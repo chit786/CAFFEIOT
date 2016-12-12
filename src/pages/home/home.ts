@@ -50,34 +50,32 @@ export class HomePage {
          let ctx = this.canvas.nativeElement;
          var mydate ;
          var order = this.order;
-         console.log("inside ion view did load"+ this.today);
             this.year = this.today.split("-")[0];
             this.month = this.today.split("-")[1];
             this.day = ( this.today.split("-")[2] ).split("T")[0];
-           // this.today = new Date(this.year, this.month, this.day);//today to query the database to get the results
            this.today = this.day + "-" + this.month + "-" + this.year;
           mydate = this.today;
-          
-        // var coffeeCountRef;
-            //after the user logs in he should see the counter on the dashboard
+
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
-                  //var coffeeCountRef = order.getCoffess();
-              //  order.getCoffess().then(snapshot => {
-                //  var snapshot = order.getCoffess();
-                    this.uName = firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT");
-                    var coffeeCountRef = firebase.database().ref('/dailyConsumption' + '/' + this.uName + '/'+ mydate);
+                 
+                  //  this.uName = firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT");
+                  this.uName = order.getcurrentuseremail();
+                 
+                    var coffeeCountRef = order.gettodayscoffeeconsumption();
+                
+                    //var coffeeCountRef = firebase.database().ref('/dailyConsumption' + '/' + this.uName + '/'+ mydate);
                     // User is signed in.
             coffeeCountRef.on('value', function(snapshot) {
                 let i=0;
                 foo = {};
                 labelArr = [];
                 labelCountArr = [];
+               
                if(snapshot.val()){
                 snapshot.val().forEach( function (arrayItem){
           
                     if(arrayItem.status=="Complete"){
-                       // labelArr.push(arrayItem.choice);
                         if(foo[arrayItem.choice]>=1){
                             foo[arrayItem.choice] = foo[arrayItem.choice] + 1;
                         }else{
@@ -163,17 +161,10 @@ export class HomePage {
               
             }); 
 
-
-
-
-
-
-
-            //console.log("1"+this.coffeCount);
                }else{
                     //no coffee records for the day
-   Chart.pluginService.register({
-        beforeDraw: function(chart) {
+         Chart.pluginService.register({
+         beforeDraw: function(chart) {
             var width = chart.chart.width,
                 height = chart.chart.height,
                 ctx = chart.chart.ctx;
@@ -246,11 +237,6 @@ export class HomePage {
                 }
             });
        
-       
-       
-    
-       // console.log("2"+this.coffeCount);
-       // this.displayChart(this.coffeCount);
     }
     
 

@@ -14,36 +14,29 @@ export class OrderData {
    public order: any;
    private fireAuth: any;
    private dbRef:any;
-    today:any = new Date().toISOString();
+    today:any ;
     year:any;
     month:any;
     day:any;
     uName:any;
     
   constructor(public http: Http) {
-    //this.fireAuth = firebase.auth();
-    //this.dbRef = firebase.database();
+   
+  }
+  
+  getcurrentuseremail():any{
+    
+    return firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT");
   }
 
-  getCoffess(): any {
-    console.log("inside getCoffees");
-     this.year = this.today.split("-")[0];
+  gettodayscoffeeconsumption():any{
+    this.today = new Date().toISOString();
+      this.year = this.today.split("-")[0];
     this.month = this.today.split("-")[1];
     this.day = ( this.today.split("-")[2] ).split("T")[0];
     // this.today = new Date(this.year, this.month, this.day);//today to query the database to get the results
     this.today = this.day + "-" + this.month + "-" + this.year;
-    var mydate = this.today 
-     firebase.auth().onAuthStateChanged(function(user) {
-     this.uName =  firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT");
-     console.log(this.uName);
-    console.log('/dailyConsumption' + '/' + this.uName + '/'+  mydate);
-    var coffeeCountRef =  firebase.database().ref('/dailyConsumption' + '/' + this.uName + '/'+  mydate);
-    // coffeeCountRef.on('value', function(snapshot) {
-      console.log("hi");
-       return coffeeCountRef;
-    // })
-    });
-    return this.getCoffess;
+    return  firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT") + '/'+  this.today );
   }
 
 }
