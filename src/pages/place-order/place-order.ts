@@ -50,7 +50,7 @@ export class PlaceOrder {
       rating : 0
       
     };
- 
+    
     this.view.dismiss(newItem);
  
   }
