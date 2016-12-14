@@ -84,7 +84,9 @@ export class MeetingDetails {
     });
     alert.present();
   }
-
+  addMember(){
+    
+  }
 
 
 
