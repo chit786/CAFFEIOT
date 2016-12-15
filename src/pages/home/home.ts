@@ -6,7 +6,7 @@ import { NavController } from 'ionic-angular';
 import { AuthData } from '../../providers/auth-data';
 import { LoginPage } from '../login/login';
 import {OrderData} from '../../providers/order-data';
-
+import {ProfilePage} from '../profile/profile';
 import { AngularFire, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 
@@ -38,11 +38,15 @@ export class HomePage {
 
     }
     //logout from the application
-    logOut(){
-            this.authData.logoutUser().then(() => {
-                this.navCtrl.setRoot(LoginPage);
-            });
+    // logOut(){
+    //         this.authData.logoutUser().then(() => {
+    //             this.navCtrl.setRoot(LoginPage);
+    //         });
+    // }
+    goToProfile(){
+    this.navCtrl.push(ProfilePage);
     }
+
     ionViewDidEnter(){
          var labelArr = [];
          var labelCountArr = [];

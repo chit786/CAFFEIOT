@@ -12,9 +12,10 @@ import {Meetings} from '../pages/meetings/meetings';
 import {MyTeams} from '../pages/my-teams/my-teams';
 import {Questions} from '../pages/questions/questions';
 import {MeetingDetails} from '../pages/meeting-details/meeting-details';
-
+import {ProfilePage} from '../pages/profile/profile';
 import { AuthData } from '../providers/auth-data';
 import {OrderData} from '../providers/order-data';
+import {ProfileData} from '../providers/profile-data';
 import { Ionic2RatingModule } from 'ionic2-rating';
 
 
@@ -40,7 +41,8 @@ export const firebaseConfig = {
     LoginPage,
     ResetPasswordPage,
     SignupPage,
-    MeetingDetails
+    MeetingDetails,
+    ProfilePage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -61,8 +63,9 @@ export const firebaseConfig = {
     LoginPage,
     ResetPasswordPage,
     SignupPage,
-    MeetingDetails
+    MeetingDetails,
+    ProfilePage
   ],
-  providers: [AuthData,OrderData]
+  providers: [AuthData,OrderData,ProfileData]
 })
 export class AppModule {}
