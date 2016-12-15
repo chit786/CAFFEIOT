@@ -38,11 +38,11 @@
                 <ion-option value="dolce">Dolce</ion-option>
             </ion-select>
         </ion-item>
+        <ion-item *ngFor="let item of choice">
+            {{item}}
+        </ion-item>
     </ion-list>
 
-    <ion-item *ngFor="let item of choice">
-        {{item}}
-    </ion-item>
 
     <button block ion-button color="primary" (click)="saveItem()">Save</button>
 
