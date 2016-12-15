@@ -22,14 +22,24 @@ export class ProfilePage {
   // assetCollection: any;
   URL: any;
 
-  constructor(public nav: NavController, public profileData: ProfileData, public alertCtrl: AlertController, public authData: AuthData, public platform: Platform) {
+  constructor(public nav: NavController, public profileData: ProfileData, public alertCtrl: AlertController, 
+  public authData: AuthData, public platform: Platform) {
     this.nav = nav;
     this.profileData = profileData;
+  
+    // this.profileData.getUserProfile().on('value', (data) => {
+    //   this.userProfile = data.val();
+    //   this.birthDate = this.userProfile.birthDate;
+    //  if(!this.userProfile.profilepic){
+    //     this.URL = "assets/img/default_profile.jpg";
+    //  }
+    // else{
+    //    this.URL = this.userProfile.profilepic;
+    // }
 
-    this.profileData.getUserProfile().on('value', (data) => {
-      this.userProfile = data.val();
-      this.birthDate = this.userProfile.birthDate;
-    });
+     
+    // });
+    this.loadData();
 
   }
 
@@ -122,9 +132,10 @@ export class ProfilePage {
   /** 
   * called after the user has logged in to load up the data
   */
-  loadData() {
+  loadData_old() {
     // load data from firebase...
-    firebase.database().ref('assets').on('value', (_snapshot: any) => {
+   // firebase.database().ref('assets').on('value', (_snapshot: any) => {
+         firebase.database().ref('userProfile').on('value', (_snapshot: any) => {
       var result ;
 
       _snapshot.forEach((_childSnapshot) => {
@@ -145,6 +156,21 @@ export class ProfilePage {
       // set the component property
       //this.assetCollection = result;
       this.URL = result;
+    });
+  }
+
+  loadData(){
+       this.profileData.getUserProfile().on('value', (data) => {
+      this.userProfile = data.val();
+      this.birthDate = this.userProfile.birthDate;
+     if(!this.userProfile.profilepic){
+        this.URL = "assets/img/default_profile.jpg";
+     }
+    else{
+       this.URL = this.userProfile.profilepic;
+    }
+
+     
     });
   }
 
@@ -186,7 +212,7 @@ export class ProfilePage {
 
   uploadToFirebase(_imageBlob) {
     //var fileName = 'sample-' + new Date().getTime() + '.jpg';
-    var fileName = 'sample' + '.jpg';
+    var fileName = 'profile' + this.profileData.currentUser.uid + '.jpg';
 
     return new Promise((resolve, reject) => {
       var fileRef = firebase.storage().ref('images/' + fileName);
@@ -204,7 +230,7 @@ export class ProfilePage {
     });
   }
 
-  saveToDatabaseAssetList(_uploadSnapshot) {
+  saveToDatabaseAssetList_old(_uploadSnapshot) {
     var ref = firebase.database().ref('assets');
 
     return new Promise((resolve, reject) => {
@@ -227,6 +253,11 @@ export class ProfilePage {
 
   }
 
+   saveToDatabaseAssetList(_uploadSnapshot) {
+    this.profileData.updateProfilepic(_uploadSnapshot.downloadURL);
+
+  }
+
 
   doGetPicture() {
     // TODO:
@@ -237,26 +268,26 @@ export class ProfilePage {
       targetHeight: 640,
       correctOrientation: true
     }).then((_imagePath) => {
-      alert('got image path ' + _imagePath);
+     // alert('got image path ' + _imagePath);
       // convert picture to blob
       return this.makeFileIntoBlob(_imagePath);
     }).then((_imageBlob) => {
-      alert('got image blob ' + _imageBlob);
+     // alert('got image blob ' + _imageBlob);
 
       // upload the blob
       return this.uploadToFirebase(_imageBlob);
     }).then((_uploadSnapshot: any) => {
-      alert('file uploaded successfully  ' + _uploadSnapshot.downloadURL);
+     // alert('file uploaded successfully  ' + _uploadSnapshot.downloadURL);
 
       // store reference to storage in database
       return this.saveToDatabaseAssetList(_uploadSnapshot);
 
     }).then((_uploadSnapshot: any) => {
-      alert('file saved to asset catalog successfully  ');
+     // alert('file saved to asset catalog successfully  ');
       this.loadData();
     }, (_error) => {
       console.log("here");
-      alert('Error ' + _error.message);
+     // alert('Error ' + _error.message);
     });
 
 

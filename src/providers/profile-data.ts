@@ -64,6 +64,14 @@ export class ProfileData {
     });
   }
 
+  updateProfilepic(profilePic: string): any {
+     return this.userProfile.child(this.currentUser.uid).update({
+      profilepic: profilePic,
+    });
+  }
+
+
+
   /**
   * Just like before this is changing the user's password, but remember, 
   * this has nothing to do with the database this is the AUTH portion of 
