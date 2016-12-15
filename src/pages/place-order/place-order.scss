@@ -1,1 +1,10 @@
-page-place-order {}
+page-place-order {
+	.place-order {
+		.list {
+			height: calc(100vh - 112px);
+		}
+		.select-text {
+			display: none;
+		}
+	}
+}
