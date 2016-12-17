@@ -12,6 +12,7 @@ import {MeetingDetails} from '../pages/meeting-details/meeting-details';
 import {MyTeams} from '../pages/my-teams/my-teams';
 import {Questions} from '../pages/questions/questions';
 import {ProfilePage} from '../pages/profile/profile';
+import {MyTeamDetails} from '../pages/my-team-details/my-team-details';
 
 @Component({
   templateUrl: 'app.html'

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-
+import { NavController,NavParams,ViewController,AlertController } from 'ionic-angular';
+import { TeamsData } from '../../providers/teams-data';
 /*
   Generated class for the MyTeamDetails page.
 
@@ -12,11 +12,53 @@ import { NavController } from 'ionic-angular';
   templateUrl: 'my-team-details.html'
 })
 export class MyTeamDetails {
-
-  constructor(public navCtrl: NavController) {}
+    title;
+    name;
+    profilePic;
+    role;
+    teamMembers = [];
+  constructor(public navParams: NavParams,public navCtrl: NavController, public view: ViewController
+  ,public teamData:TeamsData,public alertCtrl: AlertController) {}
 
   ionViewDidLoad() {
-    console.log('Hello MyTeamDetails Page');
+     this.title = this.navParams.get('item').name;
+     this.teamMembers = [];
+     //load all client data corresponding to the meeting id
+     this.teamMembers = this.teamData.getClientInfo(this.navParams.get('item'));
+
+
+
+
   }
+
+  addMember(){
+    let prompt = this.alertCtrl.create({
+      title: 'New Member',
+      message: "Enter Member Email",
+      inputs: [
+        {
+          name: 'title',
+          placeholder: 'Title'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Send',
+          handler: data => {
+            console.log('Send clicked');
+            
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
 
 }

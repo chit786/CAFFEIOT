@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController,AlertController } from 'ionic-angular';
+import { TeamsData } from '../../providers/teams-data';
+import {ProfileData} from '../../providers/profile-data';
+import {MyTeamDetails} from '../my-team-details/my-team-details';
+import firebase from 'firebase';
 
 /*
   Generated class for the MyTeams page.
@@ -12,15 +16,17 @@ import { NavController,AlertController } from 'ionic-angular';
   templateUrl: 'my-teams.html'
 })
 export class MyTeams {
-  items = [];
-  
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController) {
-    this.items = ['team A','team B','team C'];
+   items = [];
+  teamNameString : any;
+  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public teamData: TeamsData,public profileData : ProfileData) {
+    
   }
 
   ionViewDidLoad() {
-    console.log('Hello MyTeams Page');
+    this.items = this.teamData.getTeams();
+   console.log(this.items);
   }
+
   addTeam(){
      let prompt = this.alertCtrl.create({
       title: 'New Team',
@@ -49,7 +55,11 @@ export class MyTeams {
                 }
             }
             if(valExist){
-              this.items.push(data.title);
+              //save team detail in user profile
+               this.items = [];
+               this.saveTeams(data.title);
+              this.items = this.teamData.getTeams();
+             // this.items.push(data.title);
             }
             
           }
@@ -59,7 +69,45 @@ export class MyTeams {
     prompt.present();
     
   }
+
+  saveTeams(teamName){
+     var ref = firebase.database().ref('teams');
+    return new Promise((resolve, reject) => {
+
+   
+      var dataToSave = {
+        'name': teamName, // name of the team
+        'members': {'1':{'userID': firebase.auth().currentUser.uid}}
+      };
+
+       var path = ref.push(dataToSave)
+       //, (_response) => {
+      //   resolve(_response);
+      // })
+      // .catch((_error) => {
+      //   reject(_error);
+      // })
+
+      console.log(path.key);
+
+      //save this key to the logged in user 
+      this.profileData.updateTeam(path.key);
+
+   
+    });
+  
+   
+    
+  }
+
+
+
   itemSelected(item){
+
+    this.navCtrl.push(MyTeamDetails
+    ,{
+      item:item
+    });
 
   }
   showAlert() {

@@ -71,7 +71,11 @@ export class ProfileData {
   }
 
 
-
+  updateTeam(key:String):any {
+      return this.userProfile.child(this.currentUser.uid + "/teams").push({
+      teamID:key
+    });
+  }
   /**
   * Just like before this is changing the user's password, but remember, 
   * this has nothing to do with the database this is the AUTH portion of 

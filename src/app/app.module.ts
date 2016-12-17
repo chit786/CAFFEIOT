@@ -16,7 +16,9 @@ import {ProfilePage} from '../pages/profile/profile';
 import { AuthData } from '../providers/auth-data';
 import {OrderData} from '../providers/order-data';
 import {ProfileData} from '../providers/profile-data';
+import {TeamsData} from '../providers/teams-data';
 import { Ionic2RatingModule } from 'ionic2-rating';
+import {MyTeamDetails} from '../pages/my-team-details/my-team-details';
 
 
 import { AngularFireModule } from 'angularfire2';
@@ -42,7 +44,8 @@ export const firebaseConfig = {
     ResetPasswordPage,
     SignupPage,
     MeetingDetails,
-    ProfilePage
+    ProfilePage,
+    MyTeamDetails
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -64,8 +67,9 @@ export const firebaseConfig = {
     ResetPasswordPage,
     SignupPage,
     MeetingDetails,
-    ProfilePage
+    ProfilePage,
+    MyTeamDetails
   ],
-  providers: [AuthData,OrderData,ProfileData]
+  providers: [AuthData,OrderData,ProfileData,TeamsData]
 })
 export class AppModule {}

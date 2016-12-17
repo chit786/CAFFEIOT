@@ -6,13 +6,49 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>MyTeamDetails</ion-title>
-  </ion-navbar>
+    <ion-navbar color="primary">
+        <ion-navbar>
+            <ion-title>
+                {{title}}
+            </ion-title>
+        </ion-navbar>
+    </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
+    <ion-list *ngFor="let member of teamMembers">
+        <ion-item-sliding>
+            <ion-item>
+                <ion-avatar item-left>
+                    <img src="{{member.profilepic}}">
+                </ion-avatar>
+                <h2>{{member.firstName + " " + member.lastName}}</h2>
+            </ion-item>
+            <ion-item-options side="left">
+                <button ion-button color="primary">
+        <ion-icon name="text"></ion-icon>
+        Text
+      </button>
+                <button ion-button color="secondary">
+        <ion-icon name="call"></ion-icon>
+        Call
+      </button>
+            </ion-item-options>
+            <ion-item-options side="right">
+                <button ion-button color="primary">
+        <ion-icon name="mail"></ion-icon>
+        Email
+      </button>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+
+
+    <ion-fab bottom right>
+        <button ion-fab icon-only mini (click)="addMember()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
 
 </ion-content>

@@ -15,8 +15,13 @@ import {MeetingDetails} from '../meeting-details/meeting-details';
 })
 
 export class Meetings {
-  public meetings = [];
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public modalCtrl: ModalController) {}
+  //public meetings = [];
+  meetings:any;
+  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public modalCtrl: ModalController) {
+
+    this.meetings = "host";
+
+  }
 
   ionViewDidLoad() {
     console.log('Hello Meetings Page');

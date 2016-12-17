@@ -27,18 +27,6 @@ export class ProfilePage {
     this.nav = nav;
     this.profileData = profileData;
   
-    // this.profileData.getUserProfile().on('value', (data) => {
-    //   this.userProfile = data.val();
-    //   this.birthDate = this.userProfile.birthDate;
-    //  if(!this.userProfile.profilepic){
-    //     this.URL = "assets/img/default_profile.jpg";
-    //  }
-    // else{
-    //    this.URL = this.userProfile.profilepic;
-    // }
-
-     
-    // });
     this.loadData();
 
   }
@@ -144,9 +132,7 @@ export class ProfilePage {
         element.id = _childSnapshot.key;
 
        // result.push(element);
-       console.log("inside load data");
-       console.log(this.profileData.currentUser.uid );
-       console.log("asset uid" + element.owner);
+      
        if(this.profileData.currentUser.uid == element.owner ){
          console.log(element.URL);
         result = element.URL
