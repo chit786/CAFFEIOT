@@ -18,16 +18,19 @@ export class MyTeamDetails {
     role;
     teamMembers = [];
   constructor(public navParams: NavParams,public navCtrl: NavController, public view: ViewController
-  ,public teamData:TeamsData,public alertCtrl: AlertController) {}
+  ,public teamData:TeamsData,public alertCtrl: AlertController) {
 
-  ionViewDidLoad() {
-     this.title = this.navParams.get('item').name;
+    this.title = this.navParams.get('item').name;
      this.teamMembers = [];
      //load all client data corresponding to the meeting id
      this.teamMembers = this.teamData.getClientInfo(this.navParams.get('item'));
+     
 
 
+  }
 
+  ionViewDidLoad() {
+     
 
   }
 
@@ -52,12 +55,48 @@ export class MyTeamDetails {
           text: 'Send',
           handler: data => {
             console.log('Send clicked');
+            console.log(data.title);
+            console.log(this.navParams.get('item').id);
+            this.teamMembers = this.teamData.addMembertoTeam(data.title,this.navParams.get('item'));
+            
+            // console.log(isMemebrAdded);
+            //   if(isMemebrAdded){
+            //     let alert = this.alertCtrl.create({
+            //       title: 'New Member Added!',
+            //       subTitle: data.title + ' is just added!!',
+            //       buttons: ['OK']
+            //     });
+            //     alert.present();
+                
+            //   }else{
+            //     let alert = this.alertCtrl.create({
+            //       title: 'Some Issue in adding new member!',
+            //       subTitle: ' Please retry ',
+            //       buttons: ['OK']
+            //     });
+            //     alert.present();
+            //   }
+            
+
             
           }
         }
       ]
     });
     prompt.present();
+
+    
+
+
+  }
+
+  removeMember(member){
+
+    this.teamData.removeClientfromList(this.navParams.get('item').id,member.id);
+    this.teamMembers = [];
+    console.log(this.teamMembers);
+    this.teamMembers = this.teamData.getClientInfo(this.navParams.get('item'));
+
   }
 
 
