@@ -21,9 +21,21 @@
 <ion-content padding>
     <ion-item>Your Teams</ion-item>
     <ion-list>
-        <button ion-item *ngFor="let item of items" (click)="itemSelected(item)">
-    {{ item.name }}
-  </button>
+        <ion-item-sliding #slidingItem *ngFor="let item of items | async">
+            <ion-item (click)="itemSelected(item)">
+
+                {{ item.teamName }}
+
+            </ion-item>
+            <ion-item-options side="right">
+                <button ion-button color="primary" (click)="removeTeam(item.$key)">
+                    <ion-icon name="close-circle"></ion-icon>
+                     Remove
+                 </button>
+            </ion-item-options>
+        </ion-item-sliding>
+
+
     </ion-list>
 
 </ion-content>

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController,NavParams,ViewController,AlertController } from 'ionic-angular';
 import { TeamsData } from '../../providers/teams-data';
+import {AngularFire, FirebaseListObservable} from 'angularfire2';
+import firebase from 'firebase';
 /*
   Generated class for the MyTeamDetails page.
 
@@ -16,16 +18,17 @@ export class MyTeamDetails {
     name;
     profilePic;
     role;
-    teamMembers = [];
-  constructor(public navParams: NavParams,public navCtrl: NavController, public view: ViewController
+    teamMembers : FirebaseListObservable<any>;
+  constructor(public navParams: NavParams,public af: AngularFire ,public navCtrl: NavController, public view: ViewController
   ,public teamData:TeamsData,public alertCtrl: AlertController) {
 
-    this.title = this.navParams.get('item').name;
-     this.teamMembers = [];
+    this.title = this.navParams.get('item').teamName;
+     //this.teamMembers = [];
      //load all client data corresponding to the meeting id
-     this.teamMembers = this.teamData.getClientInfo(this.navParams.get('item'));
-     
-
+    // this.teamMembers = this.teamData.getClientInfo(this.navParams.get('item'));
+   
+     this.teamMembers = af.database.list('/teams/'+ this.navParams.get('item').$key + '/members' )
+  
 
   }
 
@@ -54,10 +57,34 @@ export class MyTeamDetails {
         {
           text: 'Send',
           handler: data => {
+            var key = this.navParams.get('item').$key;
             console.log('Send clicked');
             console.log(data.title);
             console.log(this.navParams.get('item').id);
-            this.teamMembers = this.teamData.addMembertoTeam(data.title,this.navParams.get('item'));
+            var profileindex = firebase.database().ref('/profile-index/' + data.title.replace("@","CAFFEIOTAT").replace(".","CAFFEIOTDOT") + '/uniqueID')
+            profileindex.once('value',function(snapshot){
+              
+              var profile = firebase.database().ref('/userProfile/' + snapshot.val())
+              profile.once('value',function(childsnapshot){
+                        var firstName = childsnapshot.val().firstName ;
+           
+                        var lastName = childsnapshot.val().lastName; 
+                        var profilepic = childsnapshot.val().profilepic;
+                        var postData = {
+                          
+                          firstName : firstName,
+                          lastName : lastName,
+                          profilepic : profilepic  
+                        }
+                        var updates= {}
+                        
+                        updates['/teams/' + key + '/members/' + snapshot.key ] = postData;
+                        firebase.database().ref().update(updates);
+              })
+             
+
+            })
+            //this.teamMembers = this.teamData.addMembertoTeam(data.title,this.navParams.get('item'));
             
             // console.log(isMemebrAdded);
             //   if(isMemebrAdded){
@@ -90,12 +117,9 @@ export class MyTeamDetails {
 
   }
 
-  removeMember(member){
+  removeMember(memberID){
 
-    this.teamData.removeClientfromList(this.navParams.get('item').id,member.id);
-    this.teamMembers = [];
-    console.log(this.teamMembers);
-    this.teamMembers = this.teamData.getClientInfo(this.navParams.get('item'));
+   this.teamMembers.remove(memberID);
 
   }
 

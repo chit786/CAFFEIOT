@@ -21,12 +21,12 @@ export class HomePage {
    userChoicePerDay: FirebaseListObservable<any[]>;
    coffess:FirebaseObjectObservable<any[]>;
    uName:string;
-   today:any = new Date().toISOString();
-   year:any;
-   month:any;
-   day:any;
+//    today:any = new Date().toISOString();
+//    year:any;
+//    month:any;
+//    day:any;
    coff:number;
-  
+ 
    
  // coffeecount;
   @ViewChild('canvas') canvas:ElementRef;
@@ -54,23 +54,32 @@ export class HomePage {
          let ctx = this.canvas.nativeElement;
          var mydate ;
          var order = this.order;
-            this.year = this.today.split("-")[0];
-            this.month = this.today.split("-")[1];
-            this.day = ( this.today.split("-")[2] ).split("T")[0];
-           this.today = this.day + "-" + this.month + "-" + this.year;
-          mydate = this.today;
+        //     this.year = this.today.split("-")[0];
+        //     this.month = this.today.split("-")[1];
+        //     this.day = ( this.today.split("-")[2] ).split("T")[0];
+        //    this.today = this.day + "-" + this.month + "-" + this.year;
+        //   mydate = this.today;
+           
+
 
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
-                 
+                    var today = new Date().toISOString();
+                    var year = today.split("-")[0];
+                    var month = today.split("-")[1];
+                    var day = ( today.split("-")[2] ).split("T")[0]
+                    today = day + "-" + month + "-" + year;
                   //  this.uName = firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT");
-                  this.uName = order.getcurrentuseremail();
-                 
-                    var coffeeCountRef = order.gettodayscoffeeconsumption();
+                  //this.uName = order.getcurrentuseremail();
+                 console.log('/dailyConsumption' + '/' + firebase.auth().currentUser.uid + '/'+  today );
+                 var coffeeCountRef = firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.uid + '/'+  today );
+                  //  var coffeeCountRef = order.gettodayscoffeeconsumption();
                 
                     //var coffeeCountRef = firebase.database().ref('/dailyConsumption' + '/' + this.uName + '/'+ mydate);
                     // User is signed in.
             coffeeCountRef.on('value', function(snapshot) {
+             //  coffeeCountRef.then(function(snapshot){
+                   console.log(snapshot);
                 let i=0;
                 foo = {};
                 labelArr = [];
@@ -96,8 +105,8 @@ export class HomePage {
             }
 
 
-
-            this.coffeCount = i;
+            
+            //this.coffeCount = i;
             
              Chart.pluginService.register({
         beforeDraw: function(chart) {
@@ -232,7 +241,8 @@ export class HomePage {
 
 
                } 
-            })
+            }
+            );
        // }
        // )
        ;

@@ -19,8 +19,8 @@
 
 <ion-content padding>
 
-    <ion-list *ngFor="let member of teamMembers">
-        <ion-item-sliding>
+    <ion-list>
+        <ion-item-sliding *ngFor="let member of teamMembers | async">
             <ion-item>
                 <ion-avatar item-left>
                     <img src="{{member.profilepic}}">
@@ -38,7 +38,7 @@
       </button>
             </ion-item-options>
             <ion-item-options side="right">
-                <button ion-button color="primary" (click)="removeMember(member)">
+                <button ion-button color="primary" (click)="removeMember(member.$key)">
         <ion-icon name="close-circle"></ion-icon>
         Remove
       </button>

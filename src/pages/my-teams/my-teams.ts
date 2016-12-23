@@ -4,7 +4,7 @@ import { TeamsData } from '../../providers/teams-data';
 import {ProfileData} from '../../providers/profile-data';
 import {MyTeamDetails} from '../my-team-details/my-team-details';
 import firebase from 'firebase';
-
+import {AngularFire, FirebaseListObservable} from 'angularfire2';
 /*
   Generated class for the MyTeams page.
 
@@ -16,18 +16,21 @@ import firebase from 'firebase';
   templateUrl: 'my-teams.html'
 })
 export class MyTeams {
-   items = [];
+   items : FirebaseListObservable<any>;
+
   teamNameString : any;
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public teamData: TeamsData,public profileData : ProfileData) {
+  constructor(public navCtrl: NavController,public af: AngularFire,public alertCtrl: AlertController,public teamData: TeamsData,public profileData : ProfileData) {
+    this.items = af.database.list(this.teamData.userProfile + '/teams');
     
   }
 
   ionViewDidLoad() {
-    this.items = this.teamData.getTeams();
-   console.log(this.items);
+   // this.items = this.teamData.getTeams();
+   //console.log(this.items);
   }
 
   addTeam(){
+    
      let prompt = this.alertCtrl.create({
       title: 'New Team',
       message: "Enter Team Name",
@@ -47,20 +50,44 @@ export class MyTeams {
         {
           text: 'Save',
           handler: data => {
-            var valExist = true;
-            for(var val in this.items){
-                if(this.items[val]==data.title){
-                  valExist = false;
-                  this.showAlert();
-                }
+            // var valExist = true;
+            // for(var val in this.items){
+            //     if(this.items[val]==data.title){
+            //       valExist = false;
+            //       this.showAlert();
+            //     }
+            // }
+            // if(valExist){
+            //   //save team detail in user profile
+            //    this.items = [];
+            //    this.saveTeams(data.title);
+            //   this.items = this.teamData.getTeams();
+            //  // this.items.push(data.title);
+            // }
+            var newItem = this.items.push({
+              teamName: data.title
+            });
+            var key =  this.teamData.userProfile.key
+            this.teamData.userProfile.on('value',function(snapshot){
+                 var firstName = snapshot.val().firstName ;
+           
+            var lastName = snapshot.val().lastName; 
+            var profilepic = snapshot.val().profilepic;
+             var postData = {
+              
+               firstName : firstName,
+               lastName : lastName,
+               profilepic : profilepic  
             }
-            if(valExist){
-              //save team detail in user profile
-               this.items = [];
-               this.saveTeams(data.title);
-              this.items = this.teamData.getTeams();
-             // this.items.push(data.title);
-            }
+            var updates= {}
+            
+            updates['/teams/' + newItem.key + '/members/' + key ] = postData;
+            firebase.database().ref().update(updates);
+            })
+           
+            
+        // var teams =  firebase.database().ref('/teams/' + newItem.key + '/members/' + this.teamData.userProfile.key );
+           
             
           }
         }
@@ -103,7 +130,7 @@ export class MyTeams {
 
 
   itemSelected(item){
-
+   
     this.navCtrl.push(MyTeamDetails
     ,{
       item:item
@@ -118,6 +145,8 @@ export class MyTeams {
     });
     alert.present();
   }
-
+  removeTeam(itemID){
+    this.items.remove(itemID);
+  }
 
 }

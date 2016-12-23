@@ -19,24 +19,32 @@ export class OrderData {
     month:any;
     day:any;
     uName:any;
+    public userProfile: any;
     
   constructor(public http: Http) {
-   
+   this.userProfile = firebase.database().ref('/userProfile');
   }
   
   getcurrentuseremail():any{
-    
-    return firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT");
+    // return new Promise((resolve)=>{
+    //   resolve(firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT"));
+    // })
+    return firebase.auth().currentUser;
   }
 
   gettodayscoffeeconsumption():any{
+    //return new Promise((resolve)=>{
     this.today = new Date().toISOString();
       this.year = this.today.split("-")[0];
     this.month = this.today.split("-")[1];
     this.day = ( this.today.split("-")[2] ).split("T")[0];
     // this.today = new Date(this.year, this.month, this.day);//today to query the database to get the results
     this.today = this.day + "-" + this.month + "-" + this.year;
-    return  firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT") + '/'+  this.today );
+    //return  firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT") + '/'+  this.today );
+      var fr =firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.uid + '/'+  this.today ) 
+      //fr.on('value').then()
+   // }
+    //)
   }
 
 }

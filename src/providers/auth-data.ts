@@ -14,6 +14,7 @@ export class AuthData {
   // Here we declare the variables we'll be using.
   public fireAuth: any;
   public userProfile: any;
+ 
   constructor(public http: Http) {
     this.fireAuth = firebase.auth();
     this.userProfile = firebase.database().ref('/userProfile');
