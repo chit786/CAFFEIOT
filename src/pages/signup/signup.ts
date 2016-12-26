@@ -3,6 +3,8 @@ import { NavController, LoadingController, AlertController } from 'ionic-angular
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthData } from '../../providers/auth-data';
 import { HomePage } from '../home/home';
+import { Preferences } from '../preferences/preferences';
+
 
 /*
   Generated class for the Signup page.
@@ -43,7 +45,8 @@ export class SignupPage {
     console.log(this.signupForm.value);
   } else {
     this.authData.signupUser(this.signupForm.value.email, this.signupForm.value.password).then(() => {
-      this.nav.setRoot(HomePage);
+      //this.nav.setRoot(HomePage);
+      this.nav.setRoot(Preferences);
     }, (error) => {
       this.loading.dismiss();
       let alert = this.alertCtrl.create({

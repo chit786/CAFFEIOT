@@ -35,4 +35,13 @@ page-profile {
         max-width: 100px !important; //any size
         max-height: 100px !important; //any size 
     }
+    .image-block {
+        padding-right: calc(50vw - 90px);
+        padding-left: calc(50vw - 90px);
+    }
+    .padding{
+            height: 180px;
+    width: 180px;
+    border-radius: 50%;
+    }
 }

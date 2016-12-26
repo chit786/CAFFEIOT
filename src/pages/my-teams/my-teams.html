@@ -33,9 +33,16 @@
                      Remove
                  </button>
             </ion-item-options>
+            <ion-item-options side="left">
+                <button ion-button color="secondary" (click)="addMeeting(item.$key)">
+                    <ion-icon name="add-circle"></ion-icon>
+                     Meet-up
+                 </button>
+            </ion-item-options>
         </ion-item-sliding>
 
 
     </ion-list>
+
 
 </ion-content>

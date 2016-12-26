@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ProfileData } from '../../providers/profile-data';
 import { AuthData } from '../../providers/auth-data';
 import { LoginPage } from '../login/login';
+import { Preferences } from '../preferences/preferences';
 
 import { Camera } from 'ionic-native';
 
@@ -35,6 +36,10 @@ export class ProfilePage {
     this.authData.logoutUser().then(() => {
       this.nav.setRoot(LoginPage);
     });
+  }
+  openPreferences(){
+    this.nav.push(Preferences);
+
   }
   updateName() {
     let alert = this.alertCtrl.create({

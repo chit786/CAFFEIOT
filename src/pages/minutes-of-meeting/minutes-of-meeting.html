@@ -6,13 +6,70 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>MinutesOfMeeting</ion-title>
-  </ion-navbar>
+    <ion-navbar color="primary">
+        <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+        <ion-title>Minutes of meeting</ion-title>
+    </ion-navbar>
+
 
 </ion-header>
 
 
 <ion-content padding>
+
+    <ion-list>
+
+        <ion-item>
+            <ion-label floating>Description</ion-label>
+            <ion-input type="text" [(ngModel)]="description"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>Assigned To</ion-label>
+            <ion-select [(ngModel)]="member">
+                <ion-option value="Chitrang">Chitrang</ion-option>
+                <ion-option value="Shammy">Shammy</ion-option>
+                <ion-option value="Praveen">PlayStation</ion-option>
+            </ion-select>
+        </ion-item>
+
+    </ion-list>
+
+    <button full ion-button color="primary" (click)="saveItem()">Save</button>
+    <div *ngIf="nomembers">
+        No Notes Yet!
+    </div>
+    <div>
+        <ion-list>
+            <ion-item-sliding *ngFor="let minute of minutes">
+                <ion-item >
+
+
+                    <ion-card>
+                        <ion-card-content>
+                            {{minute.description}}
+
+                        </ion-card-content>
+                        <h2> {{minute.assignedTo}}</h2>
+
+                    </ion-card>
+                </ion-item>
+
+                <ion-item-options side="right">
+                    <button ion-button color="primary" (click)="removeMinute(minute.$key)">
+        <ion-icon name="close-circle"></ion-icon>
+        Remove
+      </button>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-list>
+    </div>
+
+
+
+
+
 
 </ion-content>

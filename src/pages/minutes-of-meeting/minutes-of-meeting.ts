@@ -13,7 +13,13 @@ import { NavController } from 'ionic-angular';
 })
 export class MinutesOfMeeting {
 
-  constructor(public navCtrl: NavController) {}
+    public minutes = [];
+  constructor(public navCtrl: NavController) {
+    this.minutes = [
+      {description:"Test Case",assignedTo:"Chitrang"},
+      {description:"Test Case No",assignedTo:"Praveen"}
+    ];
+  } 
 
   ionViewDidLoad() {
     console.log('Hello MinutesOfMeeting Page');

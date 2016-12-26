@@ -1,23 +1,68 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import { AlertController } from 'ionic-angular';
-
+import {AngularFire, FirebaseObjectObservable} from 'angularfire2';
+import { Http,Response, Headers, RequestOptions  } from '@angular/http';
 
 @Injectable()
 export class TeamsData {
  // We'll use this to create a database reference to the userProfile node.
   userProfile: any; 
-
+  memberRegID : FirebaseObjectObservable<any>;
+  profileindex : FirebaseObjectObservable<any>;
   // We'll use this to create an auth reference to the logged in user.
   currentUser: any; 
 
+  constructor(public alertCtrl : AlertController,private http: Http,public af:AngularFire) {
 
-  constructor(public alertCtrl : AlertController) {
+    this.http = http;
     
     this.currentUser = firebase.auth().currentUser;
     this.userProfile = firebase.database().ref('/userProfile/'+  this.currentUser.uid );
+   
+  }
+
+  //send notification to client
+  sendNotify(regID,key){
+    var myAlert = this.alertCtrl;
+    var myhttp = this.http;
+    var member= this.memberRegID;
+    var af = this.af;
+   
+    this.profileindex = this.af.database.object('/profile-index/' + regID.replace("@","CAFFEIOTAT").replace(".","CAFFEIOTDOT") + '/uniqueID')
+
+     this.profileindex.$ref.on('value',function(snapshot){
+    
+        member = af.database.object('/teams/' + key + '/members/' + snapshot.val() + '/regID');
+        member.$ref.on('value',function(childsnap){
+   
+            let headers = new Headers({ 'Content-Type': 'application/json','Authorization':'key=AAAAggFbpvo:APA91bG6IRvRoSGJP2rcNGG8BLV3NxE7mbkFmvQhD_lYjAuhGtFVvX9OkYbMlTR_cP6p8kBDpvw_790o1JJbcAs0ScnwB_4wuwyGuxrtp6UlnxeyYl2b43fh6pUTVHi1jGFkTuTp58wtJjX6zSNvLg_CLKdBAEY_YA' }); // ... Set content type to JSON
+            let options = new RequestOptions({ headers: headers });
+              if(childsnap.val()){     
+              myhttp.post("https://fcm.googleapis.com/fcm/send",'{"data":{"title":"CAFFEIOT","message":"Coffee?"},"to":'+ JSON.stringify(childsnap.val())+"}",options)
+              .subscribe(data=>{
+                  let alert = myAlert.create({
+                  title: 'New Member',
+                 subTitle: 'member Added!!',
+                 buttons: ['OK']
+             });
+              alert.present();
+
+             })
+              }
+             
+        })
+
+    
+
+     })
+     
+   
+
+
 
   }
+
 
   //getTeams
  //get teams

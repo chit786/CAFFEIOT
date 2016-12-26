@@ -9,6 +9,7 @@ import { LoginPage } from '../pages/login/login';
 import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 import { SignupPage } from '../pages/signup/signup';
 import {Meetings} from '../pages/meetings/meetings';
+import {MinutesOfMeeting} from '../pages/minutes-of-meeting/minutes-of-meeting';
 import {MyTeams} from '../pages/my-teams/my-teams';
 import {Questions} from '../pages/questions/questions';
 import {MeetingDetails} from '../pages/meeting-details/meeting-details';
@@ -17,11 +18,17 @@ import { AuthData } from '../providers/auth-data';
 import {OrderData} from '../providers/order-data';
 import {ProfileData} from '../providers/profile-data';
 import {TeamsData} from '../providers/teams-data';
+import {QuestionsData} from '../providers/questions-data';
 import { Ionic2RatingModule } from 'ionic2-rating';
 import {MyTeamDetails} from '../pages/my-team-details/my-team-details';
-
-
+import {AskQuestion} from '../pages/ask-question/ask-question';
+import {Favourite} from '../pages/favourite/favourite';
+import {Feed} from '../pages/feed/feed';
+import {MyQuestions} from '../pages/my-questions/my-questions';
+import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
 import { AngularFireModule } from 'angularfire2';
+import {Preferences} from '../pages/preferences/preferences';
+import {Contacts} from '../pages/contacts/contacts';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCLoFM5qxP6IXTMThJ1mm7B8EqXYaEMXAE",
@@ -45,7 +52,15 @@ export const firebaseConfig = {
     SignupPage,
     MeetingDetails,
     ProfilePage,
-    MyTeamDetails
+    MyTeamDetails,
+    AskQuestion,
+    Favourite,
+    Feed,
+    MyQuestions,
+    ScheduleMeeting,
+    Preferences,
+    Contacts,
+    MinutesOfMeeting
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -68,8 +83,16 @@ export const firebaseConfig = {
     SignupPage,
     MeetingDetails,
     ProfilePage,
-    MyTeamDetails
+    MyTeamDetails,
+    AskQuestion,
+    Favourite,
+    Feed,
+    MyQuestions,
+    ScheduleMeeting,
+    Preferences,
+    Contacts,
+    MinutesOfMeeting
   ],
-  providers: [AuthData,OrderData,ProfileData,TeamsData]
+  providers: [AuthData,OrderData,ProfileData,TeamsData,QuestionsData]
 })
 export class AppModule {}

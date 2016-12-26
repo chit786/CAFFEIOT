@@ -49,6 +49,8 @@ export class LoginPage {
   } else {
     this.authData.loginUser(this.loginForm.value.email, this.loginForm.value.password).then( authData => {
     this.nav.setRoot(HomePage);
+    //update the deviceID where the user is currently loggedIN
+    
   }, error => {
     this.loading.dismiss().then( () => {
       let alert = this.alertCtrl.create({

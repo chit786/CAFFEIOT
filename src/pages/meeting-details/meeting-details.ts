@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavParams,ModalController,ViewController,AlertController } from 'ionic-angular';
+import { NavParams,ModalController,ViewController,AlertController,NavController } from 'ionic-angular';
 import {PlaceOrder} from '../place-order/place-order';
-
+import {Contacts} from '../contacts/contacts';
+import {MinutesOfMeeting} from '../minutes-of-meeting/minutes-of-meeting';
 /*
   Generated class for the MeetingDetails page.
 
@@ -17,7 +18,7 @@ export class MeetingDetails {
 
   title;
   description;
-  constructor(public navParams: NavParams,public modalCtrl: ModalController, public view: ViewController,public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController,public navParams: NavParams,public modalCtrl: ModalController, public view: ViewController,public alertCtrl: AlertController) {
 
   }
 
@@ -85,7 +86,16 @@ export class MeetingDetails {
     alert.present();
   }
   addMember(){
+this.navCtrl.push(Contacts, {
+      isPopup: true
+    });
+
     
+  }
+  openMom(){
+    this.navCtrl.push(MinutesOfMeeting,{
+        teamID:1
+    })
   }
 
 

@@ -15,7 +15,9 @@
         <ion-list-header>
             Personal Information
         </ion-list-header>
-        <img [src]="URL" width="180px" class="padding" />
+        <div class="image-block">
+            <img [src]="URL" class="padding" />
+        </div>
         <ion-item (click)="updateName()">
             <ion-grid>
                 <ion-row>
@@ -71,5 +73,21 @@
                 </ion-row>
             </ion-grid>
         </ion-item>
+
+        <ion-item (click)="openPreferences()">
+            <ion-grid>
+                <ion-row>
+                    <ion-col width-50>
+                        Preferences
+                    </ion-col>
+                    <ion-col class="placeholder-preferences">
+                            
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
+        </ion-item>
+
+
     </ion-list>
 </ion-content>

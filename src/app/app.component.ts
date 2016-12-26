@@ -9,10 +9,18 @@ import {OrderDetail} from '../pages/order-detail/order-detail';
 import { LoginPage } from '../pages/login/login';
 import {Meetings} from '../pages/meetings/meetings';
 import {MeetingDetails} from '../pages/meeting-details/meeting-details';
+import {MinutesOfMeeting} from '../pages/minutes-of-meeting/minutes-of-meeting';
 import {MyTeams} from '../pages/my-teams/my-teams';
 import {Questions} from '../pages/questions/questions';
 import {ProfilePage} from '../pages/profile/profile';
 import {MyTeamDetails} from '../pages/my-team-details/my-team-details';
+import {AskQuestion} from '../pages/ask-question/ask-question';
+import {Favourite} from '../pages/favourite/favourite';
+import {Feed} from '../pages/feed/feed';
+import {MyQuestions} from '../pages/my-questions/my-questions';
+import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
+import {Preferences} from '../pages/preferences/preferences';
+import {Contacts} from '../pages/contacts/contacts';
 
 @Component({
   templateUrl: 'app.html'
@@ -37,24 +45,29 @@ export class MyApp {
     firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
         this.rootPage = LoginPage;
+      }else{
+        this.initializeApp(user);
       }
     });
 
 
-    this.initializeApp();
+    //this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'HomePage', component: HomePage },
+      { title: 'Contacts', component: Contacts },
       { title: 'Orders', component: Orders },
        { title: 'Meetings', component: Meetings },
       { title: 'My Teams', component: MyTeams },
+      { title: 'Schedule Meeting', component: ScheduleMeeting },
       { title: 'Have a Question?..', component: Questions },
+
     ];
 
   }
 
-  initializeApp() {
+  initializeApp(user) {
     
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -75,7 +88,16 @@ export class MyApp {
       });
 
        push.on('registration', (data) => {
-        console.log("device token ->", data.registrationId);
+        //console.log("device token ->", data.registrationId);
+      var key = firebase.database().ref('/userProfile').child(user.uid);
+         var postData = {
+              
+               regID :  data.registrationId,
+            }
+            var updates= {}
+            
+            updates['/userProfile/' + key ] = postData;
+             firebase.database().ref().update(updates);
         //TODO - send device token to server
       });
       push.on('notification', (data) => {

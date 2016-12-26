@@ -5,6 +5,7 @@ import {ProfileData} from '../../providers/profile-data';
 import {MyTeamDetails} from '../my-team-details/my-team-details';
 import firebase from 'firebase';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
+import {ScheduleMeeting} from '../schedule-meeting/schedule-meeting';
 /*
   Generated class for the MyTeams page.
 
@@ -97,6 +98,13 @@ export class MyTeams {
     
   }
 
+  addMeeting(teamID){
+
+     this.navCtrl.push(ScheduleMeeting, {
+      teamID: teamID
+    });
+
+  }
   saveTeams(teamName){
      var ref = firebase.database().ref('teams');
     return new Promise((resolve, reject) => {

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import {Preferences} from '../pages/preferences/preferences';
+
 
 /*
   Generated class for the AuthData provider.
@@ -28,6 +30,7 @@ export class AuthData {
     return this.fireAuth.createUserWithEmailAndPassword(email, password)
       .then((newUser) => {
         this.userProfile.child(newUser.uid).set({email: email});
+       
       });
   }
 

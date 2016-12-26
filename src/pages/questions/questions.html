@@ -10,14 +10,21 @@
       <ion-icon name="menu"></ion-icon>
     </button>
         <ion-title>Questions</ion-title>
-        <ion-buttons end>
+        <!--<ion-buttons end>
             <button ion-button icon-only (click)="addItem()"><ion-icon name="add-circle"></ion-icon></button>
-        </ion-buttons>
+        </ion-buttons>-->
     </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+
+    <ion-tabs>
+        <ion-tab [root]="tab1Root" tabTitle="Feeds" tabBadge="1" tabIcon="flash"></ion-tab>
+        <ion-tab [root]="tab2Root" tabTitle="Favourites" tabIcon="heart-outline"></ion-tab>
+        <ion-tab [root]="tab3Root" tabTitle="Ask Question" tabIcon="hand"></ion-tab>
+        <ion-tab [root]="tab4Root" tabTitle="My Questions" tabIcon="list"></ion-tab>
+    </ion-tabs>
 
 </ion-content>
