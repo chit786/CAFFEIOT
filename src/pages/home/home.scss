@@ -1,13 +1,23 @@
 page-home {
-      .item-borderless {
-            border-top: 0px;
-            border-left: 0px;
-            border-right: 0px;
-            border-bottom: 0px;
-        }
+    .profile-btn {
+        color: white;
+        background-color: transparent;
+        font-size: 26px;
+    }
     .home-container {
         display: block;
         /* Large screens ----------- */
+        .progress-container {
+            padding: 0 20px;
+        }
+        .progress-bar-success {
+            background-image: -webkit-linear-gradient(top, #662900 0, #662900 100%);
+            background-image: -o-linear-gradient(top, #662900 0, #662900 100%);
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#662900), to(#662900));
+            background-image: linear-gradient(to bottom, #662900 0, #662900 100%);
+            //filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c', endColorstr='#ff449d44', GradientType=0);
+            background-repeat: repeat-x;
+        }
         @media only screen and (min-width: 768px) {
             .chart-div {
                 width: 50%;
@@ -36,7 +46,6 @@ page-home {
                 float: left;
             }
         }
-      
         .coffee-count {
             position: absolute;
             top: 15%;

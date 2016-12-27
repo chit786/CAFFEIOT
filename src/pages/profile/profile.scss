@@ -10,6 +10,10 @@ page-profile {
         background-color: #ECECEC;
         margin: 0;
         padding: 10px 16px;
+        border-bottom: 0;
+    }
+    ion-list-header.list-header-ios {
+         border-bottom: 0;
     }
     ion-item {
         padding: 0;
@@ -38,10 +42,21 @@ page-profile {
     .image-block {
         padding-right: calc(50vw - 90px);
         padding-left: calc(50vw - 90px);
+        position: relative;
     }
-    .padding{
-            height: 180px;
-    width: 180px;
-    border-radius: 50%;
+    .padding {
+        height: 180px;
+        width: 180px;
+        border-radius: 50%;
+    }
+    .floating-camera {
+        position: absolute;
+        z-index: 9;
+        top: 77%;
+        right: calc(50vw - 80px);
+        font-size: 26px;
+        border-radius: 50%;
+        color: white;
+        background-color: #662900;
     }
 }

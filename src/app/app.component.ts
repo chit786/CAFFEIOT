@@ -74,7 +74,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       if (this.platform.is('android')){
       StatusBar.styleDefault();
-       Splashscreen.hide();
+       Splashscreen.show();
       let push = Push.init({
         android: {
           senderID: "558368532218"

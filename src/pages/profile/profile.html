@@ -2,7 +2,7 @@
     <ion-navbar color="primary">
         <ion-title>Profile</ion-title>
         <ion-buttons end>
-            <button (click)="doGetPicture()">PHOTO</button>
+            <!--<button (click)="doGetPicture()">PHOTO</button>-->
             <button ion-button icon-only (click)="logOut()">
         <ion-icon name="log-out"></ion-icon>
       </button>
@@ -17,6 +17,7 @@
         </ion-list-header>
         <div class="image-block">
             <img [src]="URL" class="padding" />
+            <button (click)="doGetPicture()" class="floating-camera"><ion-icon name="camera"></ion-icon></button>
         </div>
         <ion-item (click)="updateName()">
             <ion-grid>
@@ -81,7 +82,7 @@
                         Preferences
                     </ion-col>
                     <ion-col class="placeholder-preferences">
-                            
+
                     </ion-col>
                 </ion-row>
             </ion-grid>
