@@ -18,5 +18,8 @@ export class AskQuestion {
   ionViewDidLoad() {
     console.log('Hello AskQuestion Page');
   }
+  delete(){
+    
+  }
 
 }

@@ -24,5 +24,7 @@ export class MinutesOfMeeting {
   ionViewDidLoad() {
     console.log('Hello MinutesOfMeeting Page');
   }
-
+  saveItem(){
+    
+  }
 }

@@ -88,4 +88,13 @@ export class ProfileData {
       console.log(error);
     });
   }
+  /**
+  * Setting users company
+  */
+  updateCompany(companyName:string):any{
+     return this.userProfile.child(this.currentUser.uid).update({
+      company: companyName,
+    });
+  }
+
 }

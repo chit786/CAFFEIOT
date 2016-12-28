@@ -4,7 +4,7 @@ import { ProfileData } from '../../providers/profile-data';
 import { AuthData } from '../../providers/auth-data';
 import { LoginPage } from '../login/login';
 import { Preferences } from '../preferences/preferences';
-
+import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import { Camera } from 'ionic-native';
 
 import firebase from 'firebase';
@@ -20,10 +20,13 @@ declare var window: any;
 export class ProfilePage {
   public userProfile: any;
   public birthDate: string;
+  company;
   // assetCollection: any;
   URL: any;
+  options : FirebaseListObservable<any>;
+  skills : FirebaseListObservable<any>;
 
-  constructor(public nav: NavController, public profileData: ProfileData, public alertCtrl: AlertController, 
+  constructor(public nav: NavController,public af: AngularFire, public profileData: ProfileData, public alertCtrl: AlertController, 
   public authData: AuthData, public platform: Platform) {
     this.nav = nav;
     this.profileData = profileData;
@@ -122,6 +125,16 @@ export class ProfilePage {
     alert.present();
   }
 
+  onChange(SelectedValue){
+    console.log(SelectedValue);
+    this.setCompany(SelectedValue);
+}
+
+  setCompany(SelectedValue){
+     this.profileData.updateCompany(SelectedValue);
+
+  }
+
   /** 
   * called after the user has logged in to load up the data
   */
@@ -154,6 +167,10 @@ export class ProfilePage {
        this.profileData.getUserProfile().on('value', (data) => {
       this.userProfile = data.val();
       this.birthDate = this.userProfile.birthDate;
+      this.company = this.userProfile.company;
+      this.skills = this.af.database.list('/userProfile/'+this.profileData.currentUser.uid+'/skills');
+      console.log(this.skills);
+     this.options = this.af.database.list('/organisations');
      if(!this.userProfile.profilepic){
         this.URL = "assets/img/default_profile.jpg";
      }
@@ -163,6 +180,26 @@ export class ProfilePage {
 
      
     });
+  }
+
+  delete(chip: Element,skillName : string){
+   console.log(chip);
+
+    chip.remove();
+    var skill= firebase.database().ref('/userProfile/'+this.profileData.currentUser.uid+'/skills');
+    skill.on('value',function(snapshot){
+      snapshot.forEach(function(childSnapshot){
+          if(childSnapshot.val().name==skillName){
+            childSnapshot.ref.child('name').ref.remove();
+            return true;
+          }
+          return false;
+      });
+
+    })
+    //this.skill = this.af.database.list('/userProfile/'+this.profileData.currentUser.uid+'/skills');
+    
+    //this.skill.remove();
   }
 
   makeFileIntoBlob(_imagePath) {

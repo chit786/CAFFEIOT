@@ -75,15 +75,54 @@
             </ion-grid>
         </ion-item>
 
-        <ion-item (click)="openPreferences()">
+        <ion-item>
             <ion-grid>
                 <ion-row>
-                    <ion-col width-50>
+                    <ion-col width-50 (click)="openPreferences()">
                         Preferences
                     </ion-col>
                     <ion-col class="placeholder-preferences">
-
+                        <ion-list>
+                            <ion-chip *ngFor="let skill of skills | async" #chip>
+                                <ion-label>{{skill.name}}</ion-label>
+                                <button ion-button clear color="light" (click)="delete(chip,skill.name)">
+                                <ion-icon name="close-circle"></ion-icon>
+                                     </button>
+                            </ion-chip>
+                        </ion-list>
                     </ion-col>
+                </ion-row>
+            </ion-grid>
+
+        </ion-item>
+        <ion-item>
+            <ion-grid>
+                <ion-row>
+                    <ion-col width-50 (click)="openPreferences()">
+                        Company
+                    </ion-col>
+                    <ion-col width-50 *ngIf="userProfile?.company">
+                        {{userProfile?.company}}
+                    </ion-col>
+                    <ion-col class="placeholder-profile" *ngIf="!userProfile?.company">
+                        <span>
+              Tap here to edit.
+            </span>
+                    </ion-col>
+                    <!--<ion-col width-100>
+
+
+                        <ion-list>
+                            <ion-item>
+                                <ion-label>Company</ion-label>
+                                <ion-select #newSelect [(ngModel)]="company" (ionChange)="onChange(company)">
+                                    <ion-option *ngFor="let option of options | async" value="{{option?.name}}">{{option?.name}}</ion-option>
+                                </ion-select>
+
+                            </ion-item>
+
+                        </ion-list>
+                    </ion-col>-->
                 </ion-row>
             </ion-grid>
 

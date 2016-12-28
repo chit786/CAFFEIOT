@@ -56,7 +56,7 @@ isNormal:any = true;
  
     }
   addContact(){
-console.log("inside add contact");
+    
   }
   close(){
     this.view.dismiss();

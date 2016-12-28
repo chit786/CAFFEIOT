@@ -1,4 +1,13 @@
 page-profile {
+    .placeholder-preferences ion-list {
+        white-space: normal;
+
+        .chip-md {
+            .label-md {
+                    margin-left: 15px !important;
+            }
+        }
+    }
     ion-item ion-label {
         margin: 0 !important;
     }
@@ -13,7 +22,7 @@ page-profile {
         border-bottom: 0;
     }
     ion-list-header.list-header-ios {
-         border-bottom: 0;
+        border-bottom: 0;
     }
     ion-item {
         padding: 0;
