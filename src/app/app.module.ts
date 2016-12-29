@@ -29,6 +29,7 @@ import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
 import { AngularFireModule } from 'angularfire2';
 import {Preferences} from '../pages/preferences/preferences';
 import {Contacts} from '../pages/contacts/contacts';
+import {MomentModule} from 'angular2-moment';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCLoFM5qxP6IXTMThJ1mm7B8EqXYaEMXAE",
@@ -65,7 +66,8 @@ export const firebaseConfig = {
   imports: [
     IonicModule.forRoot(MyApp),
        AngularFireModule.initializeApp(firebaseConfig),
-       Ionic2RatingModule
+       Ionic2RatingModule,
+       MomentModule
        
   ],
   bootstrap: [IonicApp],

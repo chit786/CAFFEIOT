@@ -22,26 +22,30 @@
         Schedule
     </ion-item>
     <ion-item>
-        <ion-label floating>Meeting Title</ion-label>
-        <ion-input type="text"></ion-input>
+        <ion-label floating>Meeting Description</ion-label>
+        <ion-input [(ngModel)]="meetingTitle" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label floating>Venue</ion-label>
+        <ion-input [(ngModel)]="meetingDescription" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
         <ion-icon name="calendar" item-left></ion-icon>
         <ion-label>Date</ion-label>
-        <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="conferenceDate"></ion-datetime>
+        <ion-datetime displayFormat="MMM DD, YYYY" min="2016-12-28" max="2020-10-31" [(ngModel)]="conferenceDate"></ion-datetime>
     </ion-item>
     <ion-item>
         <ion-icon name="alarm" item-left></ion-icon>
         <ion-label>Time</ion-label>
-        <ion-datetime displayFormat="HH:mm A" pickerFormat="hh mm A" [(ngModel)]="myTime"></ion-datetime>
+        <ion-datetime displayFormat="HH:mm" pickerFormat="hh mm A" [(ngModel)]="myTime"></ion-datetime>
     </ion-item>
     <ion-list>
         <ion-item>
             <ion-label>Team to meet</ion-label>
-            <ion-select [(ngModel)]="team" multiple="false" placeholder="team A" cancelText="Nah" okText="Okay!" disabled="true">
-                <ion-option value="team A" checked="true">team A</ion-option>
-                <ion-option value="team B">team B</ion-option>
+            <ion-select [(ngModel)]="team" placeholder="Select" cancelText="Nah" okText="Okay!">
+                <!--<ion-option value="team A" checked="true">team A</ion-option>-->
+                <ion-option *ngFor="let teamName of teams | async" value="{{teamName?.teamName}}">{{teamName?.teamName}}</ion-option>
             </ion-select>
         </ion-item>
     </ion-list>

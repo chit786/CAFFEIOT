@@ -4,6 +4,7 @@ import { TeamsData } from '../../providers/teams-data';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import firebase from 'firebase';
 import { Http,XHRBackend,RequestOptions} from '@angular/http';
+import { Contacts } from '../contacts/contacts';
 /*
   Generated class for the MyTeamDetails page.
 
@@ -38,81 +39,93 @@ export class MyTeamDetails {
 
   }
 
-  addMember(){
-    var regID : any;
-    let prompt = this.alertCtrl.create({
-      title: 'New Member',
-      message: "Enter Member Email",
-      inputs: [
-        {
-          name: 'title',
-          placeholder: 'Title'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Send',
-          handler: data => {
-            var key = this.navParams.get('item').$key;
-            var myMember;
-            console.log('Send clicked');
-            console.log(data.title);
-            console.log(this.navParams.get('item').id);
-           
-            var profileindex = firebase.database().ref('/profile-index/' + data.title.replace("@","CAFFEIOTAT").replace(".","CAFFEIOTDOT") + '/uniqueID')
-            profileindex.once('value',function(snapshot){
-            
-              var profile = firebase.database().ref('/userProfile/' + snapshot.val())
-              profile.once('value',function(childsnapshot){
-                        var firstName = childsnapshot.val().firstName ;
-
-                        var lastName = childsnapshot.val().lastName; 
-                        var profilepic = childsnapshot.val().profilepic;
-                         regID = childsnapshot.val().regID;
-                        var postData = {
-                          
-                          firstName : firstName,
-                          lastName : lastName,
-                          profilepic : profilepic, 
-                          regID : regID 
-                        }
-                        var updates= {}
-                        myMember = snapshot.val();
-                        updates['/teams/' + key + '/members/' + snapshot.val() ] = postData;
-                        firebase.database().ref().update(updates);
-                                // ref to member regID
-                     
-                            
-                        
-              });
-
-            
-
-            });
-
-             this.teamData.sendNotify(data.title,key);
-           
-            
-          }
-        }
-      ]
+  addNewmember(){
+    this.navCtrl.push(Contacts, {
+      isPopup: true,
+      teamKey : this.navParams.get('item')
     });
-    prompt.present();
-
-  
 
 
   }
 
-  removeMember(memberID){
+  // addMember(){
+  //   var regID : any;
+  //   let prompt = this.alertCtrl.create({
+  //     title: 'New Member',
+  //     message: "Enter Member Email",
+  //     inputs: [
+  //       {
+  //         name: 'title',
+  //         placeholder: 'Title'
+  //       },
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //         handler: data => {
+  //           console.log('Cancel clicked');
+  //         }
+  //       },
+  //       {
+  //         text: 'Send',
+  //         handler: data => {
+  //           var key = this.navParams.get('item').$key;
+  //           var myMember;
+  //           console.log('Send clicked');
+  //           console.log(data.title);
+  //           console.log(this.navParams.get('item').id);
+           
+  //           var profileindex = firebase.database().ref('/profile-index/' + data.title.replace("@","CAFFEIOTAT").replace(".","CAFFEIOTDOT") + '/uniqueID')
+  //           profileindex.once('value',function(snapshot){
+            
+  //             var profile = firebase.database().ref('/userProfile/' + snapshot.val())
+  //             profile.once('value',function(childsnapshot){
+  //                       var firstName = childsnapshot.val().firstName ;
 
+  //                       var lastName = childsnapshot.val().lastName; 
+  //                       var profilepic = childsnapshot.val().profilepic;
+  //                        regID = childsnapshot.val().regID;
+  //                       var postData = {
+                          
+  //                         firstName : firstName,
+  //                         lastName : lastName,
+  //                         profilepic : profilepic, 
+  //                         regID : regID 
+  //                       }
+  //                       var updates= {}
+  //                       myMember = snapshot.val();
+  //                       updates['/teams/' + key + '/members/' + snapshot.val() ] = postData;
+  //                       firebase.database().ref().update(updates);
+  //                               // ref to member regID
+                     
+                            
+                        
+  //             });
+
+            
+
+  //           });
+
+  //            this.teamData.sendNotify(data.title,key);
+           
+            
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   prompt.present();
+
+  
+
+
+  // }
+
+  removeMember(memberID){
+   //remove from team
    this.teamMembers.remove(memberID);
+   //remove team from userprofile which is removed
+   var userNode = this.af.database.list('/userProfile/'+memberID+'/teams') 
+   userNode.remove(this.navParams.get('item').$key);
 
   }
 

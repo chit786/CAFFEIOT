@@ -66,7 +66,8 @@ export class MyTeams {
             //  // this.items.push(data.title);
             // }
             var newItem = this.items.push({
-              teamName: data.title
+              teamName: data.title,
+               isOwner : true,
             });
             var key =  this.teamData.userProfile.key
             this.teamData.userProfile.on('value',function(snapshot){
@@ -74,11 +75,13 @@ export class MyTeams {
            
             var lastName = snapshot.val().lastName; 
             var profilepic = snapshot.val().profilepic;
+             var regID = snapshot.val().regID;
              var postData = {
               
                firstName : firstName,
                lastName : lastName,
-               profilepic : profilepic  
+               profilepic : profilepic,
+               regID: regID
             }
             var updates= {}
             
@@ -98,10 +101,10 @@ export class MyTeams {
     
   }
 
-  addMeeting(teamID){
+  addMeeting(team){
 
      this.navCtrl.push(ScheduleMeeting, {
-      teamID: teamID
+      team: team
     });
 
   }
@@ -122,8 +125,6 @@ export class MyTeams {
       // .catch((_error) => {
       //   reject(_error);
       // })
-
-      console.log(path.key);
 
       //save this key to the logged in user 
       this.profileData.updateTeam(path.key);
@@ -154,7 +155,42 @@ export class MyTeams {
     alert.present();
   }
   removeTeam(itemID){
-    this.items.remove(itemID);
+    var ownerFlag;
+    var isOwner= firebase.database().ref('/userProfile/'+firebase.auth().currentUser.uid + '/teams/'+itemID);
+    isOwner.once('value',function(snap){
+     
+        ownerFlag = snap.child('isOwner').val();
+     
+    
+    })
+
+
+
+    this.items.remove(itemID).then(()=>{
+      
+        var teamNode = this.af.database.object('/teams/'+itemID+'/members/'+firebase.auth().currentUser.uid);
+        teamNode.set(null).then(()=>{
+            if(ownerFlag){
+            var membersNode = firebase.database().ref('/teams/'+itemID+'/members');
+            membersNode.once('value',function(snapshot){
+                snapshot.forEach(function(child){
+                  
+                      var setOwnerNode = firebase.database().ref('/userProfile/'+child.key+'/teams/'+itemID);
+                      setOwnerNode.update({
+                      isOwner : true,
+                      });
+                    return true;
+
+                });
+                
+
+            })
+            //
+        }
+        }
+        );
+        
+    });
   }
 
 }

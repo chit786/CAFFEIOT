@@ -33,9 +33,9 @@
 
     </ion-list>
     <ion-list>
-        <ion-item *ngFor="let skill of skills | async">
-            <ion-chip #chip color="light">
-                <ion-label>{{skill.name}}</ion-label>
+        <ion-item class="item-borderless" *ngFor="let skill of skills | async">
+            <ion-chip #chip style="width: 100%;" color="light">
+                <ion-label style="text-align: center;">{{skill.name}}</ion-label>
                 <button #btn ion-button clear color="dark" (click)="select(chip,skill.name)">
                                 <ion-icon name="add"></ion-icon>
                 </button>

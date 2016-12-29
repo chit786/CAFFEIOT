@@ -1,9 +1,3 @@
-<!--
-  Generated template for the Contacts page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
 
@@ -36,7 +30,7 @@
                     <img src="{{member.profilepic}}">
                 </ion-avatar>
                 <ion-label>{{member.firstName + " " + member.lastName}}</ion-label>
-                <ion-checkbox *ngIf="isPopup" item-right color="dark"></ion-checkbox>
+                <ion-checkbox *ngIf="isPopup" item-right color="dark" (click)="selectMember(member.$key)"></ion-checkbox>
             </ion-item>
 
             <!--
@@ -73,7 +67,7 @@
         </div>
         <div *ngIf="isPopup">
 
-            <button ion-fab icon-only mini (click)="addMember()"><ion-icon name="add"></ion-icon></button>
+            <button ion-fab icon-only mini (click)="addMember()"><ion-icon name="checkmark"></ion-icon></button>
         </div>
     </ion-fab>
 </ion-content>

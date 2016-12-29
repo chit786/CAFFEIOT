@@ -1,8 +1,8 @@
 <!--
-  Generated template for the PlaceOrder page.
+ Generated template for the PlaceOrder page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
+ See http://ionicframework.com/docs/v2/components/#navigation for more info on
+ Ionic pages and navigation.
 -->
 <ion-header>
     <ion-toolbar color="primary">
@@ -20,12 +20,12 @@
 
     <!--<ion-list>
 
-        <ion-item>
-            <ion-label floating>Choice</ion-label>
-            <ion-input type="text" [(ngModel)]="choice"></ion-input>
-        </ion-item>
+       <ion-item>
+           <ion-label floating>Choice</ion-label>
+           <ion-input type="text" [(ngModel)]="choice"></ion-input>
+       </ion-item>
 
-    </ion-list>-->
+   </ion-list>-->
     <ion-list>
         <ion-item>
             <ion-label>Choice</ion-label>
@@ -38,11 +38,12 @@
                 <ion-option value="dolce">Dolce</ion-option>
             </ion-select>
         </ion-item>
+        <ion-item *ngFor="let item of choice; let i = index" [attr.data-index]="i">
+            {{item}}
+            <ion-icon name="close" (click)="removeItem(i)" style="float:right"></ion-icon>
+        </ion-item>
     </ion-list>
 
-    <ion-item *ngFor="let item of choice">
-        {{item}}
-    </ion-item>
 
     <button block ion-button color="primary" (click)="saveItem()">Save</button>
 

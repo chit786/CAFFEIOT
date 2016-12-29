@@ -1,1 +1,28 @@
-page-place-order {}
+page-place-order {
+    .place-order {
+        .list {
+            height: calc(100vh - 112px);
+            overflow-y: scroll;
+            .item-inner .label {
+                font-weight: bold;
+                color: #6f6565;
+                padding-left: 10px;
+            }
+            .list-md>.item-block .item-inner {
+                border-bottom: 1px solid #dedede !important;
+            }
+            .item-block:last-child .item-inner {
+                border-bottom: 1px solid #dedede !important;
+            }
+            .item-block:last-child {
+                border-bottom: 0 !important;
+            }
+        }
+        .select-text {
+            display: none;
+        }
+        .scroll-content {
+            overflow-y: hidden;
+        }
+    }
+}

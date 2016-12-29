@@ -34,24 +34,37 @@
     <div [ngSwitch]="meetings" class="meeting-list">
 
         <ion-list *ngSwitchCase="'host'">
-            <ion-item-sliding #slidingItem>
+            <ion-item-sliding #slidingItem *ngFor="let meeting of meetingListHost | async">
                 <ion-item (click)="viewItem()">
                     <div class="date-blk">
-                        <div>Thu</div>
-                        <div> 01</div>
+                        <div>
+                            {{meeting?.conferenceDate | amDateFormat : 'ddd'}}
+                        </div>
+                        <div>
+                            {{meeting?.conferenceDate | amDateFormat : 'DD'}}
+                        </div>
                     </div>
                     <!--<ion-avatar item-left>
                         <img src="assets/img/chitrang.jpg">
                     </ion-avatar>-->
                     <div class="meeting-blk">
-                        <h2>Digital Ambition</h2>
-                        <h3>Portfolio - UX design Discussion</h3>
-                        <h4>Today, 18:45 @ Innovation Lab 234A </h4>
+                        <h2>{{meeting?.team}}</h2>
+                        <h3>{{meeting?.meetingTitle}}</h3>
+                        <h4>{{meeting?.myTime + " " + meeting?.meetingDescription}}</h4>
+
                         <div class="horImgScrBlk">
-                            <img class="inline-images" src="assets/img/chitrang.jpg">
-                            <img class="inline-images" src="assets/img/chitrang.jpg">
-                            <img class="inline-images" src="assets/img/chitrang.jpg">
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col *ngFor="let user of meeting.group | async">
+
+                                        <img class="inline-images" src="{{user.profilepic}}">
+
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
                         </div>
+
+
                     </div>
                 </ion-item>
                 <ion-item-options side="left">
@@ -60,29 +73,57 @@
         Text
       </button>
                     <button ion-button color="secondary">
-        <ion-icon name="call"></ion-icon>
-        Call
+        <ion-icon name="calendar"></ion-icon>
+        Reschedule
       </button>
                 </ion-item-options>
                 <ion-item-options side="right">
                     <button ion-button color="primary">
-        <ion-icon name="mail"></ion-icon>
-        Email
+        <ion-icon name="close"></ion-icon>
+        Remove
       </button>
                 </ion-item-options>
             </ion-item-sliding>
+
+            <ion-fab bottom right>
+                <button ion-fab icon-only mini (click)="addMeeting()"><ion-icon name="add"></ion-icon></button>
+            </ion-fab>
+
         </ion-list>
 
         <ion-list *ngSwitchCase="'member'">
-            <ion-item-sliding>
-                <ion-item>
-                    <ion-avatar item-left>
-                        <img src="assets/img/machineB.png">
-                    </ion-avatar>
-                    <h2>Digital Ambition @ FOPP</h2>
-                    <h3>Portfolio - UX design Discussion</h3>
-                    <h4>Today, 18:45 @ Innovation Lab 234A </h4>
+            <ion-item-sliding #slidingItem *ngFor="let meeting of meetingListMember | async">
+                <ion-item (click)="viewItem()">
+                    <div class="date-blk">
+                        <div>
+                            {{meeting?.conferenceDate | amDateFormat : 'ddd'}}
+                        </div>
+                        <div>
+                            {{meeting?.conferenceDate | amDateFormat : 'DD'}}
+                        </div>
+                    </div>
+                    <!--<ion-avatar item-left>
+                        <img src="assets/img/chitrang.jpg">
+                    </ion-avatar>-->
+                    <div class="meeting-blk">
+                        <h2>{{meeting?.team}}</h2>
+                        <h3>{{meeting?.meetingTitle}}</h3>
+                        <h4>{{meeting?.myTime + " " + meeting?.meetingDescription}}</h4>
 
+                        <div class="horImgScrBlk">
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col *ngFor="let user of meeting.group | async">
+
+                                        <img class="inline-images" src="{{user.profilepic}}">
+
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </div>
+
+
+                    </div>
                 </ion-item>
                 <ion-item-options side="left">
                     <button ion-button color="primary">
@@ -90,14 +131,14 @@
         Text
       </button>
                     <button ion-button color="secondary">
-        <ion-icon name="call"></ion-icon>
-        Call
+        <ion-icon name="calendar"></ion-icon>
+        Reschedule
       </button>
                 </ion-item-options>
                 <ion-item-options side="right">
                     <button ion-button color="primary">
-        <ion-icon name="mail"></ion-icon>
-        Email
+        <ion-icon name="close"></ion-icon>
+        Remove
       </button>
                 </ion-item-options>
             </ion-item-sliding>
@@ -106,10 +147,6 @@
 
     </div>
 
-
-    <ion-fab bottom right>
-        <button ion-fab icon-only mini (click)="addMeeting()"><ion-icon name="add"></ion-icon></button>
-    </ion-fab>
 
 
 </ion-content>

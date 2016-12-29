@@ -63,6 +63,38 @@ export class TeamsData {
 
   }
 
+   sendNotifyContact(regID,key,message){
+    var myAlert = this.alertCtrl;
+    var myhttp = this.http;
+    var member= this.memberRegID;
+    var af = this.af;
+   
+        console.log('/teams/' + key + '/members/' + regID+ '/regID')
+        member = af.database.object('/teams/' + key + '/members/' + regID+ '/regID');
+        member.$ref.on('value',function(childsnap){
+   
+            let headers = new Headers({ 'Content-Type': 'application/json','Authorization':'key=AAAAggFbpvo:APA91bG6IRvRoSGJP2rcNGG8BLV3NxE7mbkFmvQhD_lYjAuhGtFVvX9OkYbMlTR_cP6p8kBDpvw_790o1JJbcAs0ScnwB_4wuwyGuxrtp6UlnxeyYl2b43fh6pUTVHi1jGFkTuTp58wtJjX6zSNvLg_CLKdBAEY_YA' }); // ... Set content type to JSON
+            let options = new RequestOptions({ headers: headers });
+              if(childsnap.val()){     
+              myhttp.post("https://fcm.googleapis.com/fcm/send",'{"data":{"title":"CAFFEIOT","message":"'+message+'"},"to":'+ JSON.stringify(childsnap.val())+"}",options)
+              .subscribe(data=>{
+                  let alert = myAlert.create({
+                  title: 'New Member',
+                 subTitle: 'member Added!!',
+                 buttons: ['OK']
+             });
+              alert.present();
+
+             })
+              }
+             
+        })
+
+
+
+
+
+  }
 
   //getTeams
  //get teams

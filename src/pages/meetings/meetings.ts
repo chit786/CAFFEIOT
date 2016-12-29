@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component,Pipe, PipeTransform } from '@angular/core';
 import { ModalController,NavController,ItemSliding } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import {MeetingDetails} from '../meeting-details/meeting-details';
+import {AngularFire, FirebaseListObservable} from 'angularfire2';
+
 
 /*
   Generated class for the Meetings page.
@@ -9,6 +11,7 @@ import {MeetingDetails} from '../meeting-details/meeting-details';
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 */
+
 @Component({
   selector: 'page-meetings',
   templateUrl: 'meetings.html'
@@ -16,15 +19,34 @@ import {MeetingDetails} from '../meeting-details/meeting-details';
 
 export class Meetings {
   //public meetings = [];
+ 
+  
   meetings:any;
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public modalCtrl: ModalController) {
+  myDay;
+  myDate;
+    meetingListHost : FirebaseListObservable<any>;
+    meetingListMember : FirebaseListObservable<any>;
+  constructor(public af: AngularFire,public navCtrl: NavController,public alertCtrl: AlertController,public modalCtrl: ModalController) {
 
     this.meetings = "host";
+    this.meetingListHost = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/host').map((_users) => {
+    return _users.map((_user) => {
+        _user.group = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/host/' +_user.$key + '/users')
+        return _user
+    }) 
+}) as FirebaseListObservable<any>;
+     this.meetingListMember = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/member').map((_users) => {
+    return _users.map((_user) => {
+        _user.group = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/host/' +_user.$key + '/users')
+        return _user
+    }) 
+}) as FirebaseListObservable<any>;
 
   }
 
   ionViewDidLoad() {
     console.log('Hello Meetings Page');
+    
   }
 
   addMeeting() {
@@ -63,19 +85,5 @@ export class Meetings {
        when:"Today, 18:45 @ Innovation Lab 234A "
      });
    }
-
-  // mouseoverwideDiv(itemSlide: ItemSliding){
-  //   itemSlide.setElementClass("active-sliding", false);
-  //   itemSlide.setElementClass("active-slide", false);
-  //   itemSlide.setElementClass("active-options-right", false);
-
-  // }
-
-  // mouseleavewideDiv(itemSlide: ItemSliding){
-  //   itemSlide.setElementClass("active-sliding", true);
-  //   itemSlide.setElementClass("active-slide", true);
-  //   itemSlide.setElementClass("active-options-right", true);
-
-  // }
 
 }
