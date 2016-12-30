@@ -9,7 +9,7 @@
     <ion-navbar color="primary">
         <ion-navbar>
             <ion-title>
-                {{title}}
+                {{(meetingDetail|async)?.team}}
             </ion-title>
         </ion-navbar>
     </ion-navbar>
@@ -21,30 +21,30 @@
 <ion-content padding>
     <ion-card>
         <ion-card-content>
-            {{description}}
-            <h2>"Hosted By - Chitrang Natu"</h2>
+            {{(meetingDetail|async)?.meetingTitle}}
+            <h2>{{"Hosted By - " + (meetingDetail|async)?.ownerName}}</h2>
         </ion-card-content>
 
     </ion-card>
 
     <ion-item>
-        <button ion-button item-right (click)="openMom()">
+        <button ion-button item-right (click)="openMom(meetingDetail.$key)">
         <ion-icon name="create"></ion-icon>
         Write Minutes!
       </button>
-        <button ion-button item-left (click)="reschedule()">
+        <button ion-button item-left (click)="reschedule(meetingDetail.$key)">
         <ion-icon name="calendar"></ion-icon>
         Reschedule
       </button>
     </ion-item>
 
     <ion-list>
-        <ion-item-sliding>
+        <ion-item-sliding *ngFor="let member of memberDetail | async">
             <ion-item>
                 <ion-avatar item-left>
-                    <img src="assets/img/chitrang.jpg">
+                    <img src="{{member?.profilepic}}">
                 </ion-avatar>
-                <h2>Chitrang</h2>
+                <h2>{{member?.firstName}}</h2>
                 <ion-icon name="cafe" item-right></ion-icon>
             </ion-item>
             <ion-item-options side="left">
@@ -64,56 +64,7 @@
       </button>
             </ion-item-options>
         </ion-item-sliding>
-        <ion-item-sliding>
-            <ion-item>
-                <ion-avatar item-left>
-                    <img src="assets/img/chitrang.jpg">
-                </ion-avatar>
-                <h2>Praveen</h2>
-                <ion-icon name="cafe" item-right></ion-icon>
-            </ion-item>
-            <ion-item-options side="left">
-                <button ion-button color="primary">
-        <ion-icon name="text"></ion-icon>
-        Text
-      </button>
-                <button ion-button color="secondary">
-        <ion-icon name="call"></ion-icon>
-        Call
-      </button>
-            </ion-item-options>
-            <ion-item-options side="right">
-                <button ion-button color="primary">
-        <ion-icon name="mail"></ion-icon>
-        Email
-      </button>
-            </ion-item-options>
-        </ion-item-sliding>
-        <ion-item-sliding>
-            <ion-item>
-                <ion-avatar item-left>
-                    <img src="assets/img/chitrang.jpg">
-                </ion-avatar>
-                <h2>Shammy</h2>
-                <ion-icon name="cafe" item-right></ion-icon>
-            </ion-item>
-            <ion-item-options side="left">
-                <button ion-button color="primary">
-        <ion-icon name="text"></ion-icon>
-        Text
-      </button>
-                <button ion-button color="secondary">
-        <ion-icon name="call"></ion-icon>
-        Call
-      </button>
-            </ion-item-options>
-            <ion-item-options side="right">
-                <button ion-button color="primary">
-        <ion-icon name="mail"></ion-icon>
-        Email
-      </button>
-            </ion-item-options>
-        </ion-item-sliding>
+
     </ion-list>
 
     <ion-fab bottom right>

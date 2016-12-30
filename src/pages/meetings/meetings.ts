@@ -2,6 +2,7 @@ import { Component,Pipe, PipeTransform } from '@angular/core';
 import { ModalController,NavController,ItemSliding } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import {MeetingDetails} from '../meeting-details/meeting-details';
+import {ScheduleMeeting} from '../schedule-meeting/schedule-meeting';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 
 
@@ -50,39 +51,15 @@ export class Meetings {
   }
 
   addMeeting() {
-    let prompt = this.alertCtrl.create({
-      title: 'New Meeting',
-      message: "Enter Meeting Title",
-      inputs: [
-        {
-          name: 'title',
-          placeholder: 'Title'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            console.log('Saved clicked');
-            
-          }
-        }
-      ]
+   
+    this.navCtrl.push(ScheduleMeeting, {
+      isPopup: true
     });
-    prompt.present();
   }
 
-   viewItem(){
+   viewItem(teamKey){
      this.navCtrl.push(MeetingDetails, {
-       //item:item
-       title:"Portfolio - UX design Discussion",
-       when:"Today, 18:45 @ Innovation Lab 234A "
+      teamKey : teamKey
      });
    }
 

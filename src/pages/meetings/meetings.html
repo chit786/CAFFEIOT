@@ -35,7 +35,7 @@
 
         <ion-list *ngSwitchCase="'host'">
             <ion-item-sliding #slidingItem *ngFor="let meeting of meetingListHost | async">
-                <ion-item (click)="viewItem()">
+                <ion-item (click)="viewItem(meeting.$key)">
                     <div class="date-blk">
                         <div>
                             {{meeting?.conferenceDate | amDateFormat : 'ddd'}}
@@ -44,9 +44,7 @@
                             {{meeting?.conferenceDate | amDateFormat : 'DD'}}
                         </div>
                     </div>
-                    <!--<ion-avatar item-left>
-                        <img src="assets/img/chitrang.jpg">
-                    </ion-avatar>-->
+
                     <div class="meeting-blk">
                         <h2>{{meeting?.team}}</h2>
                         <h3>{{meeting?.meetingTitle}}</h3>
@@ -93,7 +91,7 @@
 
         <ion-list *ngSwitchCase="'member'">
             <ion-item-sliding #slidingItem *ngFor="let meeting of meetingListMember | async">
-                <ion-item (click)="viewItem()">
+                <ion-item (click)="viewItem(meeting.$key)">
                     <div class="date-blk">
                         <div>
                             {{meeting?.conferenceDate | amDateFormat : 'ddd'}}
@@ -102,9 +100,7 @@
                             {{meeting?.conferenceDate | amDateFormat : 'DD'}}
                         </div>
                     </div>
-                    <!--<ion-avatar item-left>
-                        <img src="assets/img/chitrang.jpg">
-                    </ion-avatar>-->
+
                     <div class="meeting-blk">
                         <h2>{{meeting?.team}}</h2>
                         <h3>{{meeting?.meetingTitle}}</h3>

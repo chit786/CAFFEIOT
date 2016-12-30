@@ -24,7 +24,9 @@ export class ScheduleMeeting {
 
   firstNameref
 
-  constructor( public navParams: NavParams,public navCtrl: NavController,public af:AngularFire,public toastCtrl: ToastController) {}
+  constructor( public navParams: NavParams,public navCtrl: NavController,public af:AngularFire,public toastCtrl: ToastController) {
+
+  }
 
   ionViewDidLoad() {
     this.teams = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid + '/teams');
@@ -58,6 +60,20 @@ saveItem(){
     }
     var meetings = firebase.database().ref('/userProfile/'+firebase.auth().currentUser.uid + '/meetings/host');
   var meetingKey = meetings.push(meetingDetails);
+
+  //post host details to meeting list
+  var hostref = firebase.database().ref('/userProfile/'+firebase.auth().currentUser.uid);
+  hostref.once('value',function(snap){
+    
+    var fstName = snap.val().firstName;
+    var lstName = snap.val().lastName;
+
+    firebase.database().ref('/meetings/'+meetingKey.key).update({
+      ownerName : fstName + ' ' + lstName,
+    }); 
+
+  });
+
   var teamNode;
   var teams =  firebase.database().ref('/userProfile/'+firebase.auth().currentUser.uid + '/teams');
   teams.once('value',function(snapshot){
@@ -94,7 +110,7 @@ saveItem(){
                     }
 
                     updates['/meetings/'+ meetingKey.key + '/users/' + childSnapshot.key] = user
-                  
+                   
 
                     return false;
                 });
