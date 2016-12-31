@@ -29,7 +29,8 @@
        <ion-label width="10">Status</ion-label>
        <ion-label width="10">Rating</ion-label>
    </ion-item-->
-    <ion-card *ngFor="let item of items">
+    <!--<ion-card *ngFor="let item of items">-->
+    <ion-card *ngFor="let item of OrderList | async">
         <!--  <div>
            <ion-row>
                <ion-col> {{ item.choice }}</ion-col>
@@ -46,13 +47,13 @@
        </div> -->
         <div>
             <ion-badge item-left>{{ item.id }}</ion-badge>
-            <span class="al-rt">{{ '01-01-2016' | date : 'dd MMM yyyy' }}</span>
+            <span class="al-rt">{{ item.date | amCalendar : 'dd MMM yyyy' }}</span>
             <span class="clearfix"></span>
         </div>
         <div class="list-label"> {{ item.choice }}</div>
         <div class="bottom-status">
             <span><rating [(ngModel)]="rate" max="5" readOnly="true"></rating></span>
-            <span class="al-rt">{{ item.Status }}</span>
+            <span class="al-rt">{{ item.status }}</span>
         </div>
     </ion-card>
 

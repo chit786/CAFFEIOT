@@ -1,4 +1,9 @@
 page-ask-question {
+    .spinner-container {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+    }
     .item-label-floating .text-input {
         height: 100px;
     }
@@ -18,7 +23,7 @@ page-ask-question {
         border: 1px solid #622900;
     }
     ion-list {
-             padding: 15px 10px 15px 15px;
+        padding: 15px 10px 15px 15px;
     }
     .textarea,
     .tag-box {

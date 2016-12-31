@@ -54,7 +54,9 @@ export class HomePage {
          let ctx = this.canvas.nativeElement;
          var mydate ;
          var order = this.order;
-        //     this.year = this.today.split("-")[0];
+         var backColor = [];
+         var hoverColor = [];
+                 //     this.year = this.today.split("-")[0];
         //     this.month = this.today.split("-")[1];
         //     this.day = ( this.today.split("-")[2] ).split("T")[0];
         //    this.today = this.day + "-" + this.month + "-" + this.year;
@@ -71,7 +73,7 @@ export class HomePage {
                     today = day + "-" + month + "-" + year;
                   //  this.uName = firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT");
                   //this.uName = order.getcurrentuseremail();
-                 console.log('/dailyConsumption' + '/' + firebase.auth().currentUser.uid + '/'+  today );
+               
                  var coffeeCountRef = firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.uid + '/'+  today );
                   //  var coffeeCountRef = order.gettodayscoffeeconsumption();
                 
@@ -86,22 +88,55 @@ export class HomePage {
                 labelCountArr = [];
                
                if(snapshot.val()){
-                snapshot.val().forEach( function (arrayItem){
+               //running code // snapshot.val().forEach( function (arrayItem){
           
-                    if(arrayItem.status=="Complete"){
-                        if(foo[arrayItem.choice]>=1){
-                            foo[arrayItem.choice] = foo[arrayItem.choice] + 1;
+                //     if(arrayItem.status=="Complete"){
+                //         if(foo[arrayItem.choice]>=1){
+                //             foo[arrayItem.choice] = foo[arrayItem.choice] + 1;
+                //         }else{
+                //             foo[arrayItem.choice] = 1;
+                //         }
+                //     i++;
+                //     }
+
+                //  }
+                //  );
+                snapshot.forEach( function (arrayItem){
+                    
+                    var choices = arrayItem.val().choice.splice(0);
+
+                    for(var val in choices){
+
+                        console.log(arrayItem.val().choice[val].choice);
+                        
+                    if(arrayItem.val().choice[val].status=="Complete"){
+                        if(foo[arrayItem.val().choice[val].choice]>=1){
+                            foo[arrayItem.val().choice[val].choice] = foo[arrayItem.val().choice[val].choice] + 1;
                         }else{
-                            foo[arrayItem.choice] = 1;
+                            foo[arrayItem.val().choice[val].choice] = 1;
                         }
                     i++;
                     }
-
+                    }
+                    return false;
                  }
                  );
+              
+            if(Object.keys(foo).length>0){     
             for (var key in foo) {
+               
                 labelArr.push(key);
-                labelCountArr.push(foo[key])
+                labelCountArr.push(foo[key]);
+                
+            }
+        backColor = ["#FF6384","#36A2EB","#FFCE56","#D2691E"];
+            hoverColor=["#FF6384","#36A2EB","#FFCE56","#D2691E"];
+        }else{
+                labelArr.push("No Coffee");
+                labelCountArr.push(1);
+                backColor = ["#D3D3D3"];
+                hoverColor = ["#D3D3D3"];
+                
             }
 
 
@@ -120,6 +155,7 @@ export class HomePage {
             ctx.textBaseline = "middle";
 
             var text = i,
+        
                 textX = Math.round((width - ctx.measureText(text).width) / 2),
                 textY = height / 2;
             myChart.clear();
@@ -139,19 +175,9 @@ export class HomePage {
             //data:[4, 5, 13,10],
             data:labelCountArr,
             
-            backgroundColor: [
-                "#FF6384",
-                "#36A2EB",
-                "#FFCE56",
-                "#D2691E"
-            ],
+            backgroundColor: backColor,
 
-            hoverBackgroundColor: [
-                "#FF6384",
-                "#36A2EB",
-                "#FFCE56",
-                "#D2691E"
-            ]
+            hoverBackgroundColor: hoverColor
             
             }]
             },

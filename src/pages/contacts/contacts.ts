@@ -25,9 +25,12 @@ isNormal:any = true;
   selectedMembers = [];
   teamKey;
   teamName;
+
    
  searching: any = false;
-  constructor(public toastCtrl: ToastController,public teamData:TeamsData,public alertCtrl: AlertController,public navParams: NavParams,public navCtrl: NavController, public af: AngularFire,public modalCtrl: ModalController,public view: ViewController) {
+  constructor(public toastCtrl: ToastController,public teamData:TeamsData
+  ,public alertCtrl: AlertController,public navParams: NavParams,public navCtrl: NavController
+  , public af: AngularFire,public modalCtrl: ModalController,public view: ViewController) {
      this.searchControl = new FormControl();
 
   }
@@ -43,11 +46,11 @@ isNormal:any = true;
         else{
             this.isNormal = true;
          }
-        this.setFilteredItems();
+        this.setFilteredItems(this.searchTerm);
  
         this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
               this.searching = false;
-            this.setFilteredItems();
+            this.setFilteredItems(this.searchTerm);
  
         });
   }
@@ -56,9 +59,17 @@ isNormal:any = true;
     onSearchInput(){
         this.searching = true;
     }
-  setFilteredItems() {
+  setFilteredItems(searchTerm) {
  
-      this.contacts = this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/contacts');
+      this.contacts = this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/contacts').map(items=>{
+        const filtered = items.filter((item) => {
+           
+            return item.firstName.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+        }
+        )
+        return filtered;
+      });
+      
  
     }
   addContact(){

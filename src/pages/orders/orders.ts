@@ -3,7 +3,7 @@ import { ModalController,NavController } from 'ionic-angular';
 import { PlaceOrder } from '../place-order/place-order';
 import { Ionic2RatingModule } from 'ionic2-rating';
 import {OrderDetail} from '../order-detail/order-detail';
-
+import {AngularFire, FirebaseListObservable} from 'angularfire2';
 
 /*
  Generated class for the Orders page.
@@ -18,10 +18,10 @@ import {OrderDetail} from '../order-detail/order-detail';
 export class Orders {
  public items = [];
 rate;
-
+OrderList : FirebaseListObservable<any>;
  //items;
 
- constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
+ constructor(public af: AngularFire,public navCtrl: NavController, public modalCtrl: ModalController) {
    //this.initializeItems();
     this.rate = '4';
    this.initializeItems();
@@ -64,6 +64,7 @@ rate;
 
  //added as part of stub addition
  ionViewDidLoad(){
+   this.OrderList = this.af.database.list('/orders/'+firebase.auth().currentUser.uid);
 
  }
  addItem(){

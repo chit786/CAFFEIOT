@@ -38,6 +38,7 @@ public getListItem(): void { //here item is an object
     this.year = this.today.split("-")[0];
            this.month = this.today.split("-")[1];
            this.day = ( this.today.split("-")[2] ).split("T")[0];
+           this.today = this.day + "-" + this.month + "-" + this.year
            //this.today = new Date(this.year, this.month, this.day);//today to query the database to get the results
           
 
@@ -46,11 +47,30 @@ public getListItem(): void { //here item is an object
      date : this.day+"-"+this.month+"-"+this.year,
      choice: this.choice,
      machineID : "A",
-     Status : "Pending",
+     status : "Pending",
      rating : 0
      
    };
-   
+   var choices = this.choice;
+   firebase.database().ref('/orders/'+firebase.auth().currentUser.uid).push(newItem).then((orderNode)=>{
+
+     firebase.database().ref('/dailyConsumption/'+firebase.auth().currentUser.uid + '/' +this.today + '/'+ orderNode.key).update(newItem);
+
+     for(var val in choices){
+        firebase.database().ref('/dailyConsumption/'+firebase.auth().currentUser.uid + '/' +this.today + '/'+ orderNode.key  + '/choice/' + val).update({
+          choice:choices[val],
+          status:"Pending"
+        })
+        firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/'+ orderNode.key + '/choice/' + val).update({
+          choice:choices[val],
+          status:"Pending"
+        })
+     }
+
+   })
+
+
+
    this.view.dismiss(newItem);
 
  }

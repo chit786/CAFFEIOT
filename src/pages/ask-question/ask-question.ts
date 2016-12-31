@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-
+import { NavController,ToastController } from 'ionic-angular';
+import { AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
+import { FormControl } from '@angular/forms';
+import 'rxjs/add/operator/debounceTime';
 /*
   Generated class for the AskQuestion page.
 
@@ -8,18 +10,165 @@ import { NavController } from 'ionic-angular';
   Ionic pages and navigation.
 */
 @Component({
+  
   selector: 'page-ask-question',
   templateUrl: 'ask-question.html'
 })
 export class AskQuestion {
 
-  constructor(public navCtrl: NavController) {}
+  issearched :any;
+  users:any;
+  questionDetail: string = '';
+  chips=[];
+  searchTerm: string = '';
+  selectcompany : FirebaseObjectObservable<any>;
+  companyPreference;
+   searching: any = false;
+   searchControl: FormControl;
+   tags : any;
+  constructor(public toastCtrl: ToastController,public af : AngularFire, public navCtrl: NavController) {   
+  this.searchControl = new FormControl();
+  this.issearched = false;
+  }
 
   ionViewDidLoad() {
-    console.log('Hello AskQuestion Page');
-  }
-  delete(){
+        this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
+        this.searching = false;
+            
+    this.af.database.object('/userProfile/'+firebase.auth().currentUser.uid + '/company',{ preserveSnapshot: true } ).subscribe(companyname=>
+       {
+           if(this.searchTerm==''){
+          
+             this.issearched = false;
+           }
+          else{
+               this.issearched = true;
+          }
+          this.companyPreference = companyname.val();
+           this.setFilteredItems(companyname.val(),this.searchTerm)
+       }
+        
     
+    );
+ 
+        });
+  }
+
+  onSearchInput(){
+      this.searching = true;
+  }
+
+  setFilteredItems(company,searchTerm) {
+  
+       this.tags = this.af.database.list('/availabletags/' + company + '/tags').map(items=>{
+        const filtered = items.filter((item) => {
+            return item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+        })
+        return filtered;
+      },
+      );
+  }
+
+  delete(chip:Element){
+    chip.remove();
+    console.log(chip.textContent.trim());
+    const foundAt = this.chips.indexOf(chip.textContent.trim());
+    this.chips.splice(foundAt, 1);
+    
+  }
+
+  addChip(tagName){
+    const foundAt = this.chips.indexOf(tagName);
+     if (foundAt >= 0) {
+        //this.chips.splice(foundAt, 1);
+     } else {
+        this.chips.push(tagName);
+    }
+  }
+
+  clearQuestion(){
+    this.questionDetail = '';
+    this.chips = [];
+  }
+
+  postQuestion(){
+    var tags = this.chips.slice(0);
+    var qdesc = this.questionDetail;
+    var users = [];
+    firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid+'/myquestions').push({
+      questionTitle : this.questionDetail,
+      questionTags : this.chips
+    }).then((key)=>{
+        let questionDet = {
+
+                     tags : tags,
+                     questionTitle : qdesc,
+
+                   }
+       firebase.database().ref('/questions/' + key.key).update(questionDet)
+
+
+      this.questionDetail = "";
+      this.issearched = false;
+      this.chips = [];
+          let toast = this.toastCtrl.create({
+          message: 'Question Posted',
+          duration: 3000
+        });
+        toast.present();
+
+        //search from all client preferences and take the unique ID's
+        var index = 0;
+        firebase.database().ref('/userProfile').on('value',function(snapshot){
+          snapshot.forEach(function(childsnap){
+
+               for( var val in childsnap.val().skills){
+               
+                 
+                 if (tags.indexOf(childsnap.val().skills[val].name)>=0 && users.indexOf(childsnap.key)==-1 ){
+                   users.push(childsnap.key);
+                   
+                   let member = {
+
+                    memberID : childsnap.key,
+                    memberRegID : childsnap.val().regID
+
+                   }
+                   firebase.database().ref('/questions/' + key.key + '/members/' + index).update(member);
+                    index = index + 1;
+
+                   if(childsnap.key!=firebase.auth().currentUser.uid){
+                      firebase.database().ref('/userProfile/' + childsnap.key + '/feeds/' + key.key).update(questionDet);
+                   }
+
+                            
+                  // users.push(childsnap.key);
+                   
+                   break;
+                 }
+               }
+                
+               
+               return false;
+          }
+            
+          
+          )
+           
+
+
+
+        });
+        
+        
+
+
+    });
+
+
+
+
+
   }
 
 }
