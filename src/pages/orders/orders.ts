@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalController,NavController } from 'ionic-angular';
+import { ModalController,NavController,ToastController } from 'ionic-angular';
 import { PlaceOrder } from '../place-order/place-order';
 import { Ionic2RatingModule } from 'ionic2-rating';
 import {OrderDetail} from '../order-detail/order-detail';
@@ -21,9 +21,9 @@ rate;
 OrderList : FirebaseListObservable<any>;
  //items;
 
- constructor(public af: AngularFire,public navCtrl: NavController, public modalCtrl: ModalController) {
+ constructor(public toastCtrl: ToastController,public af: AngularFire,public navCtrl: NavController, public modalCtrl: ModalController) {
    //this.initializeItems();
-    this.rate = '4';
+    this.rate = '3.5';
    this.initializeItems();
  }
 
@@ -92,9 +92,51 @@ OrderList : FirebaseListObservable<any>;
   // this.dataService.save(this.items);
  }
 
- viewItem(item){
-   this.navCtrl.push(OrderDetail, {
-     item: item
-   });
+
+ cancelOrder(orderKey){
+
+  firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + orderKey).set(null);
+
  }
+
+ removeChoice(chip:Element,choiceKey,orderKey){
+  
+  var toast = this.toastCtrl;
+
+ 
+  
+   var choiceRef = firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + orderKey + '/choice' ) 
+   choiceRef.on('value',function(snapshot){
+     if(snapshot.numChildren()>1){
+         chip.remove();
+      snapshot.forEach(function(childsnapshot){
+        
+        if(childsnapshot.val().choice==chip.textContent.toString().trim()){
+          childsnapshot.ref.set(null);
+          return true;
+        }
+      })
+    }else{
+      
+        let toaster = toast.create({
+      message: 'Atleast one choice should be present, else please swipe left to cancel the order.',
+      duration: 3000
+    });
+    toaster.present();
+    }
+   })
+
+
+ }
+
+ openOrder(item){
+ this.navCtrl.push(OrderDetail, {
+     item: item,
+     itemKey : item.$key
+   });
+
+
+ }
+
+
 }

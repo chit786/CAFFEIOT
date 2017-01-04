@@ -15,45 +15,46 @@
 
 <ion-content padding>
 
+    <ion-list>
+        <ion-item *ngFor='let question of feedList | async'>
+            <ion-card>
+                <ion-card-title class="card-title">
+                    {{question?.questionTitle}}
+                </ion-card-title>
+                <ion-item>
+                    <ion-avatar item-left>
+                        <img src="{{(question.detail | async)?.askedBy.profilepic}}">
+                    </ion-avatar>
+                    <h2>{{(question.detail | async)?.askedBy.name}}</h2>
+                    <p>{{(question.detail | async)?.askedBy.date | amCalendar}}</p>
+                </ion-item>
 
-    <ion-card>
-        <ion-card-title class="card-title">
-            Any good tutorials on IONIC2?
-        </ion-card-title>
-        <ion-item>
-            <ion-avatar item-left>
-                <img src="assets/img/chitrang.jpg">
-            </ion-avatar>
-            <h2>Chitrang Natu</h2>
-            <p>November 5, 1955</p>
-        </ion-item>
-
-        <!--<ion-card-content>
+                <!--<ion-card-content>
             <p>This is a question posted as a sample to test the questions functioonality. I am going to test the long message</p>
         </ion-card-content>-->
 
-        <ion-row>
-            <ion-col>
-                <button ion-button icon-left clear small>
+                <ion-row>
+                    <ion-col>
+                        <button ion-button icon-left clear small>
         <ion-icon name="thumbs-up"></ion-icon>
-        <div>12 Likes</div>
+        <div>{{(question.detail | async)?.likeCount}} Likes</div>
       </button>
-            </ion-col>
-            <ion-col>
-                <button ion-button icon-left clear small>
+                    </ion-col>
+                    <ion-col>
+                        <button ion-button icon-left clear small>
         <ion-icon name="text"></ion-icon>
-        <div>4 Comments</div>
+        <div>{{(question.comments|async)?.length}} Comments</div>
       </button>
-            </ion-col>
-            <ion-col center text-center>
-                <ion-note>
-                    11h ago
-                </ion-note>
-            </ion-col>
-        </ion-row>
+                    </ion-col>
+                    <ion-col center text-center>
+                        <ion-note>
+                            11h ago
+                        </ion-note>
+                    </ion-col>
+                </ion-row>
 
-    </ion-card>
-
-
+            </ion-card>
+        </ion-item>
+    </ion-list>
 
 </ion-content>

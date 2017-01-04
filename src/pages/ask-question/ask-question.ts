@@ -134,7 +134,19 @@ export class AskQuestion {
                     memberRegID : childsnap.val().regID
 
                    }
+                   var today = new Date().toISOString();
+                   let askDetail= {
+
+                     name : childsnap.val().firstName + ' ' + childsnap.val().lastName,
+                     profilepic : childsnap.val().profilepic,
+                     date : today
+
+                   }
                    firebase.database().ref('/questions/' + key.key + '/members/' + index).update(member);
+                   if(index==0){
+                      firebase.database().ref('/questions/' + key.key + '/askedBy').update(askDetail);
+                   }
+                   
                     index = index + 1;
 
                    if(childsnap.key!=firebase.auth().currentUser.uid){

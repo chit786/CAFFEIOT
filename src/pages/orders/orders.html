@@ -30,31 +30,42 @@
        <ion-label width="10">Rating</ion-label>
    </ion-item-->
     <!--<ion-card *ngFor="let item of items">-->
-    <ion-card *ngFor="let item of OrderList | async">
-        <!--  <div>
-           <ion-row>
-               <ion-col> {{ item.choice }}</ion-col>
-               <ion-col>date : {{ item.date }}</ion-col>
-           </ion-row>
-           <ion-row>
-               <ion-col>order Id : {{ item.id }}</ion-col>
-               <ion-col>order status : {{ item.Status }}</ion-col>
-               <ion-col>machine Id : {{ item.machineID }}</ion-col>
-           </ion-row>
-           <ion-row>
-               rating : {{ item.rating }}
-           </ion-row>
-       </div> -->
-        <div>
-            <ion-badge item-left>{{ item.id }}</ion-badge>
-            <span class="al-rt">{{ item.date | amCalendar : 'dd MMM yyyy' }}</span>
-            <span class="clearfix"></span>
-        </div>
-        <div class="list-label"> {{ item.choice }}</div>
-        <div class="bottom-status">
-            <span><rating [(ngModel)]="rate" max="5" readOnly="true"></rating></span>
-            <span class="al-rt">{{ item.status }}</span>
-        </div>
-    </ion-card>
+    <ion-list>
+        <ion-item-sliding #slidingItem *ngFor="let item of OrderList | async">
+            <ion-item>
+                <ion-card>
+
+                    <div (click)="openOrder(item)">
+                        <ion-badge item-left>{{ item.id }}</ion-badge>
+                        <span class="al-rt">{{ item.date | amDateFormat : 'DD MMM YYYY' }}</span>
+                        <span class="clearfix"></span>
+                    </div>
+                    <!--<div class="list-label"> {{ item.choice }}</div>-->
+                    <!--<ion-list>
+            <ion-item class="list-label" *ngFor="let drink of item.choice">-->
+                    <ion-chip #chip color="light" *ngFor="let drink of item.choice">
+                        <ion-label style="text-align: center;">{{drink.choice}}</ion-label>
+                        <button #btn ion-button clear color="dark" (click)="removeChoice(chip,item.choice,item.$key)">
+                                <ion-icon name="close"></ion-icon>
+                </button>
+                    </ion-chip>
+                    <!--</ion-item>
+        </ion-list>-->
+                    <div class="bottom-status" (click)="openOrder(item)">
+                        <span><rating [(ngModel)]="item.rating" max="5" readOnly="true"></rating></span>
+                        <span class="al-rt">{{ item.status }}</span>
+                    </div>
+                </ion-card>
+            </ion-item>
+            <ion-item-options side="right">
+                <button ion-button color="primary" (click)="cancelOrder(item.$key)">
+                    <ion-icon name="close-circle"></ion-icon>
+                     Cancel
+                 </button>
+            </ion-item-options>
+        </ion-item-sliding>
+
+
+    </ion-list>
 
 </ion-content>

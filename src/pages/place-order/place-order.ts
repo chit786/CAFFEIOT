@@ -44,7 +44,7 @@ public getListItem(): void { //here item is an object
 
    let newItem = {
      id:1,
-     date : this.day+"-"+this.month+"-"+this.year,
+     date : this.month+"/"+this.day+"/"+this.year,
      choice: this.choice,
      machineID : "A",
      status : "Pending",

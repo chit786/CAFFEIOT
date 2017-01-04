@@ -16,23 +16,38 @@ export class OrderDetail {
 
   title;
   description;
+  choiceCollection;
   rate;
-  
- 
+  orderKey;
+  dbRating;
   constructor(public navParams: NavParams,public navCtrl: NavController, public view: ViewController){
  
   }
  
   ionViewDidLoad() {
     this.title = this.navParams.get('item').id;
-    this.description = this.navParams.get('item').choice;
-    this.rate = this.navParams.get('item').rating; 
-   
+    this.orderKey = this.navParams.get('itemKey');
+    var temprate = this.dbRating;
+    firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + this.orderKey ).child('rating').on('value',function(snap){
+      temprate = snap.val();
+    })
+    this.rate = temprate;
+    this.choiceCollection = this.navParams.get('item').choice; 
+    
   }
 
-  saveRating(){
-    this.navParams.get('item').rating = this.rate;
-    this.view.dismiss();
+  saveRating(choiceName){
+    // this.navParams.get('item').rating = this.rate;
+   
+    var rate = this.rate;
+    //console.log(this.orderKey);
+    firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + this.orderKey ).update({
+      rating:rate
+      
+    });
+    this.view.dismiss(); 
+  
+   // this.view.dismiss();
  
   }
 

@@ -18,11 +18,12 @@
 
 
 <ion-content padding>
-    <ion-card>
+    <ion-card *ngFor='let item of choiceCollection'>
         <ion-card-content>
-            {{description}}
+            {{item.choice}}
         </ion-card-content>
-        <rating [(ngModel)]="rate" max="5" (click)="saveRating()"></rating>
+
     </ion-card>
+    <rating [(ngModel)]="rate" max="5" (click)="saveRating()"></rating>
 
 </ion-content>
