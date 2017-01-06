@@ -21,9 +21,50 @@
     </div>
 
     <ion-list>
-        <ion-item *ngFor="let item of items">
+        <!--<ion-item *ngFor="let item of items">
             {{item.title}}
+        </ion-item>-->
+        <ion-item *ngFor='let question of myQs | async'>
+            <ion-card>
+                <ion-card-title class="card-title">
+                    {{question?.questionTitle}}
+                </ion-card-title>
+
+                <ion-item>
+                    <ion-avatar item-left>
+                        <img src="{{(question.detail | async)?.askedBy.profilepic}}">
+                    </ion-avatar>
+                    <h2>{{(question.detail | async)?.askedBy.name}}</h2>
+                    <p>{{(question.detail | async)?.askedBy.date | amCalendar}}</p>
+                </ion-item>
+
+                <!--<ion-card-content>
+            <p>This is a question posted as a sample to test the questions functioonality. I am going to test the long message</p>
+        </ion-card-content>-->
+
+                <ion-row>
+                    <ion-col>
+                        <button ion-button icon-left clear small>
+        <ion-icon name="thumbs-up"></ion-icon>
+        <div>{{(question.detail | async)?.likeCount}} Likes</div>
+      </button>
+                    </ion-col>
+                    <ion-col>
+                        <button ion-button icon-left clear small>
+        <ion-icon name="text"></ion-icon>
+        <div (click)='openQuestion(question.$key)'>{{(question.comments|async)?.length}} Comments</div>
+      </button>
+                    </ion-col>
+                    <ion-col center text-center>
+                        <ion-note>
+                            11h ago
+                        </ion-note>
+                    </ion-col>
+                </ion-row>
+
+            </ion-card>
         </ion-item>
     </ion-list>
+    <!--</ion-list>-->
 
 </ion-content>

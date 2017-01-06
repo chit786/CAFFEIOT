@@ -21,6 +21,7 @@ import {MyQuestions} from '../pages/my-questions/my-questions';
 import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
 import {Preferences} from '../pages/preferences/preferences';
 import {Contacts} from '../pages/contacts/contacts';
+import {QuestionDetail} from '../pages/question-detail/question-detail';
 
 @Component({
   templateUrl: 'app.html'

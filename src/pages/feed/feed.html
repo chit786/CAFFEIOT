@@ -21,6 +21,7 @@
                 <ion-card-title class="card-title">
                     {{question?.questionTitle}}
                 </ion-card-title>
+                <rating [(ngModel)]="question.isFav" max="1" (click)="addToFavourite(question.$key)"></rating>
                 <ion-item>
                     <ion-avatar item-left>
                         <img src="{{(question.detail | async)?.askedBy.profilepic}}">
@@ -43,7 +44,7 @@
                     <ion-col>
                         <button ion-button icon-left clear small>
         <ion-icon name="text"></ion-icon>
-        <div>{{(question.comments|async)?.length}} Comments</div>
+        <div (click)='openQuestion(question.$key)'>{{(question.comments|async)?.length}} Comments</div>
       </button>
                     </ion-col>
                     <ion-col center text-center>

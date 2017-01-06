@@ -30,6 +30,7 @@ import { AngularFireModule } from 'angularfire2';
 import {Preferences} from '../pages/preferences/preferences';
 import {Contacts} from '../pages/contacts/contacts';
 import {MomentModule} from 'angular2-moment';
+import {QuestionDetail} from '../pages/question-detail/question-detail';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCLoFM5qxP6IXTMThJ1mm7B8EqXYaEMXAE",
@@ -61,7 +62,8 @@ export const firebaseConfig = {
     ScheduleMeeting,
     Preferences,
     Contacts,
-    MinutesOfMeeting
+    MinutesOfMeeting,
+    QuestionDetail
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -93,7 +95,8 @@ export const firebaseConfig = {
     ScheduleMeeting,
     Preferences,
     Contacts,
-    MinutesOfMeeting
+    MinutesOfMeeting,
+    QuestionDetail
   ],
   providers: [AuthData,OrderData,ProfileData,TeamsData,QuestionsData]
 })

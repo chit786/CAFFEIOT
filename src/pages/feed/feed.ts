@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController,ModalController } from 'ionic-angular';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
+import { Ionic2RatingModule } from 'ionic2-rating';
+import {QuestionDetail} from '../question-detail/question-detail';
 
 /*
   Generated class for the Feed page.
@@ -13,13 +15,19 @@ import {AngularFire, FirebaseListObservable} from 'angularfire2';
   templateUrl: 'feed.html'
 })
 export class Feed {
-
+  rate;
   feedList : FirebaseListObservable<any>;
-  constructor(public navCtrl: NavController,public af: AngularFire ) {
+  constructor(public navCtrl: NavController,public af: AngularFire,public modalCtrl: ModalController ) {
 
-    this.feedList = af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/feeds').map((_qss)=>{
+   
+    
+  }
+
+  ionViewDidEnter(){
+    //again set all to 
+     this.feedList = this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/feeds').map((_qss)=>{
       return _qss.map((_qs)=>{
-       
+                      
         _qs.detail = this.af.database.object('/questions/'+_qs.$key);
        
         _qs.comments = this.af.database.list('/questions/'+_qs.$key+'/comments');
@@ -31,11 +39,52 @@ export class Feed {
     }
     ) as FirebaseListObservable<any>;
 
-    
+
+   var feeds =  firebase.database().ref('/userProfile/' + firebase.auth().currentUser.uid + '/feeds')
+   feeds.once('value',function(snapshot){
+         var updates = {};
+         snapshot.forEach(function(child){
+           updates[ child.key + '/isread'] = true;
+           return false;
+         });
+         feeds.update(updates);
+
+
+    })
+
+     firebase.database().ref('/userProfile/' + firebase.auth().currentUser.uid ).update({
+      unreadFeed : null
+    })
   }
 
-  ionViewDidLoad() {
-    console.log('Hello Feed Page');
+  addToFavourite(feed){
+
+    firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/feeds/' + feed + '/isFav').once('value',function(snapshot){
+
+      if(snapshot.val()==1){
+         firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/feeds/' + feed).update({
+            isFav : 0
+          })
+
+      }else{
+         firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/feeds/' + feed).update({
+            isFav : 1
+          })
+      }
+         
+
+    })
+
+
+     
   }
 
+  openQuestion(qsKey){
+
+  let model = this.modalCtrl.create(QuestionDetail,{
+    qsKey : qsKey})
+
+  model.present();
+
+ }
 }

@@ -21,7 +21,7 @@
 <ion-content>
 
     <ion-tabs>
-        <ion-tab [root]="tab1Root" tabTitle="Feeds" tabBadge="1" tabIcon="flash"></ion-tab>
+        <ion-tab [root]="tab1Root" tabTitle="Feeds" tabBadge="{{(feedUnread | async)?.unreadFeed}}" tabIcon="flash"></ion-tab>
         <ion-tab [root]="tab2Root" tabTitle="Favourites" tabIcon="heart-outline"></ion-tab>
         <ion-tab [root]="tab3Root" tabTitle="Ask Question" tabIcon="hand"></ion-tab>
         <ion-tab [root]="tab4Root" tabTitle="My Questions" tabIcon="list"></ion-tab>

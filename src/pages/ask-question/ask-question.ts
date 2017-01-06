@@ -3,6 +3,7 @@ import { NavController,ToastController } from 'ionic-angular';
 import { AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
 import { FormControl } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
+
 /*
   Generated class for the AskQuestion page.
 
@@ -151,6 +152,10 @@ export class AskQuestion {
 
                    if(childsnap.key!=firebase.auth().currentUser.uid){
                       firebase.database().ref('/userProfile/' + childsnap.key + '/feeds/' + key.key).update(questionDet);
+                      firebase.database().ref('/userProfile/' + childsnap.key + '/feeds/' + key.key).update({
+                        isread : "false",
+                        isFav : 0
+                      });
                    }
 
                             
@@ -182,5 +187,6 @@ export class AskQuestion {
 
 
   }
+
 
 }
