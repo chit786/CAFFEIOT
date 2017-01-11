@@ -41,6 +41,7 @@ export class MyTeamDetails {
 
   addNewmember(){
     this.navCtrl.push(Contacts, {
+      isMeet : false,
       isPopup: true,
       teamKey : this.navParams.get('item')
     });

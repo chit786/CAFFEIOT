@@ -74,6 +74,30 @@ export class ProfilePage {
     alert.present();
   }
 
+  updateNumber(){
+let alert = this.alertCtrl.create({
+      inputs: [
+        {
+          name: 'newNumber',
+          placeholder: 'Your new number',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            this.profileData.updateNumber(data.newNumber);
+          }
+        }
+      ]
+    });
+    alert.present();
+
+  }
+
   updateDOB(birthDate) {
     this.profileData.updateDOB(birthDate);
   }
@@ -293,7 +317,7 @@ export class ProfilePage {
     Camera.getPicture({
       destinationType: Camera.DestinationType.FILE_URI,
       sourceType: Camera.PictureSourceType.CAMERA,
-      targetHeight: 640,
+      targetHeight: 620,
       correctOrientation: true
     }).then((_imagePath) => {
      // alert('got image path ' + _imagePath);

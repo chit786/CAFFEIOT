@@ -3,6 +3,7 @@ import { IonicApp, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { Orders } from '../pages/orders/orders';
+import {Tasks} from '../pages/tasks/tasks';
 import { PlaceOrder } from '../pages/place-order/place-order';
 import {OrderDetail} from '../pages/order-detail/order-detail';
 import { LoginPage } from '../pages/login/login';
@@ -63,7 +64,8 @@ export const firebaseConfig = {
     Preferences,
     Contacts,
     MinutesOfMeeting,
-    QuestionDetail
+    QuestionDetail,
+    Tasks
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -89,6 +91,7 @@ export const firebaseConfig = {
     ProfilePage,
     MyTeamDetails,
     AskQuestion,
+    Tasks,
     Favourite,
     Feed,
     MyQuestions,

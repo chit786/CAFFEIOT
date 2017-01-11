@@ -22,8 +22,22 @@
         <ion-card-content>
             {{item.choice}}
         </ion-card-content>
+        <rating [(ngModel)]="rate" max="5" (click)="saveRating()"></rating>
+
+        <button ion-button small item-right color="primary" (click)="completeChoice(choiceCollection.indexOf(item))">
+        Done
+      </button>
+        <button ion-button small item-right color="primary" (click)="failedChoice(choiceCollection.indexOf(item))">
+        Failed
+      </button>
 
     </ion-card>
-    <rating [(ngModel)]="rate" max="5" (click)="saveRating()"></rating>
+
 
 </ion-content>
+
+<ion-footer>
+    <button ion-button full color="primary" (click)="completeOrder()">
+        All Completed
+      </button>
+</ion-footer>

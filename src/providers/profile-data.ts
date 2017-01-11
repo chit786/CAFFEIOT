@@ -64,6 +64,13 @@ export class ProfileData {
     });
   }
 
+  updateNumber(newNumber : string) : any{
+  return this.userProfile.child(this.currentUser.uid).update({
+      number: newNumber,
+    });
+
+  }
+
   updateProfilepic(profilePic: string): any {
      return this.userProfile.child(this.currentUser.uid).update({
       profilepic: profilePic,

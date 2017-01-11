@@ -20,6 +20,7 @@ export class OrderDetail {
   rate;
   orderKey;
   dbRating;
+  today =  new Date().toISOString();
   constructor(public navParams: NavParams,public navCtrl: NavController, public view: ViewController){
  
   }
@@ -33,6 +34,12 @@ export class OrderDetail {
     })
     this.rate = temprate;
     this.choiceCollection = this.navParams.get('item').choice; 
+
+     
+                    var year = this.today.split("-")[0];
+                    var month = this.today.split("-")[1];
+                    var day = ( this.today.split("-")[2] ).split("T")[0]
+                    this.today = day + "-" + month + "-" + year;
     
   }
 
@@ -50,5 +57,59 @@ export class OrderDetail {
    // this.view.dismiss();
  
   }
+
+  completeOrder(){
+    var choices = this.choiceCollection;
+    firebase.database().ref('/orders/' + firebase.auth().currentUser.uid + '/' + this.orderKey).update({
+      status : "Complete"
+    });
+
+      firebase.database().ref('/dailyConsumption/' + firebase.auth().currentUser.uid +'/' +this.today + '/' + this.orderKey ).update({
+      status : 'Complete'
+    })
+
+    for(var val in choices){
+
+       
+    firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + this.orderKey + '/choice/').child(val).update({
+      status : 'Complete'
+    }) 
+
+    firebase.database().ref('/dailyConsumption/' + firebase.auth().currentUser.uid +'/' +this.today + '/' + this.orderKey + '/choice/' ).child(val).update({
+      status : 'Complete'
+    })
+    }
+
+
+  }
+
+  completeChoice(choiceKey){
+ 
+    
+    firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + this.orderKey + '/choice/').child(choiceKey).update({
+      status : 'Complete'
+    }) 
+
+    firebase.database().ref('/dailyConsumption/' + firebase.auth().currentUser.uid +'/' +this.today + '/' + this.orderKey + '/choice/' ).child(choiceKey).update({
+      status : 'Complete'
+    })
+    
+    
+  }
+
+ failedChoice(choiceKey){
+ 
+    
+    firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + this.orderKey + '/choice/').child(choiceKey).update({
+      status : 'Failed'
+    }) 
+
+    firebase.database().ref('/dailyConsumption/' + firebase.auth().currentUser.uid +'/' +this.today + '/' + this.orderKey + '/choice/' ).child(choiceKey).update({
+      status : 'Failed'
+    })
+    
+    
+  }
+
 
 }

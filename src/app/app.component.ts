@@ -17,6 +17,7 @@ import {MyTeamDetails} from '../pages/my-team-details/my-team-details';
 import {AskQuestion} from '../pages/ask-question/ask-question';
 import {Favourite} from '../pages/favourite/favourite';
 import {Feed} from '../pages/feed/feed';
+import {Tasks} from '../pages/tasks/tasks';
 import {MyQuestions} from '../pages/my-questions/my-questions';
 import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
 import {Preferences} from '../pages/preferences/preferences';
@@ -29,7 +30,8 @@ import {QuestionDetail} from '../pages/question-detail/question-detail';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  //rootPage: any = LoginPage;
+  rootPage: any ;
 
   pages: Array<{title: string, component: any}>;
 
@@ -47,6 +49,7 @@ export class MyApp {
       if (!user) {
         this.rootPage = LoginPage;
       }else{
+        this.rootPage = HomePage;
         this.initializeApp(user);
       }
     });
@@ -61,8 +64,10 @@ export class MyApp {
       { title: 'Orders', component: Orders },
        { title: 'Meetings', component: Meetings },
       { title: 'My Teams', component: MyTeams },
+      { title: 'All Tasks', component: Tasks },
       { title: 'Schedule Meeting', component: ScheduleMeeting },
       { title: 'Have a Question?..', component: Questions },
+      { title: 'Logout', component:'' },
 
     ];
 
@@ -75,7 +80,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       if (this.platform.is('android')){
       StatusBar.styleDefault();
-       Splashscreen.show();
+      //  Splashscreen.show();
       let push = Push.init({
         android: {
           senderID: "558368532218"
@@ -90,8 +95,12 @@ export class MyApp {
 
        push.on('registration', (data) => {
         //console.log("device token ->", data.registrationId);
+
       var key = firebase.database().ref('/userProfile').child(user.uid);
-         var postData = {
+      if(key.key){
+           
+      }else{
+            var postData = {
               
                regID :  data.registrationId,
             }
@@ -99,6 +108,9 @@ export class MyApp {
             
             updates['/userProfile/' + key ] = postData;
              firebase.database().ref().update(updates);
+
+      }
+      
         //TODO - send device token to server
       });
       push.on('notification', (data) => {
@@ -117,7 +129,12 @@ export class MyApp {
               text: 'View',
               handler: () => {
                 //TODO: Your logic here
-                self.nav.push(HomePage, {message: data.message});
+                if(data.message=="Coffee?"){
+                   self.nav.push(PlaceOrder, {message: data.message});
+                }else{
+                  self.nav.push(HomePage, {message: data.message});
+                }
+               
               }
             }]
           });
@@ -125,7 +142,13 @@ export class MyApp {
         } else {
           //if user NOT using app and push notification comes
           //TODO: Your logic on click of push notification directly
-          self.nav.push(HomePage, {message: data.message});
+
+         // self.nav.push(HomePage, {message: data.message});
+           if(data.message=="Coffee?"){
+                   self.nav.push(PlaceOrder, {message: data.message});
+                }else{
+                  self.nav.push(HomePage, {message: data.message});
+                }
           console.log("Push notification clicked");
         }
       });
@@ -138,8 +161,14 @@ export class MyApp {
   }
 
   openPage(page) {
+    if(page.title=="Logout"){
+      firebase.auth().signOut();
+       
+    }else{
+        this.nav.setRoot(page.component);
+    }
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    
   }
 }

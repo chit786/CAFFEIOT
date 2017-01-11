@@ -44,11 +44,11 @@
             <ion-item-options side="left">
                 <button ion-button color="primary">
         <ion-icon name="text"></ion-icon>
-        Text
+        <a [href]="'sms:' + 31647911724">Mail</a>
       </button>
                 <button ion-button color="secondary">
         <ion-icon name="call"></ion-icon>
-        Call
+        <a [href]="'tel:' + 31647911724">Call</a>
       </button>
             </ion-item-options>
             <ion-item-options side="right">
@@ -69,5 +69,6 @@
 
             <button ion-fab icon-only mini (click)="addMember()"><ion-icon name="checkmark"></ion-icon></button>
         </div>
+
     </ion-fab>
 </ion-content>

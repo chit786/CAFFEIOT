@@ -43,7 +43,7 @@
     <ion-list>
         <ion-item>
             <ion-label>Team to meet</ion-label>
-            <ion-select [(ngModel)]="team" placeholder="Select" cancelText="Nah" okText="Okay!">
+            <ion-select [(ngModel)]="teamName" placeholder="Select" cancelText="Nah" okText="Okay!">
                 <!--<ion-option value="team A" checked="true">team A</ion-option>-->
                 <ion-option *ngFor="let teamName of teams | async" value="{{teamName?.teamName}}">{{teamName?.teamName}}</ion-option>
             </ion-select>

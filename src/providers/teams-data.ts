@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
-import { AlertController } from 'ionic-angular';
+import { AlertController,ToastController } from 'ionic-angular';
 import {AngularFire, FirebaseObjectObservable} from 'angularfire2';
 import { Http,Response, Headers, RequestOptions  } from '@angular/http';
 
@@ -13,7 +13,7 @@ export class TeamsData {
   // We'll use this to create an auth reference to the logged in user.
   currentUser: any; 
 
-  constructor(public alertCtrl : AlertController,private http: Http,public af:AngularFire) {
+  constructor(public alertCtrl : AlertController,private http: Http,public af:AngularFire,public toastCtrl: ToastController) {
 
     this.http = http;
     
@@ -62,6 +62,42 @@ export class TeamsData {
 
 
   }
+
+  //ask Coffee to the team
+  askCoffee(memberDetail){
+var myhttp = this.http;
+ var myAlert = this.toastCtrl;
+    memberDetail.forEach(function(snapshot){
+                       
+                    snapshot.forEach(function(child){
+                      if(child.$key!=firebase.auth().currentUser.uid){
+                          //added
+                           let headers = new Headers({ 'Content-Type': 'application/json','Authorization':'key=AAAAggFbpvo:APA91bG6IRvRoSGJP2rcNGG8BLV3NxE7mbkFmvQhD_lYjAuhGtFVvX9OkYbMlTR_cP6p8kBDpvw_790o1JJbcAs0ScnwB_4wuwyGuxrtp6UlnxeyYl2b43fh6pUTVHi1jGFkTuTp58wtJjX6zSNvLg_CLKdBAEY_YA' }); // ... Set content type to JSON
+                            let options = new RequestOptions({ headers: headers });
+                              console.log('{"data":{"title":"CAFFEIOT","message":"Coffee?"},"to":'+ JSON.stringify(child.regID)+"}");
+
+                              myhttp.post("https://fcm.googleapis.com/fcm/send",'{"data":{"title":"CAFFEIOT","message":"Coffee?"},"to":'+ JSON.stringify(child.regID)+"}",options)
+                              .subscribe(data=>{
+                                      let alert = myAlert.create({
+                                    message: child.firstName + ' notified!',
+                                    duration: 3000
+                                });
+                                  alert.present();
+
+                                })
+                          //
+                            
+                      }
+
+
+                    })
+
+                    
+                    
+                  })
+  }
+
+
 
    sendNotifyContact(regID,key,message){
     var myAlert = this.alertCtrl;

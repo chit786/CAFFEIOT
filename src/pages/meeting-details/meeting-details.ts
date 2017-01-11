@@ -2,9 +2,11 @@ import { Component } from '@angular/core';
 import { NavParams,ModalController,ViewController,AlertController,NavController } from 'ionic-angular';
 import {PlaceOrder} from '../place-order/place-order';
 import {Contacts} from '../contacts/contacts';
+import { TeamsData } from '../../providers/teams-data';
 import {ScheduleMeeting} from '../schedule-meeting/schedule-meeting';
 import {MinutesOfMeeting} from '../minutes-of-meeting/minutes-of-meeting';
 import {AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
+
 /*
   Generated class for the MeetingDetails page.
 
@@ -23,7 +25,7 @@ export class MeetingDetails {
   meetingDetail: FirebaseObjectObservable<any>;
   memberDetail : FirebaseListObservable<any>;
   constructor(public af: AngularFire,public navCtrl: NavController,public navParams: NavParams,
-  public modalCtrl: ModalController, public view: ViewController,public alertCtrl: AlertController) {
+  public modalCtrl: ModalController, public view: ViewController,public alertCtrl: AlertController,public teamData: TeamsData) {
 
   }
 
@@ -79,6 +81,10 @@ export class MeetingDetails {
                 addModal.present();
                     
                 }else if(data[val]=="team"){
+                 
+                  this.teamData.askCoffee(this.memberDetail);
+
+                  
 
                 }
             }
@@ -97,22 +103,26 @@ export class MeetingDetails {
   }
   addMember(){
 this.navCtrl.push(Contacts, {
-      isPopup: true,
+      isPopup:true,
+      isMeet: true,
       teamKey:this.navParams.get('teamKey')
     });
 
     
   }
   openMom(teamKey){
-
+    console.log(teamKey);
     this.navCtrl.push(MinutesOfMeeting,{
-        teamID:teamKey
+        teamID:this.navParams.get('teamKey')
     })
   }
 
-  reschedule(teamKey){
+  reschedule(meetKey){
+   
      this.navCtrl.push(ScheduleMeeting,{
-        teamID:teamKey
+        teamName: this.title,
+        isPopup: true,
+        meetkey:this.navParams.get('teamKey')
     })
   }
 

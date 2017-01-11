@@ -25,7 +25,7 @@ export class PlaceOrder {
   day:any;
   listItem = [];
  constructor(public navParams: NavParams,public navCtrl: NavController, public view: ViewController) {
-        
+
  }
 
 public getListItem(): void { //here item is an object 
@@ -38,12 +38,14 @@ public getListItem(): void { //here item is an object
     this.year = this.today.split("-")[0];
            this.month = this.today.split("-")[1];
            this.day = ( this.today.split("-")[2] ).split("T")[0];
+           var orderID = ( this.today.split(":")[0] ).split("T")[1] + this.today.split(":")[1] + (this.today.split(":")[2]).split(".")[0]  ;
+
            this.today = this.day + "-" + this.month + "-" + this.year
            //this.today = new Date(this.year, this.month, this.day);//today to query the database to get the results
           
 
    let newItem = {
-     id:1,
+     id:orderID,
      date : this.month+"/"+this.day+"/"+this.year,
      choice: this.choice,
      machineID : "A",

@@ -20,7 +20,7 @@
 
 
 <ion-content padding>
-    <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+    <!--<ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>-->
     <!--ion-item>
        <ion-label width="10">Order Id</ion-label>
        <ion-label width="20">Date</ion-label>
@@ -31,6 +31,9 @@
    </ion-item-->
     <!--<ion-card *ngFor="let item of items">-->
     <ion-list>
+        <ion-list-header>
+            Today's Orders
+        </ion-list-header>
         <ion-item-sliding #slidingItem *ngFor="let item of OrderList | async">
             <ion-item>
                 <ion-card>

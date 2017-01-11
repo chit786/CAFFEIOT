@@ -35,7 +35,7 @@
 
         <ion-list *ngSwitchCase="'host'">
             <ion-item-sliding #slidingItem *ngFor="let meeting of meetingListHost | async">
-                <ion-item (click)="viewItem(meeting.$key)">
+                <ion-item (click)="viewItem(meeting.$key,meeting?.teamName)">
                     <div class="date-blk">
                         <div>
                             {{meeting?.conferenceDate | amDateFormat : 'ddd'}}
@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="meeting-blk">
-                        <h2>{{meeting?.team}}</h2>
+                        <h2>{{meeting?.teamName}}</h2>
                         <h3>{{meeting?.meetingTitle}}</h3>
                         <h4>{{meeting?.myTime + " " + meeting?.meetingDescription}}</h4>
 
@@ -82,16 +82,16 @@
       </button>
                 </ion-item-options>
             </ion-item-sliding>
-
+            <!--
             <ion-fab bottom right>
                 <button ion-fab icon-only mini (click)="addMeeting()"><ion-icon name="add"></ion-icon></button>
-            </ion-fab>
+            </ion-fab>-->
 
         </ion-list>
 
         <ion-list *ngSwitchCase="'member'">
             <ion-item-sliding #slidingItem *ngFor="let meeting of meetingListMember | async">
-                <ion-item (click)="viewItem(meeting.$key)">
+                <ion-item (click)="viewItem(meeting.$key,meeting?.teamName)">
                     <div class="date-blk">
                         <div>
                             {{meeting?.conferenceDate | amDateFormat : 'ddd'}}
@@ -146,3 +146,9 @@
 
 
 </ion-content>
+
+<ion-footer>
+    <ion-fab *ngIf="isHost()" bottom right>
+        <button ion-fab icon-only mini (click)="addMeeting()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
+</ion-footer>

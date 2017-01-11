@@ -101,10 +101,10 @@ export class MyTeams {
     
   }
 
-  addMeeting(team){
+  addMeeting(teamName){
 
      this.navCtrl.push(ScheduleMeeting, {
-      team: team
+      teamName: teamName
     });
 
   }

@@ -25,7 +25,8 @@ isNormal:any = true;
   selectedMembers = [];
   teamKey;
   teamName;
-
+  isMeet : any =false;
+  meetKey;
    
  searching: any = false;
   constructor(public toastCtrl: ToastController,public teamData:TeamsData
@@ -37,11 +38,16 @@ isNormal:any = true;
 
   ionViewDidLoad() {
          this.isPopup = this.navParams.get('isPopup');
+         this.isMeet = this.navParams.get('isMeet');
          console.log(this.isPopup);
-         if(this.isPopup == true){
+         if(this.isPopup == true && this.isMeet== false){
            this.teamKey= this.navParams.get('teamKey').$key;
            this.teamName = this.navParams.get('teamKey').teamName;
            this.isNormal = false;
+         }else if(this.isMeet){
+           this.teamKey = this.navParams.get('teamKey');
+           this.isNormal = false;
+
          }
         else{
             this.isNormal = true;
@@ -100,10 +106,34 @@ isNormal:any = true;
 
            
             var profileindex = firebase.database().ref('/profile-index/' + data.title.replace("@","CAFFEIOTAT").replace(".","CAFFEIOTDOT") + '/uniqueID')
+
             profileindex.once('value',function(snapshot){
+
+              if(snapshot.val()==firebase.auth().currentUser.uid){
+
+                  
+                          let toast = toastc.create({
+                          message: 'Can not add yourself in the contacts!',
+                          duration: 3000
+                        });
+                        toast.present();
+                  
+              }else{
+
+             
             
               var profile = firebase.database().ref('/userProfile/' + snapshot.val())
               profile.once('value',function(childsnapshot){
+
+                  if(!childsnapshot.val()){
+                          let toast = toastc.create({
+                          message: 'No User with this Email ID present!',
+                          duration: 3000
+                        });
+                        toast.present();
+                  
+
+                  }else{
                         var details = true;
 
                         var firstName = childsnapshot.val().firstName ;
@@ -139,10 +169,11 @@ isNormal:any = true;
                         // });
                         // toast.present();
                         // });
+              }
                              
               });
 
-            
+              }
 
             });
             
@@ -171,6 +202,7 @@ isNormal:any = true;
 
 
   addMember(){
+    var ismeet = this.isMeet;
     var key = this.teamKey;
     var teamname = this.teamName;
     for(var val in this.selectedMembers){
@@ -194,10 +226,28 @@ isNormal:any = true;
                                   isOwner : false
                                 }
                                 var updates= {}
-                                
-                                updates['/teams/' + key + '/members/' + tempkey] = postData;
+                                if(ismeet){
+
+                                  firebase.database().ref('/meetings/' + key).once('value',function(snapshot){
+
+                                    updates['/meetings/' + key + '/users/' + tempkey] = postData;
+                                    updates['/userProfile/' + tempkey + '/meetings/member/' + key] = snapshot.val();
+                                    updates['/userProfile/' + firebase.auth().currentUser.uid + '/meetings/host/' + key + '/users/' + tempkey] = postData;
+                                      firebase.database().ref().update(updates).then(()=>{
+
+                                        firebase.database().ref('/userProfile/' + tempkey + '/meetings/member/' + key + '/users/' + tempkey).update(postData);
+                                      });
+
+                                  })
+
+                                     
+                                }else{
+                                     updates['/teams/' + key + '/members/' + tempkey] = postData;
                                 updates['/userProfile/' + tempkey + '/teams/' + key] = postTeamData;
-                                firebase.database().ref().update(updates);
+                                  firebase.database().ref().update(updates);
+                                }
+                               
+                              
                                         // ref to member regID
                             
                                     
@@ -213,7 +263,7 @@ isNormal:any = true;
 
   }
 
-   removeMember(memberID){
+  removeMember(memberID){
 
    this.contacts.remove(memberID).then(()=>{
                           
@@ -225,5 +275,6 @@ isNormal:any = true;
                         });;
 
   }
+
 
 }

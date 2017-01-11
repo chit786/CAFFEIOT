@@ -1,12 +1,12 @@
 <ion-header>
     <ion-navbar color="primary">
         <ion-title>Profile</ion-title>
-        <ion-buttons end>
-            <!--<button (click)="doGetPicture()">PHOTO</button>-->
+        <!--<ion-buttons end>
+           
             <button ion-button icon-only (click)="logOut()">
         <ion-icon name="log-out"></ion-icon>
       </button>
-        </ion-buttons>
+        </ion-buttons>-->
     </ion-navbar>
 </ion-header>
 
@@ -52,6 +52,24 @@
                         {{userProfile?.email}}
                     </ion-col>
                     <ion-col class="placeholder-profile" *ngIf="!userProfile?.email">
+                        <span>
+              Tap here to edit.
+            </span>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+
+        <ion-item (click)="updateNumber()">
+            <ion-grid>
+                <ion-row>
+                    <ion-col width-50>
+                        Number
+                    </ion-col>
+                    <ion-col width-50 *ngIf="userProfile?.number">
+                        {{userProfile?.number}}
+                    </ion-col>
+                    <ion-col class="placeholder-profile" *ngIf="!userProfile?.number">
                         <span>
               Tap here to edit.
             </span>

@@ -33,7 +33,7 @@ export class HomePage {
   
   constructor(public navCtrl: NavController, public authData: AuthData,public af: AngularFire,public order:OrderData) {
 
-       
+     
            
 
     }

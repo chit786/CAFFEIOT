@@ -19,6 +19,8 @@ export class Orders {
  public items = [];
 rate;
 OrderList : FirebaseListObservable<any>;
+ today:any = new Date().toISOString();
+ 
  //items;
 
  constructor(public toastCtrl: ToastController,public af: AngularFire,public navCtrl: NavController, public modalCtrl: ModalController) {
@@ -64,7 +66,17 @@ OrderList : FirebaseListObservable<any>;
 
  //added as part of stub addition
  ionViewDidLoad(){
-   this.OrderList = this.af.database.list('/orders/'+firebase.auth().currentUser.uid);
+    var year = this.today.split("-")[0];
+           var month = this.today.split("-")[1];
+          var day = ( this.today.split("-")[2] ).split("T")[0];
+   this.OrderList = this.af.database.list('/orders/'+firebase.auth().currentUser.uid,{
+       query:{
+        orderByChild : 'date',
+        equalTo : month+"/"+day+"/"+year
+       }
+      
+
+     });
 
  }
  addItem(){

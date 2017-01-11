@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController,NavParams } from 'ionic-angular';
+import {AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
 
 /*
   Generated class for the MinutesOfMeeting page.
@@ -13,18 +14,77 @@ import { NavController } from 'ionic-angular';
 })
 export class MinutesOfMeeting {
 
-    public minutes = [];
-  constructor(public navCtrl: NavController) {
-    this.minutes = [
-      {description:"Test Case",assignedTo:"Chitrang"},
-      {description:"Test Case No",assignedTo:"Praveen"}
-    ];
+    public minutes : FirebaseListObservable<any>;
+    member;
+    description;
+    taskDate;
+    public meetingNode : FirebaseObjectObservable<any>;
+    options : FirebaseListObservable<any>;
+  constructor(public navCtrl: NavController, public af : AngularFire,public navParams: NavParams) {
+
+    this.options = af.database.list('/meetings/' + this.navParams.get('teamID') + '/users')
+    this.meetingNode = af.database.object('/meetings/' + this.navParams.get('teamID'))
+    this.minutes = af.database.list('/minutes/'+ this.navParams.get('teamID'))
+    // this.minutes = [
+    //   {description:"Test Case",assignedTo:"Chitrang"},
+    //   {description:"Test Case No",assignedTo:"Praveen"}
+    // ];
+    
   } 
 
   ionViewDidLoad() {
-    console.log('Hello MinutesOfMeeting Page');
-  }
-  saveItem(){
     
   }
+  saveItem(){
+
+    var membername ;
+    firebase.database().ref('/meetings/' + this.navParams.get('teamID') + '/users').child(this.member).once('value',function(snapshot){
+      membername = snapshot.val().firstName + ' ' + snapshot.val().lastName
+
+
+    })
+
+    var desc = this.description;
+    
+    var dat = this.taskDate;
+
+    firebase.database().ref('/minutes/' + this.navParams.get('teamID')).push({
+      description : this.description,
+      assignedTo : membername,
+      status : 'Pending',
+      memberKey:this.member,
+      date : this.taskDate
+    }).then(key=>{
+      firebase.database().ref('/userProfile/' + this.member + '/tasks/' + key.key).update({
+        description : desc,
+        date : dat,
+        status : 'Pending'
+      }) 
+
+
+      this.member = "",
+      this.description = ""
+      this.taskDate = ""
+    });
+    
+  }
+
+  removeMinute(key,memberKey){
+
+    firebase.database().ref('/minutes/' + this.navParams.get('teamID') + '/'+ key).set(null);
+    firebase.database().ref('/userProfile/' + memberKey + '/tasks/' + key).set(null);
+
+
+  }
+  completeMinute(key,memberKey){
+
+      firebase.database().ref('/minutes/' + this.navParams.get('teamID') + '/'+ key).update({
+        status : 'Complete'
+      });
+      firebase.database().ref('/userProfile/' + memberKey + '/tasks/' + key).update({
+        status : 'Complete'
+      });
+
+  }
+
 }

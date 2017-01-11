@@ -49,6 +49,7 @@
                     <p>
                         {{comment?.desc}}
                     </p>
+                    <ion-icon name="redo" (click)="scheduleMeetingWithMember(question.$key,comment)"></ion-icon>
                 </ion-card-content>
             </ion-card>
 
@@ -57,3 +58,20 @@
 
 
 </ion-content>
+
+<ion-footer>
+
+    <ion-toolbar>
+
+        <form>
+            <ion-input #chat_input [(ngModel)]="message" (keyup.enter)="sendMessage()" (focus)="updateScroll()" name="message" placeholder="Write a message...">
+            </ion-input>
+        </form>
+        <ion-buttons right>
+            <div ion-button icon-only item-right (click)="sendMessage($event)">
+                <ion-icon name="send"></ion-icon>
+            </div>
+        </ion-buttons>
+    </ion-toolbar>
+
+</ion-footer>

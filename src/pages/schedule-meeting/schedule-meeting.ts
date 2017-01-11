@@ -14,13 +14,14 @@ import { AngularFire, FirebaseListObservable} from 'angularfire2';
 export class ScheduleMeeting {
   conferenceDate;
   myTime;
-  team;
+  teamName;
   meetingTitle;
   meetingDescription;
   parentTeam;
   parentTeamName;
   date: any = new Date().toISOString();
   teams;
+  isDisabled;
 
   firstNameref
 
@@ -28,38 +29,45 @@ export class ScheduleMeeting {
 
   }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.teams = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid + '/teams');
   
-  
-    this.parentTeam = this.navParams.get('team');
+    
+    this.parentTeam = this.navParams.get('teamName');
     
     if(this.parentTeam){
-      this.parentTeamName = this.parentTeam.teamName;
-    this.team = this.parentTeamName;
+      // this.parentTeamName = this.parentTeam.teamName;
+    this.teamName = this.parentTeam;
     }
     
   }
  
 saveItem(){
-  if(this.team){
-    var  teamVal = this.team;
+  if(this.teamName){
+    var  teamVal = this.teamName;
     //for whole database
     var meetingstitle = this.meetingTitle;
     var meetingsdescription = this.meetingDescription;
     var conferencesDate = this.conferenceDate;
     var prefTime = this.myTime;
-    var teamID = this.team;
+    var teamID = this.teamName;
 
     let meetingDetails = {
        meetingTitle : meetingstitle,
     meetingDescription : meetingsdescription,
     conferenceDate : conferencesDate,
     myTime: prefTime,
-    team : teamID
+    teamName : teamID
     }
     var meetings = firebase.database().ref('/userProfile/'+firebase.auth().currentUser.uid + '/meetings/host');
-  var meetingKey = meetings.push(meetingDetails);
+    var meetingKey 
+    if(this.navParams.get('meetKey')){
+      
+      meetingKey= this.navParams.get('meetKey');
+    }else{
+      meetingKey = meetings.push(meetingDetails);
+    }
+  
 
   //post host details to meeting list
   var hostref = firebase.database().ref('/userProfile/'+firebase.auth().currentUser.uid);
@@ -100,7 +108,7 @@ saveItem(){
                       meetingDescription : meetingsdescription,
                       conferenceDate : conferencesDate,
                       myTime: prefTime,
-                      team : teamID,
+                      teamName : teamID,
                       users : snapshot.val()
                     }
                      updates['/userProfile/'+childSnapshot.key + '/meetings/member/' + meetingKey.key] = meetingDetailswithmembers;
@@ -134,7 +142,7 @@ saveItem(){
                         toast.present();
                         this.meetingTitle = "";
                         this.conferenceDate = "";
-                        this.team = "";
+                        this.teamName = "";
                         this.myTime = "";
                         this.meetingDescription = "";
 
@@ -152,6 +160,7 @@ saveItem(){
 
 
 }
+
 
 
 }

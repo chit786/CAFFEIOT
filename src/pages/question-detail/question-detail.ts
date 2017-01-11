@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { NavParams,ViewController,NavController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavParams,ViewController,NavController,Content, TextInput } from 'ionic-angular';
 import { AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
+import {ScheduleMeeting} from '../schedule-meeting/schedule-meeting'
 /*
   Generated class for the QuestionDetail page.
 
@@ -12,9 +13,12 @@ import { AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'ang
   templateUrl: 'question-detail.html'
 })
 export class QuestionDetail {
-
+ public message = "";
+ membercanmeet = true;
   question : FirebaseObjectObservable<any>;
   comments : FirebaseListObservable<any>;
+  @ViewChild(Content) content: Content;
+  @ViewChild('chat_input') messageInput: TextInput;
   constructor(public navParams: NavParams,public navCtrl: NavController, public view: ViewController, public af:AngularFire) {}
 
   ionViewDidLoad() {
@@ -36,9 +40,104 @@ export class QuestionDetail {
     
   }
 
+  sendMessage() {
+    // this.messages.push({
+    //   position: 'left',
+    //   body: this.message
+    // });
+    firebase.database().ref('/questions/' + this.navParams.get('qsKey') + '/comments').push({
+      askedBy : firebase.auth().currentUser.uid,
+      desc : this.message
+    });
+    this.message = "";
+    console.log('calling updated');
+    this.messageInput.setFocus();
+    this.updateScroll();
+  }
+  updateScroll() {
+    console.log('updating scroll')
+    setTimeout(() => {
+      this.content.scrollToBottom();
+    }, 400)
+  }
+
   close(){
 
     this.view.dismiss();
   }
 
+  scheduleMeetingWithMember(qKey,comment){
+
+    var nav = this.navCtrl;
+
+    
+    firebase.database().ref('/userProfile/' + comment.user.$ref.key).once('value',function(snapshot){
+
+      var updates = {};
+      let newTeam = {
+        'isOwner' : true,
+        'teamName' : 'team with ' + snapshot.val().firstName
+
+      }
+
+      let isOwnerfalse = {
+        'isOwner' : false,
+        'teamName' : 'team with ' + snapshot.val().firstName
+
+      }
+
+
+      let userDetail = {
+
+        firstName : snapshot.val().firstName,
+        lastName : snapshot.val().lastName,
+        profilepic : snapshot.val().profilepic,
+        regID : snapshot.val().regID
+
+      }
+
+      firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid).once('value',function(chsnapshot){
+          var cuserKey = chsnapshot.key;
+
+
+        let cUserdetail = {
+           firstName : chsnapshot.val().firstName,
+           lastName : chsnapshot.val().lastName,
+           profilepic : chsnapshot.val().profilepic,
+           regID : chsnapshot.val().regID
+
+        }
+
+         firebase.database().ref('/teams').push({
+          members : 'temp'
+        }).then(pushkey =>{
+
+          // updates['/teams/ '+ pushkey.key +'/members/' + cuserKey] = cUserdetail;
+           // updates['/teams/'+pushkey.key+'/members/' + user.$key ] = userDetail
+           
+           updates['/userProfile/'+ firebase.auth().currentUser.uid + '/teams/' + pushkey.key] = newTeam;
+           updates['/userProfile/'+ snapshot.key + '/teams/' + pushkey.key] = isOwnerfalse;
+          updates['/userProfile/' + firebase.auth().currentUser.uid  + '/contacts/' + snapshot.key ] = userDetail;
+
+           
+           firebase.database().ref().update(updates).then(key =>{
+            firebase.database().ref('/teams/'+pushkey.key+'/members/' + snapshot.key).set(userDetail);
+             firebase.database().ref('/teams/'+pushkey.key+'/members/' + cuserKey).set(cUserdetail);
+                 nav.push(ScheduleMeeting,{
+                   teamName: 'team with ' + snapshot.val().firstName
+                 })
+
+               })
+        })
+
+      })
+
+
+    })
+
+
+
+  }
+
+ 
 }

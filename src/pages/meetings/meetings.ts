@@ -38,7 +38,7 @@ export class Meetings {
 }) as FirebaseListObservable<any>;
      this.meetingListMember = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/member').map((_users) => {
     return _users.map((_user) => {
-        _user.group = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/host/' +_user.$key + '/users')
+        _user.group = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/member/' +_user.$key + '/users')
         return _user
     }) 
 }) as FirebaseListObservable<any>;
@@ -57,10 +57,19 @@ export class Meetings {
     });
   }
 
-   viewItem(teamKey){
+   viewItem(teamKey,title){
      this.navCtrl.push(MeetingDetails, {
-      teamKey : teamKey
+      teamKey : teamKey,
+      title:title
      });
+   }
+
+   isHost(){
+     if(this.meetings=='host'){
+       return true;
+      }else{
+         return false;
+     }
    }
 
 }

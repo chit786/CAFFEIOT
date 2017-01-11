@@ -128,9 +128,15 @@ export class AskQuestion {
                  
                  if (tags.indexOf(childsnap.val().skills[val].name)>=0 && users.indexOf(childsnap.key)==-1 ){
                    users.push(childsnap.key);
+                   var isScheduled = false;
+                   if(childsnap.key==firebase.auth().currentUser.uid){
+                      isScheduled = true;
+                   }
+
+
                    
                    let member = {
-
+                    isScheduled : isScheduled, 
                     memberID : childsnap.key,
                     memberRegID : childsnap.val().regID
 

@@ -16,6 +16,7 @@ export class AuthData {
   // Here we declare the variables we'll be using.
   public fireAuth: any;
   public userProfile: any;
+
  
   constructor(public http: Http) {
     this.fireAuth = firebase.auth();
@@ -30,6 +31,7 @@ export class AuthData {
     return this.fireAuth.createUserWithEmailAndPassword(email, password)
       .then((newUser) => {
         this.userProfile.child(newUser.uid).set({email: email});
+        this.userProfile.child(newUser.uid).set({profilepic: 'assets/img/default_profile.jpg'});
        
       });
   }
