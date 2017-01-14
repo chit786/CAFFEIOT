@@ -32,6 +32,7 @@ import {Preferences} from '../pages/preferences/preferences';
 import {Contacts} from '../pages/contacts/contacts';
 import {MomentModule} from 'angular2-moment';
 import {QuestionDetail} from '../pages/question-detail/question-detail';
+import {TeamOrder} from '../pages/team-order/team-order';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCLoFM5qxP6IXTMThJ1mm7B8EqXYaEMXAE",
@@ -65,7 +66,8 @@ export const firebaseConfig = {
     Contacts,
     MinutesOfMeeting,
     QuestionDetail,
-    Tasks
+    Tasks,
+    TeamOrder
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -99,7 +101,8 @@ export const firebaseConfig = {
     Preferences,
     Contacts,
     MinutesOfMeeting,
-    QuestionDetail
+    QuestionDetail,
+    TeamOrder
   ],
   providers: [AuthData,OrderData,ProfileData,TeamsData,QuestionsData]
 })

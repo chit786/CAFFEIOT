@@ -55,7 +55,8 @@
                     <!--</ion-item>
         </ion-list>-->
                     <div class="bottom-status" (click)="openOrder(item)">
-                        <span><rating [(ngModel)]="item.rating" max="5" readOnly="true"></rating></span>
+                        <!--<span><rating [(ngModel)]="item.rating" max="5" readOnly="true"></rating></span>-->
+                        <span>Ordered By : {{item.askedByname}}</span>
                         <span class="al-rt">{{ item.status }}</span>
                     </div>
                 </ion-card>

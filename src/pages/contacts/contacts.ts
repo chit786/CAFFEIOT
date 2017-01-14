@@ -276,5 +276,19 @@ isNormal:any = true;
 
   }
 
+  callMe(number){
+
+     document.location.href = 'tel:'+number;
+
+  }
+
+  smsMe(number){
+     document.location.href = 'sms:'+number;
+
+  }
+
+  mailme(mailID){
+    document.location.href = 'mailto:'+mailID;
+  }
 
 }

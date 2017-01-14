@@ -22,10 +22,41 @@ export class MeetingDetails {
 
   title;
   description;
+    today:any = new Date().toISOString();
+       year:any;
+  month:any;
+    memberList = [];
+  day:any;
+   orderID: any;
+    uName;
   meetingDetail: FirebaseObjectObservable<any>;
   memberDetail : FirebaseListObservable<any>;
+   tempTeam : FirebaseListObservable<any>;
   constructor(public af: AngularFire,public navCtrl: NavController,public navParams: NavParams,
   public modalCtrl: ModalController, public view: ViewController,public alertCtrl: AlertController,public teamData: TeamsData) {
+
+
+      this.year = this.today.split("-")[0];
+           this.month = this.today.split("-")[1];
+           this.day = ( this.today.split("-")[2] ).split("T")[0];
+           this.orderID = ( this.today.split(":")[0] ).split("T")[1] + this.today.split(":")[1] + (this.today.split(":")[2]).split(".")[0]  ;
+
+
+            this.tempTeam = af.database.list('/meetings/'+ this.navParams.get('teamKey') + '/users',{ preserveSnapshot: true } )
+
+     this.tempTeam.subscribe((snapshots)=>{
+        snapshots.forEach(snapshot=>{
+
+          if(snapshot.key==firebase.auth().currentUser.uid){
+            this.uName = snapshot.val().firstName + ' ' + snapshot.val().lastName   
+          }
+
+
+
+          this.memberList[snapshot.key] = snapshot.val();
+        })
+
+     })
 
   }
 
@@ -46,14 +77,14 @@ export class MeetingDetails {
     alert.setTitle('Coffee?');
 
     alert.addInput({
-      type: 'checkbox',
+      type: 'radio',
       label: 'Get Coffee?',
       value: 'coffee',
       checked: true
     });
 
     alert.addInput({
-      type: 'checkbox',
+      type: 'radio',
       label: 'Ask Team',
       value: 'team'
     });
@@ -63,9 +94,9 @@ export class MeetingDetails {
       text: 'Okay',
       handler: data => {
         console.log('Checkbox data:', data);
-         for (var val in data) {
-            console.log(data[val]);
-                if(data[val]=='coffee'){
+        // for (var val in data) {
+           // console.log(data[val]);
+                if(data=='coffee'){
                 let addModal = this.modalCtrl.create(PlaceOrder);
 
                 addModal.onDidDismiss((item) => {
@@ -80,14 +111,54 @@ export class MeetingDetails {
 
                 addModal.present();
                     
-                }else if(data[val]=="team"){
-                 
-                  this.teamData.askCoffee(this.memberDetail);
+                }else if(data=="team"){
 
+                  console.log("here?");
+                
+                  //this.teamData.askCoffee(this.memberDetail);
+                  var teamDataService = this.teamData;
+                  
+                  let teamOrder = {
+                    id : this.orderID,
+                    teamName : this.title,
+                    members : this.memberList,
+                    askedByKey : firebase.auth().currentUser.uid,
+                    status : "In Progress",
+                    meetingKey:this.navParams.get('teamKey')
+
+                  }
+
+                  let orderDetail = {
+
+                    id:this.orderID,
+                  date : this.month+"/"+this.day+"/"+this.year,
+                  machineID : "A",
+                  status : "In Progress",
+                  rating : 0,
+                  askedByKey : firebase.auth().currentUser.uid,
+                  askedByname : this.uName
+                  }
+
+
+                  firebase.database().ref('/teamOrder').push(teamOrder).then((keyNode)=>{
+                    
+                    
+                      for(var val in this.memberList){
+                      
+                        firebase.database().ref('/orders/' + val.toString() + '/' + keyNode.key).update(orderDetail).then(()=>{
+                          
+
+                          teamDataService.askToMember(val.toString(),this.uName,"Coffee?");
+                        }
+                        )
+
+                      }
+
+                  })
                   
 
                 }
-            }
+           // }
       }
     });
     alert.present();

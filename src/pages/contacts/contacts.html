@@ -42,13 +42,20 @@
             </ion-item>-->
 
             <ion-item-options side="left">
-                <button ion-button color="primary">
+                <button ion-button color="primary" (click)="smsMe(member.number)">
         <ion-icon name="text"></ion-icon>
-        <a [href]="'sms:' + 31647911724">Mail</a>
+        Text
+        <!--<a [href]="'sms:' + 31647911724">Mail</a>-->
       </button>
-                <button ion-button color="secondary">
+                <button ion-button color="secondary" (click)="mailme(member.email)">
+        <ion-icon name="mail"></ion-icon>
+        Email
+        <!--<a [href]="'sms:' + 31647911724">Mail</a>-->
+      </button>
+                <button ion-button color="secondary" (click)="callMe(member.number)">
         <ion-icon name="call"></ion-icon>
-        <a [href]="'tel:' + 31647911724">Call</a>
+        Call
+        <!--<a [href]="'tel:' + 31647911724">Call</a>-->
       </button>
             </ion-item-options>
             <ion-item-options side="right">

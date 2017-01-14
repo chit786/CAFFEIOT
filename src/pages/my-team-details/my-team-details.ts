@@ -3,7 +3,7 @@ import { NavController,NavParams,ViewController,AlertController } from 'ionic-an
 import { TeamsData } from '../../providers/teams-data';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import firebase from 'firebase';
-import { Http,XHRBackend,RequestOptions} from '@angular/http';
+
 import { Contacts } from '../contacts/contacts';
 /*
   Generated class for the MyTeamDetails page.
@@ -20,17 +20,47 @@ export class MyTeamDetails {
     name;
     profilePic;
     role;
+    memberList = [];
+    uName;
+    //memberList : any;
+     today:any = new Date().toISOString();
+       year:any;
+  month:any;
+  day:any;
+  orderID: any;
     teamMembers : FirebaseListObservable<any>;
+    tempTeam : FirebaseListObservable<any>;
   constructor(public navParams: NavParams,public af: AngularFire ,public navCtrl: NavController, public view: ViewController
-  ,public teamData:TeamsData,public alertCtrl: AlertController,public http:Http) {
+  ,public teamData:TeamsData,public alertCtrl: AlertController) {
 
     this.title = this.navParams.get('item').teamName;
      //this.teamMembers = [];
      //load all client data corresponding to the meeting id
     // this.teamMembers = this.teamData.getClientInfo(this.navParams.get('item'));
-   
-     this.teamMembers = af.database.list('/teams/'+ this.navParams.get('item').$key + '/members' )
-  
+    var members = [];
+     this.teamMembers = af.database.list('/teams/'+ this.navParams.get('item').$key + '/members');
+
+      this.tempTeam = af.database.list('/teams/'+ this.navParams.get('item').$key + '/members',{ preserveSnapshot: true } )
+
+     this.tempTeam.subscribe((snapshots)=>{
+        snapshots.forEach(snapshot=>{
+
+          if(snapshot.key==firebase.auth().currentUser.uid){
+            this.uName = snapshot.val().firstName + ' ' + snapshot.val().lastName   
+          }
+
+
+
+          this.memberList[snapshot.key] = snapshot.val();
+        })
+
+     })
+
+      this.year = this.today.split("-")[0];
+           this.month = this.today.split("-")[1];
+           this.day = ( this.today.split("-")[2] ).split("T")[0];
+           this.orderID = ( this.today.split(":")[0] ).split("T")[1] + this.today.split(":")[1] + (this.today.split(":")[2]).split(".")[0]  ;
+
 
   }
 
@@ -49,77 +79,49 @@ export class MyTeamDetails {
 
   }
 
-  // addMember(){
-  //   var regID : any;
-  //   let prompt = this.alertCtrl.create({
-  //     title: 'New Member',
-  //     message: "Enter Member Email",
-  //     inputs: [
-  //       {
-  //         name: 'title',
-  //         placeholder: 'Title'
-  //       },
-  //     ],
-  //     buttons: [
-  //       {
-  //         text: 'Cancel',
-  //         handler: data => {
-  //           console.log('Cancel clicked');
-  //         }
-  //       },
-  //       {
-  //         text: 'Send',
-  //         handler: data => {
-  //           var key = this.navParams.get('item').$key;
-  //           var myMember;
-  //           console.log('Send clicked');
-  //           console.log(data.title);
-  //           console.log(this.navParams.get('item').id);
-           
-  //           var profileindex = firebase.database().ref('/profile-index/' + data.title.replace("@","CAFFEIOTAT").replace(".","CAFFEIOTDOT") + '/uniqueID')
-  //           profileindex.once('value',function(snapshot){
-            
-  //             var profile = firebase.database().ref('/userProfile/' + snapshot.val())
-  //             profile.once('value',function(childsnapshot){
-  //                       var firstName = childsnapshot.val().firstName ;
+  askCoffee(){
 
-  //                       var lastName = childsnapshot.val().lastName; 
-  //                       var profilepic = childsnapshot.val().profilepic;
-  //                        regID = childsnapshot.val().regID;
-  //                       var postData = {
-                          
-  //                         firstName : firstName,
-  //                         lastName : lastName,
-  //                         profilepic : profilepic, 
-  //                         regID : regID 
-  //                       }
-  //                       var updates= {}
-  //                       myMember = snapshot.val();
-  //                       updates['/teams/' + key + '/members/' + snapshot.val() ] = postData;
-  //                       firebase.database().ref().update(updates);
-  //                               // ref to member regID
-                     
-                            
-                        
-  //             });
+    var teamDataService = this.teamData;
 
-            
+    let teamOrder = {
+      id : this.orderID,
+      teamName : this.title,
+      members : this.memberList,
+      askedByKey : firebase.auth().currentUser.uid,
+      status : "In Progress"
 
-  //           });
+    }
 
-  //            this.teamData.sendNotify(data.title,key);
-           
-            
-  //         }
-  //       }
-  //     ]
-  //   });
-  //   prompt.present();
+    let orderDetail = {
 
-  
+       id:this.orderID,
+     date : this.month+"/"+this.day+"/"+this.year,
+     machineID : "A",
+     status : "In Progress",
+     rating : 0,
+     askedByKey : firebase.auth().currentUser.uid,
+     askedByname : this.uName
+    }
 
 
-  // }
+    firebase.database().ref('/teamOrder').push(teamOrder).then((keyNode)=>{
+      
+        for(var val in this.memberList){
+        
+          firebase.database().ref('/orders/' + val.toString() + '/' + keyNode.key).update(orderDetail).then(()=>{
+
+            teamDataService.askToMember(val.toString(),this.uName,"Coffee?");
+          }
+          )
+
+        }
+
+    });
+    
+
+
+  }
+
 
   removeMember(memberID){
    //remove from team

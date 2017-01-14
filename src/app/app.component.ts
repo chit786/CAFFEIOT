@@ -6,6 +6,7 @@ import { HomePage } from '../pages/home/home';
 import { Orders } from '../pages/orders/orders';
 import { PlaceOrder } from '../pages/place-order/place-order';
 import {OrderDetail} from '../pages/order-detail/order-detail';
+import {TeamOrder} from '../pages/team-order/team-order';
 import { LoginPage } from '../pages/login/login';
 import {Meetings} from '../pages/meetings/meetings';
 import {MeetingDetails} from '../pages/meeting-details/meeting-details';

@@ -12,13 +12,15 @@ export class TeamsData {
   profileindex : FirebaseObjectObservable<any>;
   // We'll use this to create an auth reference to the logged in user.
   currentUser: any; 
+ 
 
   constructor(public alertCtrl : AlertController,private http: Http,public af:AngularFire,public toastCtrl: ToastController) {
-
+    
     this.http = http;
     
     this.currentUser = firebase.auth().currentUser;
     this.userProfile = firebase.database().ref('/userProfile/'+  this.currentUser.uid );
+    
    
   }
 
@@ -97,6 +99,21 @@ var myhttp = this.http;
                   })
   }
 
+  askToMember(memberKey,messageBy,message){
+    var myhttp = this.http;
+
+    firebase.database().ref('/userProfile/' + memberKey + '/regID').once('value',function(snapshot){
+
+                            let headers = new Headers({ 'Content-Type': 'application/json','Authorization':'key=AAAAggFbpvo:APA91bG6IRvRoSGJP2rcNGG8BLV3NxE7mbkFmvQhD_lYjAuhGtFVvX9OkYbMlTR_cP6p8kBDpvw_790o1JJbcAs0ScnwB_4wuwyGuxrtp6UlnxeyYl2b43fh6pUTVHi1jGFkTuTp58wtJjX6zSNvLg_CLKdBAEY_YA' }); // ... Set content type to JSON
+                            let options = new RequestOptions({ headers: headers });
+                              console.log('{"data":{"title":"CAFFEIOT","message":"Coffee?"},"to":'+ JSON.stringify(snapshot.val())+"}");
+
+                              myhttp.post("https://fcm.googleapis.com/fcm/send",'{"data":{"title":"CAFFEIOT","message":"'+ messageBy + ' says ' + message +'"},"to":'+ JSON.stringify(snapshot.val())+"}",options)
+                            
+
+    })
+  }
+
 
 
    sendNotifyContact(regID,key,message){
@@ -104,8 +121,6 @@ var myhttp = this.http;
     var myhttp = this.http;
     var member= this.memberRegID;
     var af = this.af;
-   
-        console.log('/teams/' + key + '/members/' + regID+ '/regID')
         member = af.database.object('/teams/' + key + '/members/' + regID+ '/regID');
         member.$ref.on('value',function(childsnap){
    

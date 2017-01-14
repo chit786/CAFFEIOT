@@ -45,6 +45,9 @@
                     <img src="{{member?.profilepic}}">
                 </ion-avatar>
                 <h2>{{member?.firstName}}</h2>
+                <ion-chip #chip color="light" *ngFor="let drink of member?.choice">
+                    <ion-label style="text-align: center;">{{drink.choice}}</ion-label>
+                </ion-chip>
                 <ion-icon name="cafe" item-right></ion-icon>
             </ion-item>
             <ion-item-options side="left">
@@ -67,6 +70,13 @@
 
     </ion-list>
 
+
+
+
+
+</ion-content>
+
+<ion-footer>
     <ion-fab bottom right>
         <button ion-fab icon-only mini (click)="addMember()"><ion-icon name="person-add"></ion-icon></button>
     </ion-fab>
@@ -74,7 +84,4 @@
     <ion-fab bottom left>
         <button ion-fab icon-only mini (click)="orderCoffee()"><ion-icon name="more"></ion-icon></button>
     </ion-fab>
-
-
-
-</ion-content>
+</ion-footer>

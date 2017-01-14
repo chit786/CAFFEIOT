@@ -3,6 +3,7 @@ import { ModalController,NavController,ToastController } from 'ionic-angular';
 import { PlaceOrder } from '../place-order/place-order';
 import { Ionic2RatingModule } from 'ionic2-rating';
 import {OrderDetail} from '../order-detail/order-detail';
+import {TeamOrder} from '../team-order/team-order';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 
 /*
@@ -142,11 +143,18 @@ OrderList : FirebaseListObservable<any>;
  }
 
  openOrder(item){
+
+   if(item.askedByname){
+     this.navCtrl.push(TeamOrder,{
+       order : item
+     })
+
+   }else{
  this.navCtrl.push(OrderDetail, {
      item: item,
      itemKey : item.$key
    });
-
+   }
 
  }
 
