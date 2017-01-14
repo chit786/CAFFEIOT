@@ -29,7 +29,7 @@ export class ResetPasswordPage {
     }
 
   ionViewDidLoad() {
-    console.log('Hello ResetPassword Page');
+
   }
   elementChanged(input){
     let field = input.inputControl.name;
@@ -39,7 +39,7 @@ export class ResetPasswordPage {
   this.submitAttempt = true;
 
   if (!this.resetPasswordForm.valid){
-    console.log(this.resetPasswordForm.value);
+   
   } else {
     this.authData.resetPassword(this.resetPasswordForm.value.email).then((user) => {
       let alert = this.alertCtrl.create({

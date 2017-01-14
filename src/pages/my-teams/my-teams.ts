@@ -26,8 +26,7 @@ export class MyTeams {
   }
 
   ionViewDidLoad() {
-   // this.items = this.teamData.getTeams();
-   //console.log(this.items);
+
   }
 
   addTeam(){
@@ -45,7 +44,7 @@ export class MyTeams {
         {
           text: 'Cancel',
           handler: data => {
-            console.log('Cancel clicked');
+            
           }
         },
         {

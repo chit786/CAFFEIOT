@@ -61,7 +61,7 @@ export class MeetingDetails {
   }
 
   ionViewDidLoad() {
-    console.log(this.navParams.get('teamKey'));
+   
     this.meetingDetail = this.af.database.object('/meetings/' + this.navParams.get('teamKey'));
     this.memberDetail = this.af.database.list('/meetings/' + this.navParams.get('teamKey')+ '/users');
 
@@ -93,9 +93,9 @@ export class MeetingDetails {
     alert.addButton({
       text: 'Okay',
       handler: data => {
-        console.log('Checkbox data:', data);
+       
         // for (var val in data) {
-           // console.log(data[val]);
+          
                 if(data=='coffee'){
                 let addModal = this.modalCtrl.create(PlaceOrder);
 
@@ -113,7 +113,7 @@ export class MeetingDetails {
                     
                 }else if(data=="team"){
 
-                  console.log("here?");
+                 
                 
                   //this.teamData.askCoffee(this.memberDetail);
                   var teamDataService = this.teamData;
@@ -182,7 +182,7 @@ this.navCtrl.push(Contacts, {
     
   }
   openMom(teamKey){
-    console.log(teamKey);
+   
     this.navCtrl.push(MinutesOfMeeting,{
         teamID:this.navParams.get('teamKey')
     })

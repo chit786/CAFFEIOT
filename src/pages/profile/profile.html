@@ -78,6 +78,24 @@
             </ion-grid>
         </ion-item>
 
+        <ion-item (click)="updateWeight()">
+            <ion-grid>
+                <ion-row>
+                    <ion-col width-50>
+                        Weight
+                    </ion-col>
+                    <ion-col width-50 *ngIf="userProfile?.weight">
+                        {{userProfile?.weight}} Kg
+                    </ion-col>
+                    <ion-col class="placeholder-profile" *ngIf="!userProfile?.weight">
+                        <span>
+              Tap here to put weight in Kg.
+            </span>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+
         <ion-item (click)="updatePassword()">
             <ion-grid>
                 <ion-row>

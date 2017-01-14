@@ -33,7 +33,7 @@ export class PlaceOrder {
    this.memberKey = this.navParams.get('memberkey');
    this.meetKey = this.navParams.get('meetKey');
 
-   console.log(this.memberKey);
+ 
 
 
 
@@ -41,9 +41,7 @@ export class PlaceOrder {
 
 public getListItem(): void { //here item is an object 
   this.listItem = [];
-   //this.listItem.push(this.choice);// Just did this in order to avoid changing the next lines of code :P
-   console.log(this.choice);
-   console.log(this.listItem);
+
  }
  saveItem(){
     this.year = this.today.split("-")[0];
@@ -148,9 +146,9 @@ public getListItem(): void { //here item is an object
  }
 
  removeItem(index){
-   console.log(this.choice);
+
    this.choice.splice(index, 1);
-   console.log(this.choice);
+  
 
  }
 

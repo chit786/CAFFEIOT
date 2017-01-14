@@ -47,7 +47,7 @@ export class OrderDetail {
     // this.navParams.get('item').rating = this.rate;
    
     var rate = this.rate;
-    //console.log(this.orderKey);
+   
     firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + this.orderKey ).update({
       rating:rate
       

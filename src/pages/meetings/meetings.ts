@@ -46,7 +46,7 @@ export class Meetings {
   }
 
   ionViewDidLoad() {
-    console.log('Hello Meetings Page');
+    
     
   }
 

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, AlertController } from 'ionic-angular';
-import { StatusBar,Push, Splashscreen } from 'ionic-native';
+import { StatusBar,Push, Splashscreen,Keyboard } from 'ionic-native';
 import firebase from 'firebase';
 import { HomePage } from '../pages/home/home';
 import { Orders } from '../pages/orders/orders';
@@ -77,6 +77,7 @@ export class MyApp {
   initializeApp(user) {
     
     this.platform.ready().then(() => {
+      Keyboard.disableScroll(true);
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       if (this.platform.is('android')){

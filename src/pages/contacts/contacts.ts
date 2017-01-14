@@ -39,7 +39,7 @@ isNormal:any = true;
   ionViewDidLoad() {
          this.isPopup = this.navParams.get('isPopup');
          this.isMeet = this.navParams.get('isMeet');
-         console.log(this.isPopup);
+   
          if(this.isPopup == true && this.isMeet== false){
            this.teamKey= this.navParams.get('teamKey').$key;
            this.teamName = this.navParams.get('teamKey').teamName;
@@ -93,16 +93,13 @@ isNormal:any = true;
         {
           text: 'Cancel',
           handler: data => {
-            console.log('Cancel clicked');
+           
           }
         },
         {
           text: 'Send',
           handler: data => {
            
-          
-            console.log('Send clicked');
-            console.log(data.title);
 
            
             var profileindex = firebase.database().ref('/profile-index/' + data.title.replace("@","CAFFEIOTAT").replace(".","CAFFEIOTDOT") + '/uniqueID')

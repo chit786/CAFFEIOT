@@ -72,7 +72,7 @@ export class AskQuestion {
 
   delete(chip:Element){
     chip.remove();
-    console.log(chip.textContent.trim());
+    
     const foundAt = this.chips.indexOf(chip.textContent.trim());
     this.chips.splice(foundAt, 1);
     

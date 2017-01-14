@@ -71,6 +71,12 @@ export class ProfileData {
 
   }
 
+  updateWeight(newWeight : string) : any{
+  return this.userProfile.child(this.currentUser.uid).update({
+      weight: newWeight,
+    });
+
+  }
   updateProfilepic(profilePic: string): any {
      return this.userProfile.child(this.currentUser.uid).update({
       profilepic: profilePic,

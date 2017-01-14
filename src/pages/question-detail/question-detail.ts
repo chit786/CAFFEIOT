@@ -27,6 +27,12 @@ export class QuestionDetail {
     this.comments = this.af.database.list('/questions/' + this.navParams.get('qsKey') + '/comments').map((cms)=>{
       return cms.map((cm)=>{
 
+        if(cm.askedBy==firebase.auth().currentUser.uid){
+            cm.position = 'right';
+        }else{
+            cm.position = 'left';
+        }
+
         cm.user= this.af.database.object('/userProfile/'+ cm.askedBy ),
         cm.detail = this.af.database.object('/questions/'+this.navParams.get('qsKey') )
         return cm;
@@ -50,12 +56,12 @@ export class QuestionDetail {
       desc : this.message
     });
     this.message = "";
-    console.log('calling updated');
+
     this.messageInput.setFocus();
     this.updateScroll();
   }
   updateScroll() {
-    console.log('updating scroll')
+  
     setTimeout(() => {
       this.content.scrollToBottom();
     }, 400)

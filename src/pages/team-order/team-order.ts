@@ -123,7 +123,6 @@ export class TeamOrder {
 
  AddOrder(memberKey){
 
-   console.log(memberKey);
    if(this.orderStatus=="In Progress"){
 
     this.navCtrl.push(PlaceOrder,{

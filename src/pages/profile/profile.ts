@@ -98,6 +98,31 @@ let alert = this.alertCtrl.create({
 
   }
 
+  
+
+updateWeight(){
+let alert = this.alertCtrl.create({
+      inputs: [
+        {
+          name: 'newWeight',
+          placeholder: 'Your weight',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            this.profileData.updateWeight(data.newWeight);
+          }
+        }
+      ]
+    });
+    alert.present();
+
+  }
   updateDOB(birthDate) {
     this.profileData.updateDOB(birthDate);
   }
@@ -150,7 +175,7 @@ let alert = this.alertCtrl.create({
   }
 
   onChange(SelectedValue){
-    console.log(SelectedValue);
+    
     this.setCompany(SelectedValue);
 }
 
@@ -176,7 +201,7 @@ let alert = this.alertCtrl.create({
        // result.push(element);
       
        if(this.profileData.currentUser.uid == element.owner ){
-         console.log(element.URL);
+         
         result = element.URL
        }
       });
@@ -193,7 +218,7 @@ let alert = this.alertCtrl.create({
       this.birthDate = this.userProfile.birthDate;
       this.company = this.userProfile.company;
       this.skills = this.af.database.list('/userProfile/'+this.profileData.currentUser.uid+'/skills');
-      console.log(this.skills);
+      
      this.options = this.af.database.list('/organisations');
      if(!this.userProfile.profilepic){
         this.URL = "assets/img/default_profile.jpg";
@@ -207,7 +232,7 @@ let alert = this.alertCtrl.create({
   }
 
   delete(chip: Element,skillName : string){
-   console.log(chip);
+  
 
     chip.remove();
     var skill= firebase.database().ref('/userProfile/'+this.profileData.currentUser.uid+'/skills');
@@ -243,7 +268,7 @@ let alert = this.alertCtrl.create({
             };
 
             reader.onerror = (e) => {
-              console.log('Failed file read: ' + e.toString());
+             
               reject(e);
             };
 
@@ -272,7 +297,7 @@ let alert = this.alertCtrl.create({
       var uploadTask = fileRef.put(_imageBlob);
 
       uploadTask.on('state_changed', (_snapshot) => {
-        console.log('snapshot progess ' + _snapshot);
+     
       }, (_error) => {
         reject(_error);
       }, () => {
@@ -338,7 +363,7 @@ let alert = this.alertCtrl.create({
      // alert('file saved to asset catalog successfully  ');
       this.loadData();
     }, (_error) => {
-      console.log("here");
+    
      // alert('Error ' + _error.message);
     });
 

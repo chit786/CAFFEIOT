@@ -32,7 +32,7 @@ export class SignupPage {
     }
 
   ionViewDidLoad() {
-    console.log('Hello Signup Page');
+   
   }
  elementChanged(input){
     let field = input.inputControl.name;
@@ -42,7 +42,7 @@ export class SignupPage {
   this.submitAttempt = true;
 
   if (!this.signupForm.valid){
-    console.log(this.signupForm.value);
+   
   } else {
     this.authData.signupUser(this.signupForm.value.email, this.signupForm.value.password).then(() => {
       //this.nav.setRoot(HomePage);

@@ -35,7 +35,7 @@ export class LoginPage {
     }
 
   ionViewDidLoad() {
-    console.log('Hello Login Page');
+    
   }
   elementChanged(input){
     let field = input.inputControl.name;
@@ -45,7 +45,7 @@ export class LoginPage {
   this.submitAttempt = true;
 
   if (!this.loginForm.valid){
-    console.log(this.loginForm.value);
+    
   } else {
     this.authData.loginUser(this.loginForm.value.email, this.loginForm.value.password).then( authData => {
     this.nav.setRoot(HomePage);

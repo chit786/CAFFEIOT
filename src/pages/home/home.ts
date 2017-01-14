@@ -15,34 +15,27 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  //chart;
- //chart;
+
    coffeCount:any;
    userChoicePerDay: FirebaseListObservable<any[]>;
    coffess:FirebaseObjectObservable<any[]>;
    uName:string;
-//    today:any = new Date().toISOString();
-//    year:any;
-//    month:any;
-//    day:any;
+   waterIntake : any;
    coff:number;
  
    
  // coffeecount;
   @ViewChild('canvas') canvas:ElementRef;
+   @ViewChild('waterlevel') waterlevel:Element;
   
   constructor(public navCtrl: NavController, public authData: AuthData,public af: AngularFire,public order:OrderData) {
 
-     
-           
+    this.waterIntake = 40;
 
     }
-    //logout from the application
-    // logOut(){
-    //         this.authData.logoutUser().then(() => {
-    //             this.navCtrl.setRoot(LoginPage);
-    //         });
-    // }
+   
+   
+
     goToProfile(){
     this.navCtrl.push(ProfilePage);
     }
@@ -56,12 +49,7 @@ export class HomePage {
          var order = this.order;
          var backColor = [];
          var hoverColor = [];
-                 //     this.year = this.today.split("-")[0];
-        //     this.month = this.today.split("-")[1];
-        //     this.day = ( this.today.split("-")[2] ).split("T")[0];
-        //    this.today = this.day + "-" + this.month + "-" + this.year;
-        //   mydate = this.today;
-           
+
 
 
             firebase.auth().onAuthStateChanged(function(user) {
@@ -71,43 +59,27 @@ export class HomePage {
                     var month = today.split("-")[1];
                     var day = ( today.split("-")[2] ).split("T")[0]
                     today = day + "-" + month + "-" + year;
-                  //  this.uName = firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT");
-                  //this.uName = order.getcurrentuseremail();
+                
                
                  var coffeeCountRef = firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.uid + '/'+  today );
-                  //  var coffeeCountRef = order.gettodayscoffeeconsumption();
-                
-                    //var coffeeCountRef = firebase.database().ref('/dailyConsumption' + '/' + this.uName + '/'+ mydate);
-                    // User is signed in.
+                 
             coffeeCountRef.on('value', function(snapshot) {
-             //  coffeeCountRef.then(function(snapshot){
-                   console.log(snapshot);
+            
+                  
                 let i=0;
                 foo = {};
                 labelArr = [];
                 labelCountArr = [];
                
                if(snapshot.val()){
-               //running code // snapshot.val().forEach( function (arrayItem){
-          
-                //     if(arrayItem.status=="Complete"){
-                //         if(foo[arrayItem.choice]>=1){
-                //             foo[arrayItem.choice] = foo[arrayItem.choice] + 1;
-                //         }else{
-                //             foo[arrayItem.choice] = 1;
-                //         }
-                //     i++;
-                //     }
-
-                //  }
-                //  );
+              
                 snapshot.forEach( function (arrayItem){
                     
                     var choices = arrayItem.val().choice.splice(0);
 
                     for(var val in choices){
 
-                        console.log(arrayItem.val().choice[val].choice);
+                       
                         
                     if(arrayItem.val().choice[val].status=="Complete"){
                         if(foo[arrayItem.val().choice[val].choice]>=1){
