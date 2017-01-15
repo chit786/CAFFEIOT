@@ -19,13 +19,19 @@
 
 
 <ion-content padding>
-    <ion-card>
+    <!--<ion-card>
         <ion-card-content>
             {{(meetingDetail|async)?.meetingTitle}}
             <h2>{{"Hosted By - " + (meetingDetail|async)?.ownerName}}</h2>
         </ion-card-content>
 
-    </ion-card>
+    </ion-card>-->
+    <ion-item>
+
+
+        <h2> {{(meetingDetail|async)?.meetingTitle}}</h2>
+        <p>{{"Hosted By - " + (meetingDetail|async)?.ownerName}}</p>
+    </ion-item>
 
     <ion-item>
         <button ion-button item-right (click)="openMom(meetingDetail.$key)">

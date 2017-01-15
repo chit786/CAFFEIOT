@@ -1,6 +1,6 @@
 <ion-header>
     <ion-navbar color="primary">
-        <button ion-button menuToggle>
+        <button ion-button menuToggle class="disable-hover">
              <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>
@@ -25,6 +25,13 @@
 
 
     </div>
+    <div class="progress-container">
+        <div class="progress" style="width:100%">
+            <div #waterlevel class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:40%">
+                {{waterIntake}}% Water
+            </div>
+        </div>
+    </div>
     <div class="home-table" style="height:250px">
         <ion-list>
             <ion-item>
@@ -42,11 +49,5 @@
         </ion-list>
 
     </div>
-    <div class="progress-container">
-        <div class="progress" style="width:100%">
-            <div #waterlevel class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:40%">
-                {{waterIntake}}% Water
-            </div>
-        </div>
-    </div>
+
 </ion-content>

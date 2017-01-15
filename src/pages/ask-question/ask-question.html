@@ -20,6 +20,27 @@
         <ion-textarea [(ngModel)]="questionDetail" maxlength="140" class="textarea"></ion-textarea>
     </ion-item>
 
+    <ion-list no-lines class="tag-container">
+
+
+
+        <ion-grid>
+            <ion-row>
+                <span *ngFor="let chip of chips">
+                        <ion-chip #chip1>
+                            <ion-label>{{chip}}</ion-label>
+                            <button ion-button clear color="light" (click)="delete(chip1)">
+        <ion-icon name="close-circle"></ion-icon>
+      </button>
+                        </ion-chip>
+                    </span>
+            </ion-row>
+
+        </ion-grid>
+
+
+    </ion-list>
+
     <ion-label>
         TAGS
     </ion-label>
@@ -28,47 +49,13 @@
     <div *ngIf="searching" class="spinner-container">
         <ion-spinner></ion-spinner>
     </div>
-    <ion-list *ngIf="issearched">
+    <ion-list no-lines *ngIf="issearched" class="tag-list">
         <ion-item *ngFor='let tag of tags | async'>
             <ion-label (click)="addChip(tag?.name)">{{tag.name}}</ion-label>
         </ion-item>
 
     </ion-list>
-    <ion-list>
-        <!--<ion-label>
-            TAGS
-        </ion-label>
-        <ion-item class="tag-box">
-            <ion-input placeholder="Add Tags!" clearInput>
 
-            </ion-input>
-
-        </ion-item>-->
-
-        <ion-item>
-            <ion-grid>
-                <ion-row>
-                    <ion-col *ngFor="let chip of chips">
-                        <ion-chip #chip1>
-                            <ion-label>{{chip}}</ion-label>
-                            <button ion-button clear color="light" (click)="delete(chip1)">
-        <ion-icon name="close-circle"></ion-icon>
-      </button>
-                        </ion-chip>
-                    </ion-col>
-                </ion-row>
-
-            </ion-grid>
-
-
-            <!--<ion-chip #chip2>
-                <ion-label>One</ion-label>
-                <button ion-button clear color="light" (click)="delete(chip2)">
-        <ion-icon name="close-circle"></ion-icon>
-      </button>
-            </ion-chip>-->
-        </ion-item>
-    </ion-list>
     <div class="clear-post-blk">
 
         <button ion-button color="primary" (click)="postQuestion()" round>Post</button>

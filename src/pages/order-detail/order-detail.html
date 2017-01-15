@@ -25,9 +25,9 @@
         <rating [(ngModel)]="rate" max="5" (click)="saveRating()"></rating>
 
         <button ion-button small item-right color="primary" (click)="completeChoice(choiceCollection.indexOf(item))">
-        Done
+        Complete
       </button>
-        <button ion-button small item-right color="primary" (click)="failedChoice(choiceCollection.indexOf(item))">
+        <button class="failed-btn" ion-button small item-right color="primary" (click)="failedChoice(choiceCollection.indexOf(item))">
         Failed
       </button>
 

@@ -23,7 +23,16 @@
 <ion-content padding>
     <ion-item>
 
-        <ion-card>
+
+        <h2>{{(question|async)?.questionTitle}}</h2>
+        <ion-avatar item-left>
+            <img src="{{(question | async)?.askedBy.profilepic}}">
+        </ion-avatar>
+        <p>{{(question | async)?.askedBy.name}}</p>
+        <p>{{(question | async)?.askedBy.date | amCalendar}}</p>
+
+
+        <!--<ion-card>
             <ion-card-title class="card-title">
                 {{(question|async)?.questionTitle}}
             </ion-card-title>
@@ -36,7 +45,7 @@
             </ion-item>
 
 
-        </ion-card>
+        </ion-card>-->
     </ion-item>
     <!--<ion-list>
         <ion-item *ngFor='let comment of comments | async'>
@@ -56,13 +65,16 @@
         </ion-item>
     </ion-list>-->
 
-    <ion-list no-lines>
+    <ion-list no-lines class="chat-list">
         <ion-item *ngFor="let comment of comments| async">
-            <ion-avatar item-left>
+            <ion-avatar item-right *ngIf="comment.position=='right'" class="profile-pic right">
                 <img src="{{(comment.user | async)?.profilepic}}">
             </ion-avatar>
             <chat-bubble [message]="comment"></chat-bubble>
             <ion-icon name="redo" (click)="scheduleMeetingWithMember(question.$key,comment)"></ion-icon>
+            <ion-avatar item-left *ngIf="comment.position=='left'" class="profile-pic left">
+                <img src="{{(comment.user | async)?.profilepic}}">
+            </ion-avatar>
         </ion-item>
     </ion-list>
 

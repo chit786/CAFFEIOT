@@ -5,11 +5,12 @@ import {Component} from '@angular/core';
     template:
     `
       <div class="chatBubble">
-        <div class="profile-pic {{comment.position}}"></div>
+       
         <div class="chat-bubble {{comment.position}}">
           <div class="message">{{comment?.desc}}</div>
          
         </div>
+       
       </div>
   `
 })

@@ -4,6 +4,17 @@ page-ask-question {
         text-align: center;
         padding: 10px;
     }
+    .tag-container {
+        margin: 0;
+        ion-row {
+            display: block;
+            width: 100%;
+            white-space: normal;
+        }
+    }
+    .tag-list {
+        margin: 0 0 64px 0;
+    }
     .item-label-floating .text-input {
         height: 100px;
     }
@@ -19,14 +30,10 @@ page-ask-question {
         border-bottom-color: transparent;
         box-shadow: none !important;
     }
-    .tag-box.input-has-focus {
-        border: 1px solid #622900;
-    }
-    ion-list {
-        padding: 15px 10px 15px 15px;
-    }
-    .textarea,
-    .tag-box {
+    // ion-list {
+    //     padding: 15px 10px 15px 15px;
+    // }
+    .textarea {
         border: 1px solid #eeeeee;
     }
     .input-has-focus {
@@ -36,7 +43,10 @@ page-ask-question {
     }
     .clear-post-blk {
         padding: 0 20px;
-        margin-top: 150px;
+        position: fixed;
+        width: 100%;
+        left: 0;
+        bottom: 70px;
         .clear-btn {
             float: right;
         }

@@ -23,14 +23,17 @@ export class HomePage {
    waterIntake : any;
    coff:number;
  
-   
+   temp:any;
  // coffeecount;
   @ViewChild('canvas') canvas:ElementRef;
-   @ViewChild('waterlevel') waterlevel:Element;
+   @ViewChild('waterlevel') waterlevel:ElementRef;
   
   constructor(public navCtrl: NavController, public authData: AuthData,public af: AngularFire,public order:OrderData) {
 
     this.waterIntake = 40;
+    this.temp = "width:40px"
+    //water intake is 2/3 of body weight in pounds multiply by 0.029 litre , 1 kg = 2.20 pound
+    
 
     }
    

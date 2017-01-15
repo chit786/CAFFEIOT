@@ -57,6 +57,7 @@ export class AskQuestion {
 
   onSearchInput(){
       this.searching = true;
+      this.issearched = false;
   }
 
   setFilteredItems(company,searchTerm) {

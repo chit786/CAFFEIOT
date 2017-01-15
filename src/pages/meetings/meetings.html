@@ -53,11 +53,11 @@
                         <div class="horImgScrBlk">
                             <ion-grid>
                                 <ion-row>
-                                    <ion-col *ngFor="let user of meeting.group | async">
+                                    <span *ngFor="let user of meeting.group | async" class="overlap-img">
 
                                         <img class="inline-images" src="{{user.profilepic}}">
 
-                                    </ion-col>
+                                    </span>
                                 </ion-row>
                             </ion-grid>
                         </div>
@@ -109,11 +109,11 @@
                         <div class="horImgScrBlk">
                             <ion-grid>
                                 <ion-row>
-                                    <ion-col *ngFor="let user of meeting.group | async">
+                                    <span *ngFor="let user of meeting.group | async">
 
                                         <img class="inline-images" src="{{user.profilepic}}">
 
-                                    </ion-col>
+                                    </span>
                                 </ion-row>
                             </ion-grid>
                         </div>

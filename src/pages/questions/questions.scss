@@ -1,6 +1,24 @@
+page-feed {}
+
 page-questions {
-    .header-badge {
-        top: -7px !important;
-        left: -11px !important;
+    .card-title {
+        padding-left: 16px;
+        font-size: 1.0em;
+        width: calc(100% - 50px);
+        font-weight: bold;
+        float: left;
+        color: #000;
+        white-space: normal;
+    }
+    ion-col {
+        button.button-small-md {
+            font-size: 1.1rem;
+        }
+    }
+    .tabbar.show-tabbar {
+        height: 60px;
+        .tab-button-text {
+            margin: 0 !important;
+        }
     }
 }

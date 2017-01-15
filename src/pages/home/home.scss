@@ -32,6 +32,12 @@ page-home {
                 padding: 20px;
                 display: inline-block;
             }
+            .progress-container {
+                height: 40px;
+                position: absolute;
+                width: 100%;
+                top: 360px;
+            }
         }
         @media only screen and (min-width: 0px) and (max-width:767px) {
             .chart-div {

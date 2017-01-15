@@ -7,11 +7,13 @@ import { Preferences } from '../preferences/preferences';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import { Camera } from 'ionic-native';
 
+
 import firebase from 'firebase';
 
 import 'whatwg-fetch';
 
 declare var window: any;
+declare var plugins: any;
 
 @Component({
   selector: 'page-profile',
@@ -25,6 +27,14 @@ export class ProfilePage {
   URL: any;
   options : FirebaseListObservable<any>;
   skills : FirebaseListObservable<any>;
+
+   public optionsval: any = {
+        destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      targetHeight: 620,
+      targetWidth : 620,
+      correctOrientation: true
+  }
 
   constructor(public nav: NavController,public af: AngularFire, public profileData: ProfileData, public alertCtrl: AlertController, 
   public authData: AuthData, public platform: Platform) {
@@ -335,19 +345,52 @@ let alert = this.alertCtrl.create({
 
   }
 
-
+  // Return a promise to catch errors while loading image
+  getMedia(_imagePath){
+    return new Promise((resolve, reject) => {
+      // Get Image from ionic-native's built in camera plugin
+      // Camera.getPicture(this.optionsval).then((fileUri) => {
+        // Crop Image, on android this returns something like, '/storage/emulated/0/Android/...'
+        // Only giving an android example as ionic-native camera has built in cropping ability
+        if (this.platform.is('android')) {
+        
+          _imagePath = 'file://' + _imagePath;
+        }
+          const options = { quality: 100 };
+          /* Using cordova-plugin-crop starts here */
+          plugins.crop.promise(_imagePath, options).then( (path) => {
+            // path looks like 'file:///storage/emulated/0/Android/data/com.foo.bar/cache/1477008080626-cropped.jpg?1477008106566'
+            console.log('Cropped Image Path!: ' + path);
+            // Do whatever you want with new path such as read in a file
+            // Here we resolve the path to finish, but normally you would now want to read in the file
+            resolve(path);
+          }).catch( (error) => {
+            reject(error);
+          });
+        
+      // }).catch((error) => {
+      //   reject(error);
+      // })
+    });
+  }
   doGetPicture() {
     // TODO:
     // get picture from camera
     Camera.getPicture({
+      
       destinationType: Camera.DestinationType.FILE_URI,
       sourceType: Camera.PictureSourceType.CAMERA,
       targetHeight: 620,
+      targetWidth : 620,
       correctOrientation: true
     }).then((_imagePath) => {
      // alert('got image path ' + _imagePath);
       // convert picture to blob
-      return this.makeFileIntoBlob(_imagePath);
+      return this.getMedia(_imagePath);
+
+      
+    }).then((_imgPath)=>{
+       return this.makeFileIntoBlob(_imgPath);
     }).then((_imageBlob) => {
      // alert('got image blob ' + _imageBlob);
 
