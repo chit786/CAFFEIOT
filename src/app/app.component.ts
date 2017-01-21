@@ -5,25 +5,14 @@ import firebase from 'firebase';
 import { HomePage } from '../pages/home/home';
 import { Orders } from '../pages/orders/orders';
 import { PlaceOrder } from '../pages/place-order/place-order';
-import {OrderDetail} from '../pages/order-detail/order-detail';
-import {TeamOrder} from '../pages/team-order/team-order';
 import { LoginPage } from '../pages/login/login';
 import {Meetings} from '../pages/meetings/meetings';
-import {MeetingDetails} from '../pages/meeting-details/meeting-details';
-import {MinutesOfMeeting} from '../pages/minutes-of-meeting/minutes-of-meeting';
 import {MyTeams} from '../pages/my-teams/my-teams';
 import {Questions} from '../pages/questions/questions';
-import {ProfilePage} from '../pages/profile/profile';
-import {MyTeamDetails} from '../pages/my-team-details/my-team-details';
-import {AskQuestion} from '../pages/ask-question/ask-question';
-import {Favourite} from '../pages/favourite/favourite';
-import {Feed} from '../pages/feed/feed';
 import {Tasks} from '../pages/tasks/tasks';
-import {MyQuestions} from '../pages/my-questions/my-questions';
 import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
-import {Preferences} from '../pages/preferences/preferences';
 import {Contacts} from '../pages/contacts/contacts';
-import {QuestionDetail} from '../pages/question-detail/question-detail';
+import {CacheService} from "ionic-cache/ionic-cache";
 
 @Component({
   templateUrl: 'app.html'
@@ -36,7 +25,9 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform,public alertCtrl: AlertController) {
+  constructor(public platform: Platform,public alertCtrl: AlertController,cache: CacheService) {
+
+    cache.setDefaultTTL(60 * 60); 
     //initialize firebase
     firebase.initializeApp({
       apiKey: "AIzaSyCLoFM5qxP6IXTMThJ1mm7B8EqXYaEMXAE",
@@ -82,7 +73,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       if (this.platform.is('android')){
       StatusBar.styleDefault();
-      //  Splashscreen.show();
+        Splashscreen.hide();
       let push = Push.init({
         android: {
           senderID: "558368532218"

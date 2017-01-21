@@ -1,5 +1,5 @@
-import { Component,Pipe, PipeTransform } from '@angular/core';
-import { ModalController,NavController,ItemSliding } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { ModalController,NavController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import {MeetingDetails} from '../meeting-details/meeting-details';
 import {ScheduleMeeting} from '../schedule-meeting/schedule-meeting';

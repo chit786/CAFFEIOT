@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { NavController,ModalController,ViewController,NavParams,AlertController,ToastController } from 'ionic-angular';
 import firebase from 'firebase';
 import { TeamsData } from '../../providers/teams-data';
-import {AngularFire, FirebaseListObservable} from 'angularfire2';
+import {AngularFire} from 'angularfire2';
 import 'rxjs/add/operator/debounceTime';
 import { FormControl } from '@angular/forms';
+
 
 /*
   Generated class for the Contacts page.
@@ -27,11 +28,13 @@ isNormal:any = true;
   teamName;
   isMeet : any =false;
   meetKey;
+
    
  searching: any = false;
   constructor(public toastCtrl: ToastController,public teamData:TeamsData
   ,public alertCtrl: AlertController,public navParams: NavParams,public navCtrl: NavController
   , public af: AngularFire,public modalCtrl: ModalController,public view: ViewController) {
+    
      this.searchControl = new FormControl();
 
   }
@@ -131,7 +134,7 @@ isNormal:any = true;
                   
 
                   }else{
-                        var details = true;
+                        //var details = true;
 
                         var firstName = childsnapshot.val().firstName ;
                         var lastName = childsnapshot.val().lastName; 

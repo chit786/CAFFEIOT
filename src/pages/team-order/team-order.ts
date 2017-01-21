@@ -23,7 +23,7 @@ export class TeamOrder {
   constructor(public navCtrl: NavController,public af:AngularFire, public navParms : NavParams) {
 
     this.currentMember= firebase.auth().currentUser.uid;
-    var orderstatus = this.orderStatus;
+   // var orderstatus = this.orderStatus;
     this.members = af.database.list('/teamOrder/' +this.navParms.get('order').$key + '/members')
   
 

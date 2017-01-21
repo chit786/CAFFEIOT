@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ModalController,NavController,ToastController } from 'ionic-angular';
 import { PlaceOrder } from '../place-order/place-order';
-import { Ionic2RatingModule } from 'ionic2-rating';
+// import { Ionic2RatingModule } from 'ionic2-rating';
 import {OrderDetail} from '../order-detail/order-detail';
 import {TeamOrder} from '../team-order/team-order';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';

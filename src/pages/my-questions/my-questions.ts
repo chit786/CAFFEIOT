@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NavController,ModalController } from 'ionic-angular';
-import { AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
+import { AngularFire, FirebaseListObservable} from 'angularfire2';
 import { QuestionsData } from '../../providers/questions-data';
 import 'rxjs/add/operator/debounceTime';
 import {QuestionDetail} from '../question-detail/question-detail';

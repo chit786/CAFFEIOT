@@ -12,8 +12,6 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class OrderData {
    public order: any;
-   private fireAuth: any;
-   private dbRef:any;
     today:any ;
     year:any;
     month:any;
@@ -41,7 +39,7 @@ export class OrderData {
     // this.today = new Date(this.year, this.month, this.day);//today to query the database to get the results
     this.today = this.day + "-" + this.month + "-" + this.year;
     //return  firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.email.replace("@","CAFFEIOTAT").replace(".","CAFFEDOT") + '/'+  this.today );
-      var fr =firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.uid + '/'+  this.today ) 
+      //var fr =firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.uid + '/'+  this.today ) 
       //fr.on('value').then()
    // }
     //)

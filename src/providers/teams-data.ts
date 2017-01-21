@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import { AlertController,ToastController } from 'ionic-angular';
 import {AngularFire, FirebaseObjectObservable} from 'angularfire2';
-import { Http,Response, Headers, RequestOptions  } from '@angular/http';
+import { Http, Headers, RequestOptions  } from '@angular/http';
 
 @Injectable()
 export class TeamsData {
@@ -152,8 +152,7 @@ var myhttp = this.http;
   getTeams() : any{
     var myItems = [];
     var teams = this.userProfile.child("teams");
-    var teamName;
-    var memberGroup;
+
     console.log("hi")
     teams.on('value',function(snapshot){
       

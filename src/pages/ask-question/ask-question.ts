@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController,ToastController } from 'ionic-angular';
-import { AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
+import { AngularFire,FirebaseObjectObservable} from 'angularfire2';
 import { FormControl } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 
@@ -151,7 +151,7 @@ export class AskQuestion {
 
                    }
                    firebase.database().ref('/questions/' + key.key + '/members/' + index).update(member);
-                   if(index==0){
+                   if(childsnap.key==firebase.auth().currentUser.uid){
                       firebase.database().ref('/questions/' + key.key + '/askedBy').update(askDetail);
                    }
                    

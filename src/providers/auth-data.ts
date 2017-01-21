@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import {Preferences} from '../pages/preferences/preferences';
+
 
 
 /*

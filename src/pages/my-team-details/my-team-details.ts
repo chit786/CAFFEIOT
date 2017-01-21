@@ -37,7 +37,7 @@ export class MyTeamDetails {
      //this.teamMembers = [];
      //load all client data corresponding to the meeting id
     // this.teamMembers = this.teamData.getClientInfo(this.navParams.get('item'));
-    var members = [];
+    //var members = [];
      this.teamMembers = af.database.list('/teams/'+ this.navParams.get('item').$key + '/members');
 
       this.tempTeam = af.database.list('/teams/'+ this.navParams.get('item').$key + '/members',{ preserveSnapshot: true } )

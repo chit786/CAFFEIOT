@@ -34,6 +34,7 @@ import {MomentModule} from 'angular2-moment';
 import {QuestionDetail} from '../pages/question-detail/question-detail';
 import {TeamOrder} from '../pages/team-order/team-order';
 import {ChatBubble} from '../components/chat-bubble/chat-bubble';
+import {CacheService} from "ionic-cache/ionic-cache";
 
 
 export const firebaseConfig = {
@@ -108,6 +109,6 @@ export const firebaseConfig = {
     TeamOrder,
     ChatBubble
   ],
-  providers: [AuthData,OrderData,ProfileData,TeamsData,QuestionsData]
+  providers: [AuthData,OrderData,ProfileData,TeamsData,QuestionsData,CacheService]
 })
 export class AppModule {}

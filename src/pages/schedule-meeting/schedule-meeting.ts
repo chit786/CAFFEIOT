@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController,ToastController,NavParams } from 'ionic-angular';
-import { AngularFire, FirebaseListObservable} from 'angularfire2';
+import { AngularFire} from 'angularfire2';
 /*
   Generated class for the ScheduleMeeting page.
 

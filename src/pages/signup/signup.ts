@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, LoadingController, AlertController } from 'ionic-angular';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthData } from '../../providers/auth-data';
-import { HomePage } from '../home/home';
 import { Preferences } from '../preferences/preferences';
 
 

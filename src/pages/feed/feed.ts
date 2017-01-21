@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController,ModalController } from 'ionic-angular';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
-import { Ionic2RatingModule } from 'ionic2-rating';
+// import { Ionic2RatingModule } from 'ionic2-rating';
 import {QuestionDetail} from '../question-detail/question-detail';
 
 /*
@@ -37,7 +37,7 @@ export class Feed {
 
       )
     }
-    ) as FirebaseListObservable<any>;
+    ) as FirebaseListObservable<any> ;
 
 
    var feeds =  firebase.database().ref('/userProfile/' + firebase.auth().currentUser.uid + '/feeds')

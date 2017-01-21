@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController,ViewController,NavParams,ToastController } from 'ionic-angular';
-import { HomePage } from '../home/home';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import { ProfileData } from '../../providers/profile-data';
 /*
