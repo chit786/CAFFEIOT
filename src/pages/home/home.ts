@@ -24,21 +24,59 @@ export class HomePage {
    nutritions:FirebaseListObservable<any[]>;
    temp:any;
   finalNutritionarray = [];
+  shownutrition:any;
   waterObservable : FirebaseObjectObservable<any>;
-
+  nutritionIcon:any ;
  
  // coffeecount;
   @ViewChild('canvas') canvas:ElementRef;
    @ViewChild('waterLevel') waterlevelRef:ElementRef;
 
   public waterlevel:string = '';
-    // ngAfterViewInit() {
-    //     // console.log("ngView");
-    //     console.log(this.waterIntake);
-    //     this.waterlevel = this.waterlevelRef.nativeElement;
-    //     this.renderer.setElementStyle(this.waterlevel ,"width",this.waterIntake + "%");
+    ngAfterViewInit() {
+      
+         //water intake is 2/3 of body weight in pounds multiply by 0.029 litre , 1 kg = 2.20 pound
+          var consumeDay;
+        var today = new Date().toISOString();
+                        var year = today.split("-")[0];
+                        var month = today.split("-")[1];
+                        var day = ( today.split("-")[2] ).split("T")[0]
+                        today = year + '-' + day + '-' + month;
+                        consumeDay = day + '-' + month + '-' + year; 
+
+        this.af.database.object('/nutritions/' + firebase.auth().currentUser.uid + '/' + consumeDay + '/serving size')
+        .subscribe((water)=>{
+
+            this.af.database.object('/userProfile/' + firebase.auth().currentUser.uid ).subscribe((user)=>{
+
+                this.waterIntake = Math.round((water.value / ((2 * 0.029 * 1000 *((user.weight * 2.20))/ 3)))*100)
+                console.log(this.waterIntake);
+                 this.waterlevel = this.waterlevelRef.nativeElement;
+                 if(Number.isNaN(this.waterIntake)){
+                     this.waterIntake =0;
+                 }
+                 this.renderer.setElementStyle(this.waterlevel ,"width",this.waterIntake + "%");
          
-    // }
+            })
+            
+        })   
+
+         firebase.database().ref('/dailyConsumption/' + firebase.auth().currentUser.uid).once('value',function(snapshot){
+            snapshot.forEach(function(child){
+              
+                 if(child.key!= day+"-"+month+"-"+year){
+                  firebase.database().ref('/dailyConsumption/' + firebase.auth().currentUser.uid + '/' + child.key).set(null);
+                }
+                return false;
+            })
+               
+           })
+
+
+
+
+         
+    }
 
     
 
@@ -52,23 +90,10 @@ export class HomePage {
                         var year = today.split("-")[0];
                         var month = today.split("-")[1];
                         var day = ( today.split("-")[2] ).split("T")[0]
-                        today = year + '-' + day + '-' + month;
+                        today = year + '-' + month + '-' + day;
                         consumeDay = day + '-' + month + '-' + year; 
 
-      //water intake is 2/3 of body weight in pounds multiply by 0.029 litre , 1 kg = 2.20 pound
-        af.database.object('/nutritions/' + firebase.auth().currentUser.uid + '/' + consumeDay + '/serving size')
-        .subscribe((water)=>{
-
-            af.database.object('/userProfile/' + firebase.auth().currentUser.uid ).subscribe((user)=>{
-
-                this.waterIntake = Math.round((water.value / ((2 * 0.029 * 1000 *((user.weight * 2.20))/ 3)))*100)
-                console.log(this.waterIntake);
-                 this.waterlevel = this.waterlevelRef.nativeElement;
-                 this.renderer.setElementStyle(this.waterlevel ,"width",this.waterIntake + "%");
-         
-            })
-            
-        })                
+        
 
      
         //today's tasks list
@@ -87,6 +112,9 @@ export class HomePage {
             }) as FirebaseListObservable<any>;  
 
             this.nutritions = af.database.list('/nutritions/' + firebase.auth().currentUser.uid + '/' + consumeDay)
+
+            this.nutritionIcon = 'ios-remove-circle-outline';
+            this.shownutrition = true;
           
 
     }
@@ -102,6 +130,21 @@ export class HomePage {
     }
   }
    
+  hideList(){
+
+      if(this.shownutrition){
+          this.nutritionIcon = 'ios-add-circle-outline';
+          this.shownutrition = false;
+      }else{
+          this.shownutrition = true;
+         
+           this.nutritionIcon = 'ios-remove-circle-outline';
+
+      }
+
+
+  }
+
 
     goToProfile(){
     this.navCtrl.push(ProfilePage);

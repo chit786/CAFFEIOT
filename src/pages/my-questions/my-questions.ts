@@ -43,21 +43,41 @@ export class MyQuestions {
     onSearchInput(){
         this.searching = true;
     }
-  // setFilteredItems() {
- 
-  //       this.items = this.dataService.filterItems(this.searchTerm);
- 
-  //   }
+
+    addTolike(qKey){
+
+      console.log(qKey);
+    firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/myquestions/' + qKey + '/likeCount').once('value',function(snapshot){
+      console.log("qkey: " +qKey + " snapvalue" + snapshot.val());
+      if(snapshot.val()==1){
+         firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/myquestions/' + qKey).update({
+            likeCount : 0
+          })
+          firebase.database().ref('/questions/' + qKey).child('likeCount').transaction(function(likeCount){
+
+                return likeCount - 1;
+
+              })
+
+
+      }else{
+         firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/myquestions/' + qKey).update({
+            likeCount : 1
+          })
+          firebase.database().ref('/questions/' + qKey).child('likeCount').transaction(function(likeCount){
+
+                return likeCount + 1;
+
+              })
+      }
+         
+
+    })
+    }
+
 
     setFilteredmyquestions() {
   
-      //  this.myQs = this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/myquestions').map((qss)=>{
-      //   const filtered = qss.filter((qs) => {
-      //       return qs.questionTitle.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
-      //   })
-      //   return filtered;
-      // },
-      // );
 
       this.myQs = this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/myquestions').map((_qss)=>{
       return _qss.map((_qs)=>{
@@ -73,7 +93,7 @@ export class MyQuestions {
             return qs.questionTitle.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
         })
     }
-    ) as FirebaseListObservable<any>;
+    ).map((myqs)=>myqs.reverse()) as FirebaseListObservable<any>;
 
   }
 

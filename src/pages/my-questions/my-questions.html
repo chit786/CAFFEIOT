@@ -45,8 +45,9 @@
                 <ion-row>
                     <ion-col>
                         <button ion-button icon-left clear small>
-        <ion-icon name="thumbs-up"></ion-icon>
-        <div>{{(question.detail | async)?.likeCount}} Likes</div>
+        <ion-icon name="thumbs-up" *ngIf="question.likeCount" ></ion-icon>
+         <ion-icon name="thumbs-up-outline" *ngIf="!question.likeCount"></ion-icon>
+        <div (click)="addTolike(question.$key)">{{(question.detail | async)?.likeCount}} Likes</div>
       </button>
                     </ion-col>
                     <ion-col>

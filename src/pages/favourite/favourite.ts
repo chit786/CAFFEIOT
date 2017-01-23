@@ -43,7 +43,36 @@ export class Favourite {
 
       
   }
+   addTolike(qKey){
 
+     
+    firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/feeds/' + qKey + '/likeCount').once('value',function(snapshot){
+     
+      if(snapshot.val()==1){
+         firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/feeds/' + qKey).update({
+            likeCount : 0
+          })
+          firebase.database().ref('/questions/' + qKey).child('likeCount').transaction(function(likeCount){
+
+                return likeCount - 1;
+
+              })
+
+
+      }else{
+         firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/feeds/' + qKey).update({
+            likeCount : 1
+          })
+          firebase.database().ref('/questions/' + qKey).child('likeCount').transaction(function(likeCount){
+
+                return likeCount + 1;
+
+              })
+      }
+         
+
+    })
+    }
  
   openQuestion(qsKey){
 

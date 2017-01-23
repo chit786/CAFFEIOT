@@ -30,7 +30,11 @@ export class Meetings {
   constructor(public af: AngularFire,public navCtrl: NavController,public alertCtrl: AlertController,public modalCtrl: ModalController) {
 
     this.meetings = "host";
-    this.meetingListHost = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/host').map((_users) => {
+    this.meetingListHost = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/host',{
+      query:{
+        orderByChild : 'conferenceDate'
+      }
+    }).map((_users) => {
     return _users.map((_user) => {
         _user.group = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/host/' +_user.$key + '/users')
         return _user

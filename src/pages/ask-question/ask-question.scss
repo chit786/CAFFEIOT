@@ -1,4 +1,10 @@
 page-ask-question {
+    .invalid {
+        border-bottom: 1px solid #FF6153;
+    }
+    .error-message .item-inner {
+        border-bottom: 0 !important;
+    }
     .spinner-container {
         width: 100%;
         text-align: center;

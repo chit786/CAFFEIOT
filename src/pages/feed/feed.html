@@ -21,7 +21,9 @@
                 <ion-card-title class="card-title">
                     {{question?.questionTitle}}
                 </ion-card-title>
-                <rating [(ngModel)]="question.isFav" max="1" (click)="addToFavourite(question.$key)"></rating>
+                <!--<rating [(ngModel)]="question.isFav" max="1" (click)="addToFavourite(question.$key)"></rating>-->
+                <ion-icon name="heart" *ngIf="question.isFav" (click)="addToFavourite(question.$key)"></ion-icon>
+                <ion-icon name="heart-outline" *ngIf="!question.isFav" (click)="addToFavourite(question.$key)"></ion-icon>
                 <ion-item>
                     <ion-avatar item-left>
                         <img src="{{(question.detail | async)?.askedBy.profilepic}}">
@@ -37,8 +39,9 @@
                 <ion-row>
                     <ion-col>
                         <button ion-button icon-left clear small>
-        <ion-icon name="thumbs-up"></ion-icon>
-        <div>{{(question.detail | async)?.likeCount}} Likes</div>
+        <ion-icon name="thumbs-up" *ngIf="question.likeCount" ></ion-icon>
+         <ion-icon name="thumbs-up-outline" *ngIf="!question.likeCount"></ion-icon>
+        <div (click)="addTolike(question.$key)">{{(question.detail | async)?.likeCount}} Likes</div>
       </button>
                     </ion-col>
                     <ion-col>

@@ -20,6 +20,7 @@ export class Orders {
  public items = [];
 rate;
 OrderList : FirebaseListObservable<any>;
+
  today:any = new Date().toISOString();
  
  //items;
@@ -28,6 +29,21 @@ OrderList : FirebaseListObservable<any>;
    //this.initializeItems();
     this.rate = '3.5';
    this.initializeItems();
+    var year = this.today.split("-")[0];
+           var month = this.today.split("-")[1];
+          var day = ( this.today.split("-")[2] ).split("T")[0];
+   firebase.database().ref('/orders/' + firebase.auth().currentUser.uid).once('value',function(snapshot){
+            snapshot.forEach(function(child){
+            
+                 if(child.val().date != month+"/"+day+"/"+year){
+                  firebase.database().ref('/orders/' + firebase.auth().currentUser.uid + '/' + child.key).set(null);
+                }
+                return false;
+            })
+               
+           })
+
+
  }
 
  initializeItems() {
@@ -72,12 +88,26 @@ OrderList : FirebaseListObservable<any>;
           var day = ( this.today.split("-")[2] ).split("T")[0];
    this.OrderList = this.af.database.list('/orders/'+firebase.auth().currentUser.uid,{
        query:{
+         
         orderByChild : 'date',
         equalTo : month+"/"+day+"/"+year
        }
       
 
-     });
+     }).map((data)=>{
+
+       return data.map((val)=>{
+         if(val.askedByname){
+           val.askedByname = val.askedByname;
+         }else{
+           val.askedByname =  "You";
+         }
+         return val;
+       })
+     }).map((orders)=>orders.reverse()) as FirebaseListObservable<any>;
+
+
+     
 
  }
  addItem(){
@@ -144,7 +174,7 @@ OrderList : FirebaseListObservable<any>;
 
  openOrder(item){
 
-   if(item.askedByname){
+   if(item.askedByname!="You"){
      this.navCtrl.push(TeamOrder,{
        order : item
      })

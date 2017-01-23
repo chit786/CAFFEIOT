@@ -90,19 +90,19 @@ export class MyApp {
         //console.log("device token ->", data.registrationId);
 
       var key = firebase.database().ref('/userProfile').child(user.uid);
-      if(key.key){
+      // if(key.key){
            
-      }else{
-            var postData = {
+      // }else{
+            // var postData = {
               
-               regID :  data.registrationId,
-            }
-            var updates= {}
+            //    regID :  data.registrationId,
+            // }
+            // var updates= {}
             
-            updates['/userProfile/' + key ] = postData;
-             firebase.database().ref().update(updates);
+            // updates['/userProfile/' + key ] = postData;
+             firebase.database().ref('/userProfile/' + key + '/regID').set(data.registrationId);
 
-      }
+      // }
       
         //TODO - send device token to server
       });

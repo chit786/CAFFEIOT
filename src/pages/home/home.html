@@ -29,7 +29,7 @@
         {{waterIntake}}% Water
         <div class="progress" style="width:100%">
 
-            <div #waterLevel class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:40%">
+            <div #waterLevel class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
 
             </div>
         </div>
@@ -37,12 +37,15 @@
     <div class="home-table" style="height:250px">
         <ion-list>
             <ion-list-header>
-                Intakes
+                <ion-icon [name]="nutritionIcon" item-right (click)="hideList()"></ion-icon>
+                <h2 style="display: inline-block;">Intakes</h2>
             </ion-list-header>
-            <ion-item *ngFor='let item of nutritions | async'>
-                <h2>{{item.$key}}</h2>
-                <p>{{item.value + item.unit}}</p>
-            </ion-item>
+            <div *ngIf="shownutrition">
+                <ion-item *ngFor='let item of nutritions | async'>
+                    <h2>{{item.$key}}</h2>
+                    <p>{{item.value + item.unit}}</p>
+                </ion-item>
+            </div>
             <!--<ion-item>
                 <h2>Calories</h2>
             </ion-item>
@@ -57,8 +60,10 @@
     </div>
     <ion-list>
         <ion-list-header>
-            TODAY's Tasks
+            Today's Tasks
+
         </ion-list-header>
+
         <ion-item padding *ngFor='let task of todaystasks | async' (click)="toggleDetails(task)">
             <ion-icon color="primary" item-right [name]="task.icon"></ion-icon>
             <h2>{{task.description}}</h2>
@@ -68,6 +73,8 @@
                 <p>Completion Date : {{task.date}}</p>
             </div>
         </ion-item>
+
+
     </ion-list>
 
 </ion-content>

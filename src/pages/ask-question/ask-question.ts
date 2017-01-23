@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController,ToastController } from 'ionic-angular';
 import { AngularFire,FirebaseObjectObservable} from 'angularfire2';
-import { FormControl } from '@angular/forms';
+import { FormControl,FormBuilder, Validators } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 
 /*
@@ -16,7 +16,7 @@ import 'rxjs/add/operator/debounceTime';
   templateUrl: 'ask-question.html'
 })
 export class AskQuestion {
-
+  public askQuestionForm;
   issearched :any;
   users:any;
   questionDetail: string = '';
@@ -27,9 +27,17 @@ export class AskQuestion {
    searching: any = false;
    searchControl: FormControl;
    tags : any;
-  constructor(public toastCtrl: ToastController,public af : AngularFire, public navCtrl: NavController) {   
+   submitAttempt:any = false;
+  constructor(public toastCtrl: ToastController,public af : AngularFire, public navCtrl: NavController,public formBuilder: FormBuilder) {   
   this.searchControl = new FormControl();
   this.issearched = false;
+   this.askQuestionForm = formBuilder.group({
+        textArea: ['', Validators.compose([Validators.required])],
+        
+      });
+
+
+
   }
 
   ionViewDidLoad() {
@@ -94,6 +102,12 @@ export class AskQuestion {
   }
 
   postQuestion(){
+  this.submitAttempt = true;
+    if(this.askQuestionForm.valid && this.chips.length!=0){
+
+   
+
+
     var tags = this.chips.slice(0);
     var qdesc = this.questionDetail;
     var users = [];
@@ -191,7 +205,15 @@ export class AskQuestion {
 
 
 
-
+ }else{
+   if(this.chips.length==0){
+      let toast = this.toastCtrl.create({
+          message: 'Choose Tags before asking question to get response!',
+          duration: 3000
+        });
+        toast.present();
+   }
+ }
 
   }
 
