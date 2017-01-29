@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavParams,ViewController,NavController,Content, TextInput } from 'ionic-angular';
 import { AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
-import {ScheduleMeeting} from '../schedule-meeting/schedule-meeting'
+import {ScheduleMeeting} from '../schedule-meeting/schedule-meeting';
+import firebase from 'firebase';
 /*
   Generated class for the QuestionDetail page.
 

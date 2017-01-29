@@ -24,9 +24,9 @@
                 <img src="{{member.profilepic}}">
             </ion-avatar>
             <h2>{{member.firstName + ' ' + member.lastName}}</h2>
-            <ion-chip #chip color="light" *ngFor="let drink of member.choice">
+            <ion-chip #chip color="light" *ngFor="let drink of member.choices|async">
                 <ion-label style="text-align: center;">{{drink.choice}}</ion-label>
-                <button *ngIf="currentMember==member.$key" #btn ion-button clear color="dark" (click)="removeChoice(chip)">
+                <button *ngIf="currentMember==member.$key && orderStatus!='Complete'" #btn ion-button clear color="dark" (click)="removeChoice(chip,drink.$key)">
                                 <ion-icon name="close"></ion-icon>
                 </button>
             </ion-chip>

@@ -8,6 +8,7 @@ import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import { Camera } from 'ionic-native';
 
 
+
 import firebase from 'firebase';
 
 import 'whatwg-fetch';

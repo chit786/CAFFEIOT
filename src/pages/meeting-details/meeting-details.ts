@@ -6,6 +6,7 @@ import { TeamsData } from '../../providers/teams-data';
 import {ScheduleMeeting} from '../schedule-meeting/schedule-meeting';
 import {MinutesOfMeeting} from '../minutes-of-meeting/minutes-of-meeting';
 import {AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
+import firebase from 'firebase';
 
 /*
   Generated class for the MeetingDetails page.

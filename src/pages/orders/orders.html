@@ -47,7 +47,7 @@
                     <!--<ion-list>
             <ion-item class="list-label" *ngFor="let drink of item.choice">-->
 
-                    <ion-chip #chip color="light" *ngFor="let drink of item.choice">
+                    <ion-chip #chip color="light" *ngFor="let drink of item.choices|async">
                         <ion-label style="text-align: center;">{{drink.choice}}</ion-label>
                         <button #btn ion-button clear color="dark" (click)="removeChoice(chip,item.choice,item.$key)">
                                 <ion-icon name="close"></ion-icon>

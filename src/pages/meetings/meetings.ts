@@ -4,6 +4,7 @@ import { AlertController } from 'ionic-angular';
 import {MeetingDetails} from '../meeting-details/meeting-details';
 import {ScheduleMeeting} from '../schedule-meeting/schedule-meeting';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
+import firebase from 'firebase';
 
 
 /*

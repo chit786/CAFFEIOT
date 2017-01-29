@@ -4,6 +4,7 @@ import { PlaceOrder } from '../place-order/place-order';
 // import { Ionic2RatingModule } from 'ionic2-rating';
 import {OrderDetail} from '../order-detail/order-detail';
 import {TeamOrder} from '../team-order/team-order';
+import firebase from 'firebase';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 
 /*
@@ -28,7 +29,7 @@ OrderList : FirebaseListObservable<any>;
  constructor(public toastCtrl: ToastController,public af: AngularFire,public navCtrl: NavController, public modalCtrl: ModalController) {
    //this.initializeItems();
     this.rate = '3.5';
-   this.initializeItems();
+
     var year = this.today.split("-")[0];
            var month = this.today.split("-")[1];
           var day = ( this.today.split("-")[2] ).split("T")[0];
@@ -46,40 +47,7 @@ OrderList : FirebaseListObservable<any>;
 
  }
 
- initializeItems() {
-   /*this.items = [
-     {id:1,date:"21 April",choice:"Latte",machineID:"A",Status:"Completed",rating:1},
-     {id:2,date:"22 April",choice:"Mocha",machineID:"C",Status:"Pending",rating:2},
-     {id:3,date:"24 April",choice:"Latte",machineID:"A",Status:"Complated",rating:5}
-   ];*/
-  // this.items = this.items;
- // this.dataService.getData().then((orderlist) => {
 
-  //   if(orderlist){
-   //    this.items = JSON.parse(orderlist); 
-   //  }
-
-  // });
-     
- }
-
- getItems(ev) {
-   // Reset items back to all of the items
-   //this.initializeItems();
-
-   // set val to the value of the ev target
-   var val = ev.target.value;
-
-   // if the value is an empty string don't filter the items
-   if (val && val.trim() != '') {
-     this.items = this.items.filter((item) => {
-       return (item.id.toString()===val);
-     })
-   }else{
-     this.initializeItems();
-   }
-   
- }
 
  //added as part of stub addition
  ionViewDidLoad(){
@@ -102,6 +70,7 @@ OrderList : FirebaseListObservable<any>;
          }else{
            val.askedByname =  "You";
          }
+         val.choices = this.af.database.list('/orders/'+firebase.auth().currentUser.uid + '/' + val.$key + '/choice')
          return val;
        })
      }).map((orders)=>orders.reverse()) as FirebaseListObservable<any>;
@@ -151,11 +120,13 @@ OrderList : FirebaseListObservable<any>;
    var choiceRef = firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + orderKey + '/choice' ) 
    choiceRef.on('value',function(snapshot){
      if(snapshot.numChildren()>1){
-         chip.remove();
+        
       snapshot.forEach(function(childsnapshot){
         
         if(childsnapshot.val().choice==chip.textContent.toString().trim()){
-          childsnapshot.ref.set(null);
+          childsnapshot.ref.set(null).then(()=>{
+             chip.remove();
+          });
           return true;
         }
       })

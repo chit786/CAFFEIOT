@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, ViewController,NavParams  } from 'ionic-angular';
-
+import firebase from 'firebase';
 /*
  Generated class for the PlaceOrder page.
 

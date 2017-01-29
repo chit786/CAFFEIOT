@@ -1,6 +1,7 @@
 //import 'chart.js/src/chart';
 import 'chart.js/dist/Chart.bundle';
 declare var Chart;
+import firebase from 'firebase';
 import { Component, ViewChild, ElementRef,Renderer } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AuthData } from '../../providers/auth-data';
@@ -27,6 +28,7 @@ export class HomePage {
   shownutrition:any;
   waterObservable : FirebaseObjectObservable<any>;
   nutritionIcon:any ;
+   auth:any;
  
  // coffeecount;
   @ViewChild('canvas') canvas:ElementRef;
@@ -47,7 +49,7 @@ export class HomePage {
         this.af.database.object('/nutritions/' + firebase.auth().currentUser.uid + '/' + consumeDay + '/serving size')
         .subscribe((water)=>{
 
-            this.af.database.object('/userProfile/' + firebase.auth().currentUser.uid ).subscribe((user)=>{
+            this.af.database.object('/userProfile/' + firebase.auth().currentUser.uid).subscribe((user)=>{
 
                 this.waterIntake = Math.round((water.value / ((2 * 0.029 * 1000 *((user.weight * 2.20))/ 3)))*100)
                 console.log(this.waterIntake);
@@ -72,7 +74,7 @@ export class HomePage {
                
            })
 
-
+           console.log("in home");
 
 
          
@@ -84,7 +86,20 @@ export class HomePage {
   constructor(public navCtrl: NavController, public authData: AuthData,public af: AngularFire,public order:OrderData,
   public renderer: Renderer) {
 
+    //   this.auth = af.auth.subscribe((user)=>{
+    //       if (user) {
+    //         // User signed in!
+    //         var uid = user.uid;
+    //         console.log(uid)
+    //         } else {
+    //         // User logged out
+    //         console.log("no user")
+    //         }
+    //   })
 
+      //af.auth.getAuth().auth.uid
+
+      console.log("in home constructor");
         var consumeDay;
         var today = new Date().toISOString();
                         var year = today.split("-")[0];
@@ -97,7 +112,7 @@ export class HomePage {
 
      
         //today's tasks list
-            this.todaystasks = af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/tasks',{
+            this.todaystasks = af.database.list('/userProfile/' + firebase.auth().currentUser.uid+ '/tasks',{
                 query:{
                     orderByChild:'date',
                     equalTo  : today
@@ -173,7 +188,7 @@ export class HomePage {
                     today = day + "-" + month + "-" + year;
                 
                
-                 var coffeeCountRef = firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.uid + '/'+  today );
+                 var coffeeCountRef = firebase.database().ref('/dailyConsumption' + '/' + firebase.auth().currentUser.uid+ '/'+  today );
                  
             coffeeCountRef.on('value', function(snapshot) {
             

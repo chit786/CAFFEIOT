@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { NavParams,ViewController,NavController  } from 'ionic-angular';
+import { NavParams,ViewController,NavController,ToastController  } from 'ionic-angular';
+import firebase from 'firebase';
+import {AngularFire, FirebaseListObservable} from 'angularfire2';
 // import { Ionic2RatingModule } from 'ionic2-rating';
 
 /*
@@ -16,12 +18,14 @@ export class OrderDetail {
 
   title;
   description;
-  choiceCollection;
+  choiceCollection : FirebaseListObservable<any> ;
   rate;
   orderKey;
   dbRating;
+  choices=[];
   today =  new Date().toISOString();
-  constructor(public navParams: NavParams,public navCtrl: NavController, public view: ViewController){
+  constructor(public navParams: NavParams,public toastCtrl: ToastController,
+  public navCtrl: NavController, public view: ViewController,public af:AngularFire){
      
  
   }
@@ -34,7 +38,11 @@ export class OrderDetail {
       temprate = snap.val();
     })
     this.rate = temprate;
-    this.choiceCollection = this.navParams.get('item').choice; 
+    this.choiceCollection = this.navParams.get('item').choices; 
+    this.choiceCollection.subscribe((choice)=>{
+      this.choices = choice.splice(0);
+      console.log(this.choices);
+    })
 
      
                     var year = this.today.split("-")[0];
@@ -60,7 +68,8 @@ export class OrderDetail {
   }
 
   completeOrder(){
-    var choices = this.choiceCollection;
+    var choices = this.choices;
+    //var choices = this.choiceCollection;
     firebase.database().ref('/orders/' + firebase.auth().currentUser.uid + '/' + this.orderKey).update({
       status : "Complete"
     });
@@ -105,6 +114,14 @@ let promises = Object.keys(choices)
 
             })
            
+        }).then(()=>{
+
+           let toaster = this.toastCtrl.create({
+      message: 'updated your nutritions!',
+      duration: 3000
+    });
+    toaster.present();
+
         });
    
         
@@ -117,11 +134,11 @@ let promises = Object.keys(choices)
 
     for(var val in choices){
 
-    firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + this.orderKey + '/choice/').child(val).update({
+    firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + this.orderKey + '/choice/' ).child(choices[val].$key).update({
       status : 'Complete'
     })
 
-    firebase.database().ref('/dailyConsumption/' + firebase.auth().currentUser.uid +'/' +this.today + '/' + this.orderKey + '/choice/' ).child(val).update({
+    firebase.database().ref('/dailyConsumption/' + firebase.auth().currentUser.uid +'/' +this.today + '/' + this.orderKey + '/choice/' ).child(choices[val].$key).update({
       status : 'Complete'
     })
     }

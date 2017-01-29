@@ -5,6 +5,7 @@ import {Favourite} from '../favourite/favourite';
 import {Feed} from '../feed/feed';
 import {MyQuestions} from '../my-questions/my-questions';
 import {AngularFire,FirebaseObjectObservable} from 'angularfire2';
+import firebase from 'firebase';
 /*
   Generated class for the Questions page.
 

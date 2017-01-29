@@ -3,6 +3,7 @@ import { NavController,ToastController } from 'ionic-angular';
 import { AngularFire,FirebaseObjectObservable} from 'angularfire2';
 import { FormControl,FormBuilder, Validators } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
+import firebase from 'firebase';
 
 /*
   Generated class for the AskQuestion page.

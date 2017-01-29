@@ -27,14 +27,14 @@ import {Favourite} from '../pages/favourite/favourite';
 import {Feed} from '../pages/feed/feed';
 import {MyQuestions} from '../pages/my-questions/my-questions';
 import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
-import { AngularFireModule } from 'angularfire2';
+import { AngularFireModule,AuthProviders,AuthMethods} from 'angularfire2';
 import {Preferences} from '../pages/preferences/preferences';
 import {Contacts} from '../pages/contacts/contacts';
 import {MomentModule} from 'angular2-moment';
 import {QuestionDetail} from '../pages/question-detail/question-detail';
 import {TeamOrder} from '../pages/team-order/team-order';
 import {ChatBubble} from '../components/chat-bubble/chat-bubble';
-import {CacheService} from "ionic-cache/ionic-cache";
+
 
 
 export const firebaseConfig = {
@@ -43,7 +43,10 @@ export const firebaseConfig = {
   databaseURL: "https://caffeiot.firebaseio.com",
   storageBucket: "caffeiot.appspot.com"
 };
-
+// const myFirebaseAuthConfig = {
+//   provider: AuthProviders.Password,
+//   method: AuthMethods.Password
+// }
 @NgModule({
   declarations: [
     MyApp,
@@ -109,6 +112,6 @@ export const firebaseConfig = {
     TeamOrder,
     ChatBubble
   ],
-  providers: [AuthData,OrderData,ProfileData,TeamsData,QuestionsData,CacheService]
+  providers: [AuthData,OrderData,ProfileData,TeamsData,QuestionsData]
 })
 export class AppModule {}

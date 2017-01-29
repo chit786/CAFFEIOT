@@ -12,7 +12,8 @@ import {Questions} from '../pages/questions/questions';
 import {Tasks} from '../pages/tasks/tasks';
 import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
 import {Contacts} from '../pages/contacts/contacts';
-import {CacheService} from "ionic-cache/ionic-cache";
+import { AngularFire } from 'angularfire2';
+
 
 @Component({
   templateUrl: 'app.html'
@@ -20,14 +21,14 @@ import {CacheService} from "ionic-cache/ionic-cache";
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  //rootPage: any = LoginPage;
+  //rootPage: any = HomePage;
   rootPage: any ;
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform,public alertCtrl: AlertController,cache: CacheService) {
-
-    cache.setDefaultTTL(60 * 60); 
+  constructor(public platform: Platform,public alertCtrl: AlertController,public af: AngularFire) {
+    
+   console.log("in component");
     //initialize firebase
     firebase.initializeApp({
       apiKey: "AIzaSyCLoFM5qxP6IXTMThJ1mm7B8EqXYaEMXAE",
@@ -35,16 +36,32 @@ export class MyApp {
       databaseURL: "https://caffeiot.firebaseio.com",
       storageBucket: "caffeiot.appspot.com",
       messagingSenderId: "558368532218"
-    });
+    },'app1');
 
     firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
+        console.log("Login");
         this.rootPage = LoginPage;
       }else{
+         console.log("Home");
         this.rootPage = HomePage;
         this.initializeApp(user);
       }
     });
+
+    //   af.auth.subscribe(auth => {
+    //     if(auth) {
+          
+    //       console.log('logged in');
+    //       this.rootPage = HomePage;
+    //     } else {
+    //       console.log('not logged in');
+    // //     this.rootPage = LoginPage;
+    //       this.rootPage = LoginPage;
+    //       this.initializeApp(auth);
+    //     }
+    //   });
+
 
 
     //this.initializeApp();

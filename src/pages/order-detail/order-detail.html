@@ -18,7 +18,7 @@
 
 
 <ion-content padding>
-    <ion-card *ngFor='let item of choiceCollection'>
+    <ion-card *ngFor='let item of choiceCollection |async'>
         <ion-card-content>
             {{item.choice}}
         </ion-card-content>

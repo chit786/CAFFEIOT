@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController,NavParams } from 'ionic-angular';
 import {AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
-
+import firebase from 'firebase';
 /*
   Generated class for the MinutesOfMeeting page.
 

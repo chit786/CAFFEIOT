@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController,ViewController,NavParams,ToastController } from 'ionic-angular';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import { ProfileData } from '../../providers/profile-data';
+import firebase from 'firebase';
 /*
   Generated class for the Preferences page.
 
