@@ -52,18 +52,15 @@ export class OrderDetail {
     
   }
 
-  saveRating(choiceName){
+  saveRating(choiceName,itemrating){
     // this.navParams.get('item').rating = this.rate;
    
-    var rate = this.rate;
+    // var rate = this.rate;
    
-    firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + this.orderKey ).update({
-      rating:rate
+    firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' +  this.navParams.get('item').$key + '/choice/' + choiceName.$key ).update({
+      rating:itemrating
       
     });
-    this.view.dismiss(); 
-  
-   // this.view.dismiss();
  
   }
 

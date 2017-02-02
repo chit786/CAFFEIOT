@@ -19,6 +19,27 @@ page-home {
             background-repeat: repeat-x;
         }
         @media only screen and (min-width: 768px) {
+            .mob-view {
+                display: none;
+            }
+            .dskt-view {
+                display: block;
+                .mg-tp {
+                    margin-top: 50px;
+                }
+                ion-list {
+                    height: 100%;
+                    overflow: hidden;
+                    .list-header-md {
+                        border-top: 0;
+                        border-bottom: 1px solid #dedede;
+                    }
+                }
+                .scrollList {
+                    overflow: auto;
+                    height: 100%;
+                }
+            }
             .chart-div {
                 width: 50%;
                 height: 250px;
@@ -27,7 +48,7 @@ page-home {
                 float: left;
             }
             .home-table {
-                height: 450px;
+                height: 400px;
                 width: 49%;
                 padding: 20px;
                 display: inline-block;
@@ -37,16 +58,23 @@ page-home {
                 position: absolute;
                 width: 100%;
                 top: 360px;
+                margin-top: 50px;
             }
         }
         @media only screen and (min-width: 0px) and (max-width:767px) {
+            .mob-view {
+                display: block;
+            }
+            .dskt-view {
+                display: none;
+            }
             .chart-div {
                 width: 100%;
                 padding: 20px;
                 float: left;
             }
             .home-table {
-                height: 450px;
+                height: auto;
                 width: 100%;
                 padding: 20px;
                 float: left;

@@ -19,10 +19,13 @@
 
 
 <ion-content padding>
-    <ion-item>Your Teams</ion-item>
+    <!--<ion-item>Your Teams</ion-item>-->
+    <ion-list-header>Your Teams</ion-list-header>
     <ion-list>
         <ion-item-sliding #slidingItem *ngFor="let item of items | async">
+
             <ion-item (click)="itemSelected(item)">
+                <!--<ion-icon name="arrow-forward"></ion-icon>-->
 
                 {{ item.teamName }}
 

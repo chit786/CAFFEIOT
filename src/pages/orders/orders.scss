@@ -1,4 +1,23 @@
 page-orders {
+    ion-item.item-ios {
+        &:last-child {
+            border-bottom: 0 !important;
+        }
+        padding-left: 0;
+        .item-inner {
+            padding-right: 0 !important;
+            border-bottom: 0 !important;
+            ion-label.label.label-ios {
+                padding: 0 !important;
+                margin: 0 !important;
+                ion-chip {
+                    ion-label {
+                        padding: 10px 0 0 10px !important;
+                    }
+                }
+            }
+        }
+    }
     ion-card img {
         margin: auto;
         width: 15vw;
@@ -11,6 +30,13 @@ page-orders {
     }
     ion-card {
         padding: 5px 10px;
+        white-space: normal;
+        .chipclass {
+            text-align: center;
+            padding-top: 9px;
+            padding-right: 0px;
+            margin: 0;
+        }
         .al-rt {
             text-align: right;
             float: right;
@@ -46,7 +72,7 @@ page-orders {
         }
         ion-chip {
             ion-label {
-                padding: 0 0 0 10px;
+                padding: 0 0 0 10px !important;
             }
         }
         .bottom-status {
@@ -57,5 +83,12 @@ page-orders {
                 display: inline-block;
             }
         }
+    }
+    .btn-removeorder {
+        padding: 0;
+        margin: 0;
+        width: 80px;
+        height: 30px;
+        float: right;
     }
 }

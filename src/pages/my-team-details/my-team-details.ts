@@ -38,7 +38,14 @@ export class MyTeamDetails {
      //load all client data corresponding to the meeting id
     // this.teamMembers = this.teamData.getClientInfo(this.navParams.get('item'));
     //var members = [];
-     this.teamMembers = af.database.list('/teams/'+ this.navParams.get('item').$key + '/members');
+     this.teamMembers = af.database.list('/teams/'+ this.navParams.get('item').$key + '/members')
+                        .map((_userRefs)=>{
+            return _userRefs.map((_userRef)=>{
+             _userRef.profile = this.af.database.object('/userProfile/' + _userRef.$key) 
+             
+                 return _userRef;
+            })
+          }) as FirebaseListObservable<any>;
 
       this.tempTeam = af.database.list('/teams/'+ this.navParams.get('item').$key + '/members',{ preserveSnapshot: true } )
 
@@ -131,6 +138,36 @@ export class MyTeamDetails {
    userNode.remove(this.navParams.get('item').$key);
 
   }
+
+
+   callMe(user){
+
+    user.subscribe((userref)=>{
+         document.location.href = 'tel:'+userref.number;
+    })
+
+  }
+
+  smsMe(user){
+   // console.log(number);
+  
+    user.subscribe((userref)=>{
+         document.location.href = 'sms:'+userref.number;
+    })
+
+    
+
+  }
+
+  mailme(user){
+    
+
+    user.subscribe((userref)=>{
+        document.location.href = 'mailto:'+userref.email;
+    })
+
+  }
+
 
 
 }

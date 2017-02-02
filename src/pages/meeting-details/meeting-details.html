@@ -48,28 +48,32 @@
         <ion-item-sliding *ngFor="let member of memberDetail | async">
             <ion-item>
                 <ion-avatar item-left>
-                    <img src="{{member?.profilepic}}">
+                    <img src="{{(member.profilePicturenew | async)?.profilepic}}">
                 </ion-avatar>
-                <h2>{{member?.firstName}}</h2>
-                <ion-chip #chip color="light" *ngFor="let drink of member?.choice">
+                <h2>{{(member.profilePicturenew | async)?.firstName}}</h2>
+
+                <ion-chip #chip color="light" *ngFor="let drink of member.choices | async">
                     <ion-label style="text-align: center;">{{drink.choice}}</ion-label>
                 </ion-chip>
                 <ion-icon name="cafe" item-right></ion-icon>
             </ion-item>
             <ion-item-options side="left">
-                <button ion-button color="primary">
+                <button ion-button color="text" (click)="smsMe(member.profilePicturenew)">
         <ion-icon name="text"></ion-icon>
         Text
+        <!--<a [href]="'sms:' + 31647911724">Mail</a>-->
       </button>
-                <button ion-button color="secondary">
+                <button ion-button color="call" (click)="callMe(member.profilePicturenew)">
         <ion-icon name="call"></ion-icon>
         Call
+        <!--<a [href]="'tel:' + 31647911724">Call</a>-->
       </button>
             </ion-item-options>
             <ion-item-options side="right">
-                <button ion-button color="primary">
+                <button ion-button color="primary" (click)="mailme(member.profilePicturenew)">
         <ion-icon name="mail"></ion-icon>
         Email
+        <!--<a [href]="'sms:' + 31647911724">Mail</a>-->
       </button>
             </ion-item-options>
         </ion-item-sliding>

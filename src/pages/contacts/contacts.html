@@ -27,9 +27,9 @@
 
             <ion-item>
                 <ion-avatar item-left>
-                    <img src="{{member.profilepic}}">
+                    <img src="{{(member.userRef | async)?.profilepic}}">
                 </ion-avatar>
-                <ion-label>{{member.firstName + " " + member.lastName}}</ion-label>
+                <ion-label>{{(member.userRef | async)?.firstName + " " + (member.userRef | async)?.lastName}}</ion-label>
                 <ion-checkbox *ngIf="isPopup" item-right color="dark" (click)="selectMember(member.$key)"></ion-checkbox>
             </ion-item>
 
@@ -42,17 +42,17 @@
             </ion-item>-->
 
             <ion-item-options side="left">
-                <button ion-button color="text" (click)="smsMe(member.number)">
+                <button ion-button color="text" (click)="smsMe(member.userRef)">
         <ion-icon name="text"></ion-icon>
         Text
         <!--<a [href]="'sms:' + 31647911724">Mail</a>-->
       </button>
-                <button ion-button color="primary" (click)="mailme(member.email)">
+                <button ion-button color="primary" (click)="mailme(member.userRef)">
         <ion-icon name="mail"></ion-icon>
         Email
         <!--<a [href]="'sms:' + 31647911724">Mail</a>-->
       </button>
-                <button ion-button color="call" (click)="callMe(member.number)">
+                <button ion-button color="call" (click)="callMe(member.userRef)">
         <ion-icon name="call"></ion-icon>
         Call
         <!--<a [href]="'tel:' + 31647911724">Call</a>-->

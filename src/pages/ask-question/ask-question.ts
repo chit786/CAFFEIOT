@@ -120,6 +120,7 @@ export class AskQuestion {
 
                      tags : tags,
                      questionTitle : qdesc,
+                     param:firebase.auth().currentUser.uid
 
                    }
        firebase.database().ref('/questions/' + key.key).update(questionDet)
@@ -163,6 +164,8 @@ export class AskQuestion {
                      name : childsnap.val().firstName + ' ' + childsnap.val().lastName,
                      profilepic : childsnap.val().profilepic,
                      date : today
+                    
+
 
                    }
                    firebase.database().ref('/questions/' + key.key + '/members/' + index).update(member);

@@ -30,9 +30,9 @@ export class Favourite {
      }
      ).map((_qss)=>{
       return _qss.map((_qs)=>{
-                      
+                            
         _qs.detail = this.af.database.object('/questions/'+_qs.$key);
-       
+         _qs.askProfile = this.af.database.object('/userProfile/' + _qs.param )
         _qs.comments = this.af.database.list('/questions/'+_qs.$key+'/comments');
        
           return _qs;

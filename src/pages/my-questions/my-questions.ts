@@ -82,7 +82,7 @@ export class MyQuestions {
 
       this.myQs = this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/myquestions').map((_qss)=>{
       return _qss.map((_qs)=>{
-                      
+         _qs.user = this.af.database.object('/userProfile/' + firebase.auth().currentUser.uid);              
         _qs.detail = this.af.database.object('/questions/'+_qs.$key);
        
         _qs.comments = this.af.database.list('/questions/'+_qs.$key+'/comments');

@@ -2,6 +2,7 @@
 import 'chart.js/dist/Chart.bundle';
 declare var Chart;
 import firebase from 'firebase';
+import {Platform} from 'ionic-angular';
 import { Component, ViewChild, ElementRef,Renderer } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AuthData } from '../../providers/auth-data';
@@ -29,12 +30,17 @@ export class HomePage {
   waterObservable : FirebaseObjectObservable<any>;
   nutritionIcon:any ;
    auth:any;
+   segmentvalue:any;
+   isMobile : any;
  
  // coffeecount;
   @ViewChild('canvas') canvas:ElementRef;
-   @ViewChild('waterLevel') waterlevelRef:ElementRef;
+   @ViewChild('waterLevel1') waterlevelRef1:ElementRef;
+   @ViewChild('waterLevel2') waterlevelRef2:ElementRef;
+   
 
-  public waterlevel:string = '';
+  public waterlevel1:string = '';
+    public waterlevel2:string = '';
     ngAfterViewInit() {
       
          //water intake is 2/3 of body weight in pounds multiply by 0.029 litre , 1 kg = 2.20 pound
@@ -53,11 +59,13 @@ export class HomePage {
 
                 this.waterIntake = Math.round((water.value / ((2 * 0.029 * 1000 *((user.weight * 2.20))/ 3)))*100)
                 console.log(this.waterIntake);
-                 this.waterlevel = this.waterlevelRef.nativeElement;
+                 this.waterlevel1 = this.waterlevelRef1.nativeElement;
+                 this.waterlevel2 = this.waterlevelRef2.nativeElement;
                  if(Number.isNaN(this.waterIntake)){
                      this.waterIntake =0;
                  }
-                 this.renderer.setElementStyle(this.waterlevel ,"width",this.waterIntake + "%");
+                 this.renderer.setElementStyle(this.waterlevel1 ,"width",this.waterIntake + "%");
+                 this.renderer.setElementStyle(this.waterlevel2 ,"width",this.waterIntake + "%");
          
             })
             
@@ -84,8 +92,10 @@ export class HomePage {
 
 
   constructor(public navCtrl: NavController, public authData: AuthData,public af: AngularFire,public order:OrderData,
-  public renderer: Renderer) {
+  public renderer: Renderer, platform:Platform) {
 
+    //   this.isMobile = platform.width() < 768;
+      this.segmentvalue = "Nutritions";
     //   this.auth = af.auth.subscribe((user)=>{
     //       if (user) {
     //         // User signed in!

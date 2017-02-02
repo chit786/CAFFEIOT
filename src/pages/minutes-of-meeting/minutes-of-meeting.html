@@ -46,18 +46,14 @@
             <ion-item-sliding *ngFor="let minute of minutes | async">
                 <ion-item>
 
+                    <h2>Assigned To : {{minute.assignedTo}}</h2>
+                    <p>Task : {{minute.description}}</p>
+                    <p>Completion Date : {{minute.date}}</p>
+                    <p>Status : {{minute.status}}</p>
 
-                    <ion-card>
-                        <ion-card-content>
-                            {{minute.description}}
-
-                        </ion-card-content>
-                        <h2> {{minute.assignedTo}}</h2>
-
-                    </ion-card>
                 </ion-item>
 
-                <ion-item-options *ngIf="minute.status=='Pending'" side="right">
+                <ion-item-options side="right">
                     <button ion-button color="primary" (click)="removeMinute(minute.$key,minute.memberKey)">
         <ion-icon name="close-circle"></ion-icon>
         Remove

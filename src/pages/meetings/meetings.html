@@ -55,7 +55,7 @@
                                 <ion-row>
                                     <span *ngFor="let user of meeting.group | async" class="overlap-img">
 
-                                        <img class="inline-images" src="{{user.profilepic}}">
+                                        <img class="inline-images" src="{{(user.profilePicture | async)?.profilepic}}">
 
                                     </span>
                                 </ion-row>
@@ -111,7 +111,7 @@
                                 <ion-row>
                                     <span *ngFor="let user of meeting.group | async">
 
-                                        <img class="inline-images" src="{{user.profilepic}}">
+                                        <img class="inline-images" src="{{(user.profilePicture | async)?.profilepic}}">
 
                                     </span>
                                 </ion-row>

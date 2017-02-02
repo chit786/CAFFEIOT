@@ -22,6 +22,7 @@ import firebase from 'firebase';
 export class MeetingDetails {
 
   title;
+  teamkey:any;
   description;
     today:any = new Date().toISOString();
        year:any;
@@ -36,7 +37,7 @@ export class MeetingDetails {
   constructor(public af: AngularFire,public navCtrl: NavController,public navParams: NavParams,
   public modalCtrl: ModalController, public view: ViewController,public alertCtrl: AlertController,public teamData: TeamsData) {
 
-
+    this.teamkey = this.navParams.get('teamKey') ;
       this.year = this.today.split("-")[0];
            this.month = this.today.split("-")[1];
            this.day = ( this.today.split("-")[2] ).split("T")[0];
@@ -62,9 +63,16 @@ export class MeetingDetails {
   }
 
   ionViewDidLoad() {
-   
-    this.meetingDetail = this.af.database.object('/meetings/' + this.navParams.get('teamKey'));
-    this.memberDetail = this.af.database.list('/meetings/' + this.navParams.get('teamKey')+ '/users');
+
+    this.meetingDetail = this.af.database.object('/meetings/' + this.teamkey);
+    this.memberDetail = this.af.database.list('/meetings/' + this.teamkey+ '/users')
+                        .map((_userRefs)=>{
+            return _userRefs.map((_userRef)=>{
+             _userRef.profilePicturenew = this.af.database.object('/userProfile/' + _userRef.$key) 
+             _userRef.choices =  this.af.database.list('/meetings/' + this.teamkey+ '/users/' + _userRef.$key + '/choice')  
+                 return _userRef;
+            })
+          }) as FirebaseListObservable<any>;
 
 
     this.title = this.navParams.get('title');
@@ -198,6 +206,33 @@ this.navCtrl.push(Contacts, {
     })
   }
 
+   callMe(user){
+
+    user.subscribe((userref)=>{
+         document.location.href = 'tel:'+userref.number;
+    })
+
+  }
+
+  smsMe(user){
+   // console.log(number);
+  
+    user.subscribe((userref)=>{
+         document.location.href = 'sms:'+userref.number;
+    })
+
+    
+
+  }
+
+  mailme(user){
+    
+
+    user.subscribe((userref)=>{
+        document.location.href = 'mailto:'+userref.email;
+    })
+
+  }
 
 
 

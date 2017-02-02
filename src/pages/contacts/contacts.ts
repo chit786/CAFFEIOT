@@ -77,6 +77,16 @@ isNormal:any = true;
         }
         )
         return filtered;
+      }).map((users)=>{
+        return users.map((user)=>{
+
+          user.userRef = this.af.database.object('/userProfile/'+ user.$key)
+
+          return user;
+
+
+        })
+
       });
       
  
@@ -266,29 +276,42 @@ isNormal:any = true;
   removeMember(memberID){
 
    this.contacts.remove(memberID).then(()=>{
-                          
-                          let toast = this.toastCtrl.create({
-                          message: 'Contact removed',
-                          duration: 3000
-                        });
-                        toast.present();
-                        });;
+            
+            let toast = this.toastCtrl.create({
+            message: 'Contact removed',
+            duration: 3000
+          });
+          toast.present();
+          });;
 
   }
 
-  callMe(number){
+  callMe(user){
 
-     document.location.href = 'tel:'+number;
-
-  }
-
-  smsMe(number){
-     document.location.href = 'sms:'+number;
+    user.subscribe((userref)=>{
+         document.location.href = 'tel:'+userref.number;
+    })
 
   }
 
-  mailme(mailID){
-    document.location.href = 'mailto:'+mailID;
+  smsMe(user){
+   // console.log(number);
+  
+    user.subscribe((userref)=>{
+         document.location.href = 'sms:'+userref.number;
+    })
+
+    
+
+  }
+
+  mailme(user){
+    
+
+    user.subscribe((userref)=>{
+        document.location.href = 'mailto:'+userref.email;
+    })
+
   }
 
 }
