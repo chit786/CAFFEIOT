@@ -77,18 +77,31 @@
             <!--</div>-->
 
             <ion-list *ngSwitchCase="'tasks'">
+                <ion-item-sliding *ngFor="let task of todaystasks | async" (click)="toggleDetails(task)">
+                    <ion-item>
+                        <!--<ion-item padding *ngFor='let task of todaystasks | async' (click)="toggleDetails(task)">-->
+                        <ion-icon color="primary" item-right [name]="task.icon"></ion-icon>
+                        <h2>{{task.description}}</h2>
+                        <div *ngIf="task.showDetails">
 
-                <ion-item padding *ngFor='let task of todaystasks | async' (click)="toggleDetails(task)">
-                    <ion-icon color="primary" item-right [name]="task.icon"></ion-icon>
-                    <h2>{{task.description}}</h2>
-                    <div *ngIf="task.showDetails">
+                            <p>Status : {{task.status}}</p>
+                            <p>Completion Date : {{task.date}}</p>
+                        </div>
+                    </ion-item>
+                    <ion-item-options side="right">
+                        <button ion-button color="primary" (click)="removetask(task.$key)">
+              <ion-icon name="close-circle"></ion-icon>
+            Remove
+          </button>
+                    </ion-item-options>
+                    <ion-item-options side="left">
+                        <button *ngIf="task.status!='Complete'" ion-button color="secondary" (click)="completetask(task.$key)">
+        <ion-icon name="checkmark"></ion-icon>
+        Done
+      </button>
+                    </ion-item-options>
 
-                        <p>Status : {{task.status}}</p>
-                        <p>Completion Date : {{task.date}}</p>
-                    </div>
-                </ion-item>
-
-
+                </ion-item-sliding>
             </ion-list>
 
         </div>
@@ -128,15 +141,30 @@
             <ion-list-header *ngIf="!isMobile">
                 Today's Tasks
             </ion-list-header>
-            <ion-item padding *ngFor='let task of todaystasks | async' (click)="toggleDetails(task)">
-                <ion-icon color="primary" item-right [name]="task.icon"></ion-icon>
-                <h2>{{task.description}}</h2>
-                <div *ngIf="task.showDetails">
+            <ion-item-sliding *ngFor="let task of todaystasks | async" (click)="toggleDetails(task)">
+                <ion-item>
+                    <!--<ion-item padding *ngFor='let task of todaystasks | async' (click)="toggleDetails(task)">-->
+                    <ion-icon color="primary" item-right [name]="task.icon"></ion-icon>
+                    <h2>{{task.description}}</h2>
+                    <div *ngIf="task.showDetails">
 
-                    <p>Status : {{task.status}}</p>
-                    <p>Completion Date : {{task.date}}</p>
-                </div>
-            </ion-item>
+                        <p>Status : {{task.status}}</p>
+                        <p>Completion Date : {{task.date}}</p>
+                    </div>
+                </ion-item>
+                <ion-item-options side="right">
+                    <button ion-button color="primary" (click)="removetask(task.$key)">
+              <ion-icon name="close-circle"></ion-icon>
+            Remove
+          </button>
+                </ion-item-options>
+                <ion-item-options side="left">
+                    <button *ngIf="task.status!='Complete'" ion-button color="secondary" (click)="completetask(task.$key)">
+        <ion-icon name="checkmark"></ion-icon>
+        Done
+      </button>
+                </ion-item-options>
+            </ion-item-sliding>
 
 
         </ion-list>

@@ -2,4 +2,7 @@ page-meeting-details {
     h2 {
         white-space: normal;
     }
+    .list-ios>.item-wrapper:last-child .item-block {
+        border-bottom: 0 !important;
+    }
 }

@@ -1,14 +1,45 @@
 page-feed {}
 
 page-questions {
+    .nocompmsg {
+        white-space: pre-wrap;
+        position: fixed;
+        top: 300px;
+        font-size: larger;
+        font-weight: 600;
+    }
+    ion-item.item-ios {
+        &:first-child {
+            border-top: 0 !important;
+        }
+        &:last-child {
+            border-bottom: 0 !important;
+        }
+        padding-left: 0;
+        .item-inner {
+            padding-right: 0 !important;
+            border-bottom: 0 !important;
+            ion-label.label.label-ios {
+                padding: 0 !important;
+                margin: 0 !important;
+                ion-chip {
+                    ion-label {
+                        padding: 10px 0 0 10px !important;
+                    }
+                }
+            }
+        }
+    }
     .card-title {
         padding-left: 16px;
-        font-size: 1.0em;
+        // font-size: 1.0em;
         width: calc(100% - 50px);
         font-weight: bold;
         float: left;
-        color: #000;
+        // color: #000;
         white-space: normal;
+        color: grey;
+        font-size: medium;
     }
     ion-col {
         button.button-small-md {
@@ -19,6 +50,28 @@ page-questions {
         height: 60px;
         .tab-button-text {
             margin: 0 !important;
+        }
+    }
+    ion-card {
+        padding: 5px 10px;
+        white-space: normal;
+        .favHeart {
+            color: #662900;
+            float: right;
+            font-size: 25px;
+        }
+        .nonfavHeart {
+            float: right !important;
+            font-size: 25px;
+        }
+        .button-small-ios {
+            padding: 0!important;
+        }
+        .button-ios {
+            margin: 0;
+        }
+        .un-btn {
+            float: right;
         }
     }
 }

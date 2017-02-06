@@ -1,6 +1,6 @@
 {
-    "name": "CAFFEIOT",
-    "author": "Ionic Framework",
+    "name": "Cuppa",
+    "author": "Chitrang Natu",
     "homepage": "http://ionicframework.com/",
     "private": true,
     "scripts": {
@@ -73,5 +73,5 @@
             "locator": "android"
         }
     ],
-    "description": "mySideMenu: An Ionic project"
+    "description": "Cuppa : A business coffee APP"
 }

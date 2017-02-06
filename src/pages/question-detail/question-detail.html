@@ -26,9 +26,10 @@
 
         <h2>{{(question|async)?.questionTitle}}</h2>
         <ion-avatar item-left>
-            <img src="{{(question | async)?.askedBy.profilepic}}">
+            <!--<img src="{{(question | async)?.askedBy.profilepic}}">-->
+            <img src="{{((question | async)?.host|async)?.profilepic}}">
         </ion-avatar>
-        <p>{{(question | async)?.askedBy.name}}</p>
+        <p>{{((question | async)?.host|async)?.firstName + ' ' + ((question | async)?.host | async)?.lastName}}</p>
         <p>{{(question | async)?.askedBy.date | amCalendar}}</p>
 
 
@@ -71,7 +72,7 @@
                 <img src="{{(comment.user | async)?.profilepic}}">
             </ion-avatar>
             <chat-bubble [message]="comment"></chat-bubble>
-            <ion-icon name="redo" (click)="scheduleMeetingWithMember(question.$key,comment)"></ion-icon>
+            <ion-icon name="redo" *ngIf="comment.questionflag" (click)="scheduleMeetingWithMember(question.$key,comment)"></ion-icon>
             <ion-avatar item-left *ngIf="comment.position=='left'" class="profile-pic left">
                 <img src="{{(comment.user | async)?.profilepic}}">
             </ion-avatar>

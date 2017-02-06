@@ -23,6 +23,7 @@ export class Questions {
   tab2Root: any = Favourite;
   tab3Root: any = AskQuestion;
   tab4Root: any = MyQuestions;
+  isCompSet : any;
   constructor(public navCtrl: NavController,public af: AngularFire ) {
       
 
@@ -34,9 +35,9 @@ export class Questions {
     
 
     firebase.database().ref('/userProfile/'+firebase.auth().currentUser.uid + '/feeds').on('value',function(snapshot){
-
+     
       snapshot.forEach(function(child){
-
+        
         if(child.val().isread==false){
             //get value from the unreadFeed
             firebase.database().ref('/userProfile/' + firebase.auth().currentUser.uid + '/unreadFeed').transaction(function (current_value) {
@@ -49,6 +50,20 @@ export class Questions {
 
 
     })
+
+
+
+   this.af.database.object('/userProfile/'+firebase.auth().currentUser.uid ).subscribe(user=>{
+      
+      if(user.company){
+        this.isCompSet = true;
+      }else{
+        this.isCompSet = false;
+      }
+
+    })
+
+
 
     
   }

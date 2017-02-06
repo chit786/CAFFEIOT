@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController,NavParams,ViewController,AlertController } from 'ionic-angular';
+import { NavController,NavParams,ViewController,AlertController,ToastController } from 'ionic-angular';
 import { TeamsData } from '../../providers/teams-data';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import firebase from 'firebase';
@@ -31,7 +31,7 @@ export class MyTeamDetails {
     teamMembers : FirebaseListObservable<any>;
     tempTeam : FirebaseListObservable<any>;
   constructor(public navParams: NavParams,public af: AngularFire ,public navCtrl: NavController, public view: ViewController
-  ,public teamData:TeamsData,public alertCtrl: AlertController) {
+  ,public teamData:TeamsData,public alertCtrl: AlertController,public toastCtrl: ToastController) {
 
     this.title = this.navParams.get('item').teamName;
      //this.teamMembers = [];
@@ -110,9 +110,9 @@ export class MyTeamDetails {
      askedByname : this.uName
     }
 
-
+    var keyVal;
     firebase.database().ref('/teamOrder').push(teamOrder).then((keyNode)=>{
-      
+      keyVal = keyNode;
         for(var val in this.memberList){
         
           firebase.database().ref('/orders/' + val.toString() + '/' + keyNode.key).update(orderDetail).then(()=>{
@@ -122,6 +122,13 @@ export class MyTeamDetails {
           )
 
         }
+
+    }).then(()=>{
+      let toast = this.toastCtrl.create({
+                          message: 'New order is placed with id : ' + keyVal.key,
+                          duration: 3000
+                        });
+                        toast.present();
 
     });
     

@@ -76,7 +76,7 @@ var myhttp = this.http;
                           //added
                            let headers = new Headers({ 'Content-Type': 'application/json','Authorization':'key=AAAAggFbpvo:APA91bG6IRvRoSGJP2rcNGG8BLV3NxE7mbkFmvQhD_lYjAuhGtFVvX9OkYbMlTR_cP6p8kBDpvw_790o1JJbcAs0ScnwB_4wuwyGuxrtp6UlnxeyYl2b43fh6pUTVHi1jGFkTuTp58wtJjX6zSNvLg_CLKdBAEY_YA' }); // ... Set content type to JSON
                             let options = new RequestOptions({ headers: headers });
-                              console.log('{"data":{"title":"CAFFEIOT","message":"Coffee?"},"to":'+ JSON.stringify(child.regID)+"}");
+                             
 
                               myhttp.post("https://fcm.googleapis.com/fcm/send",'{"data":{"title":"CAFFEIOT","message":"Coffee?"},"to":'+ JSON.stringify(child.regID)+"}",options)
                               .subscribe(data=>{
@@ -106,7 +106,7 @@ var myhttp = this.http;
 
                             let headers = new Headers({ 'Content-Type': 'application/json','Authorization':'key=AAAAggFbpvo:APA91bG6IRvRoSGJP2rcNGG8BLV3NxE7mbkFmvQhD_lYjAuhGtFVvX9OkYbMlTR_cP6p8kBDpvw_790o1JJbcAs0ScnwB_4wuwyGuxrtp6UlnxeyYl2b43fh6pUTVHi1jGFkTuTp58wtJjX6zSNvLg_CLKdBAEY_YA' }); // ... Set content type to JSON
                             let options = new RequestOptions({ headers: headers });
-                              console.log('{"data":{"title":"CAFFEIOT","message":"Coffee?"},"to":'+ JSON.stringify(snapshot.val())+"}");
+                              console.log('{"data":{"title":"Cuppa","message":"Coffee?"},"to":'+ JSON.stringify(snapshot.val())+"}");
 
                               myhttp.post("https://fcm.googleapis.com/fcm/send",'{"data":{"title":"CAFFEIOT","message":"'+ messageBy + ' says ' + message +'"},"to":'+ JSON.stringify(snapshot.val())+"}",options)
                             
@@ -127,7 +127,7 @@ var myhttp = this.http;
             let headers = new Headers({ 'Content-Type': 'application/json','Authorization':'key=AAAAggFbpvo:APA91bG6IRvRoSGJP2rcNGG8BLV3NxE7mbkFmvQhD_lYjAuhGtFVvX9OkYbMlTR_cP6p8kBDpvw_790o1JJbcAs0ScnwB_4wuwyGuxrtp6UlnxeyYl2b43fh6pUTVHi1jGFkTuTp58wtJjX6zSNvLg_CLKdBAEY_YA' }); // ... Set content type to JSON
             let options = new RequestOptions({ headers: headers });
               if(childsnap.val()){     
-              myhttp.post("https://fcm.googleapis.com/fcm/send",'{"data":{"title":"CAFFEIOT","message":"'+message+'"},"to":'+ JSON.stringify(childsnap.val())+"}",options)
+              myhttp.post("https://fcm.googleapis.com/fcm/send",'{"data":{"title":"Cuppa","message":"'+message+'"},"to":'+ JSON.stringify(childsnap.val())+"}",options)
               .subscribe(data=>{
                   let alert = myAlert.create({
                   title: 'New Member',
@@ -261,8 +261,7 @@ var myhttp = this.http;
      clientNode.once('value',function(snapshot){
 
         snapshot.forEach(function(arrItem){
-          console.log('email'+ arrItem.val().email);
-          console.log('exp' + email);
+       
             if(arrItem.val().email == email){
                
                  

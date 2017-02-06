@@ -21,9 +21,9 @@
     <ion-list>
         <ion-item *ngFor='let member of members | async' (click)="AddOrder(member.$key)">
             <ion-avatar item-left>
-                <img src="{{member.profilepic}}">
+                <img src="{{(member.user|async)?.profilepic}}">
             </ion-avatar>
-            <h2>{{member.firstName + ' ' + member.lastName}}</h2>
+            <h2>{{(member.user|async)?.firstName + ' ' + (member.user|async)?.lastName}}</h2>
             <ion-chip #chip color="light" *ngFor="let drink of member.choices|async">
                 <ion-label style="text-align: center;">{{drink.choice}}</ion-label>
                 <button *ngIf="currentMember==member.$key && orderStatus!='Complete'" #btn ion-button clear color="dark" (click)="removeChoice(chip,drink.$key)">

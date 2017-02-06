@@ -31,6 +31,7 @@ export class MeetingDetails {
   day:any;
    orderID: any;
     uName;
+    isHost;
   meetingDetail: FirebaseObjectObservable<any>;
   memberDetail : FirebaseListObservable<any>;
    tempTeam : FirebaseListObservable<any>;
@@ -63,7 +64,7 @@ export class MeetingDetails {
   }
 
   ionViewDidLoad() {
-
+    this.isHost = this.navParams.get('isHost');
     this.meetingDetail = this.af.database.object('/meetings/' + this.teamkey);
     this.memberDetail = this.af.database.list('/meetings/' + this.teamkey+ '/users')
                         .map((_userRefs)=>{

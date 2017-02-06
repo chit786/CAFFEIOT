@@ -24,9 +24,23 @@ export class Feed {
     
   }
 
+  
+
   ionViewDidEnter(){
+
+    
     //again set all to 
-     this.feedList = this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/feeds').map((_qss)=>{
+     this.feedList = this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/feeds',
+     {
+       query:{
+        orderByChild : 'isFav',
+        equalTo : 0
+       }
+      
+
+     }
+     )
+     .map((_qss)=>{
       return _qss.map((_qs)=>{       
         _qs.detail = this.af.database.object('/questions/'+_qs.$key);
         _qs.askProfile = this.af.database.object('/userProfile/' + _qs.param )
@@ -120,4 +134,9 @@ export class Feed {
   model.present();
 
  }
+
+ removeQuestion(qsKey){
+   this.feedList.remove(qsKey);
+ }
+
 }

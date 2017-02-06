@@ -20,6 +20,7 @@ import {OrderData} from '../providers/order-data';
 import {ProfileData} from '../providers/profile-data';
 import {TeamsData} from '../providers/teams-data';
 import {QuestionsData} from '../providers/questions-data';
+import {SendSMSPage} from '../pages/send-sms/send-sms';
 import { Ionic2RatingModule } from 'ionic2-rating';
 import {MyTeamDetails} from '../pages/my-team-details/my-team-details';
 import {AskQuestion} from '../pages/ask-question/ask-question';
@@ -74,7 +75,8 @@ export const firebaseConfig = {
     QuestionDetail,
     Tasks,
     TeamOrder,
-    ChatBubble
+    ChatBubble,
+    SendSMSPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -110,7 +112,8 @@ export const firebaseConfig = {
     MinutesOfMeeting,
     QuestionDetail,
     TeamOrder,
-    ChatBubble
+    ChatBubble,
+    SendSMSPage
   ],
   providers: [AuthData,OrderData,ProfileData,TeamsData,QuestionsData]
 })

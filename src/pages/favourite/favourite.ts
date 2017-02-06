@@ -74,6 +74,33 @@ export class Favourite {
 
     })
     }
+
+    addToFavourite(feed){
+
+    firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/feeds/' + feed + '/isFav').once('value',function(snapshot){
+
+      if(snapshot.val()==1){
+         firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/feeds/' + feed).update({
+            isFav : 0
+          })
+
+      }else{
+         firebase.database().ref('/userProfile/'+ firebase.auth().currentUser.uid + '/feeds/' + feed).update({
+            isFav : 1
+          })
+      }
+         
+
+    })
+
+
+     
+  }
+
+
+ removeQuestion(qsKey){
+   this.favList.remove(qsKey);
+ }
  
   openQuestion(qsKey){
 

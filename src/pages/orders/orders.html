@@ -50,7 +50,7 @@
 
                 <ion-chip #chip color="light" *ngFor="let drink of item.choices|async">
                     <ion-label class="chipclass" style="text-align: center;">{{drink.choice}}</ion-label>
-                    <button #btn ion-button clear color="dark" (click)="removeChoice(chip,item.choice,item.$key)">
+                    <button #btn ion-button *ngIf="item.status!='Complete'" clear color="dark" (click)="removeChoice(chip,item.choice,item.$key)">
                                 <ion-icon name="close"></ion-icon>
                 </button>
                 </ion-chip>

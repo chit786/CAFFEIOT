@@ -7,6 +7,7 @@ import {Component} from '@angular/core';
       <div class="chatBubble">
        
         <div class="chat-bubble {{comment.position}}">
+         <div class="name">{{(comment.user | async)?.firstName}}</div>
           <div class="message">{{comment?.desc}}</div>
          
         </div>

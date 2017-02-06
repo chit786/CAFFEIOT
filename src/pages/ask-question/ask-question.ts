@@ -104,6 +104,10 @@ export class AskQuestion {
 
   postQuestion(){
   this.submitAttempt = true;
+  var hostCompany = this.companyPreference;
+  
+
+
     if(this.askQuestionForm.valid && this.chips.length!=0){
 
    
@@ -140,6 +144,8 @@ export class AskQuestion {
         firebase.database().ref('/userProfile').on('value',function(snapshot){
           snapshot.forEach(function(childsnap){
 
+            if(hostCompany==childsnap.val().company){
+
                for( var val in childsnap.val().skills){
                
                  
@@ -155,16 +161,16 @@ export class AskQuestion {
                    let member = {
                     isScheduled : isScheduled, 
                     memberID : childsnap.key,
-                    memberRegID : childsnap.val().regID
+                    // memberRegID : childsnap.val().regID
 
                    }
-                   var today = new Date().toISOString();
+                   var today = new Date().toUTCString();
                    let askDetail= {
 
                      name : childsnap.val().firstName + ' ' + childsnap.val().lastName,
                      profilepic : childsnap.val().profilepic,
-                     date : today
-                    
+                     date : today,
+                     company : childsnap.val().company
 
 
                    }
@@ -178,7 +184,7 @@ export class AskQuestion {
                    if(childsnap.key!=firebase.auth().currentUser.uid){
                       firebase.database().ref('/userProfile/' + childsnap.key + '/feeds/' + key.key).update(questionDet);
                       firebase.database().ref('/userProfile/' + childsnap.key + '/feeds/' + key.key).update({
-                        isread : "false",
+                        isread : false,
                         isFav : 0
                       });
                    }
@@ -192,6 +198,7 @@ export class AskQuestion {
                 
                
                return false;
+            }
           }
             
           

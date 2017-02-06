@@ -38,7 +38,7 @@
         <ion-icon name="create"></ion-icon>
         Write Minutes!
       </button>
-        <button ion-button item-left (click)="reschedule(meetingDetail.$key)">
+        <button *ngIf="isHost" ion-button item-left (click)="reschedule(meetingDetail.$key)">
         <ion-icon name="calendar"></ion-icon>
         Reschedule
       </button>

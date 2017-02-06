@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController,NavParams } from 'ionic-angular';
+import { NavController,NavParams,ToastController } from 'ionic-angular';
 import {AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
 import {PlaceOrder} from '../place-order/place-order';
 import firebase from 'firebase';
@@ -27,7 +27,7 @@ export class TeamOrder {
   year:any;
   month:any;
   day:any;
-  constructor(public navCtrl: NavController,public af:AngularFire, public navParms : NavParams) {
+  constructor(public navCtrl: NavController,public af:AngularFire,public toastCtrl: ToastController, public navParms : NavParams) {
 
      this.year = this.today.split("-")[0];
            this.month = this.today.split("-")[1];
@@ -42,6 +42,7 @@ export class TeamOrder {
 
         return member.map((val)=>{
              val.choices = this.af.database.list('/teamOrder/' +this.navParms.get('order').$key + '/members/' + val.$key + "/choice")
+             val.user = this.af.database.object('/userProfile/' + val.$key )
             return val;
         })
        
@@ -116,7 +117,16 @@ export class TeamOrder {
    //update status to Pending in team Order
    firebase.database().ref('/teamOrder/' +orderKey ).update({
      status : 'Pending'
-   })
+   }).then(()=>{
+
+
+      let toaster = this.toastCtrl.create({
+      message: 'Thank you, feel free to update your order before clicking Complete',
+      duration: 3000
+    });
+    toaster.present();
+      
+    });
    // update status of the order in all team members order
 
 
@@ -138,7 +148,16 @@ export class TeamOrder {
    //update status to Pending in team Order
    firebase.database().ref('/teamOrder/' +orderKey ).update({
      status : 'Complete'
-   })
+   }).then(()=>{
+
+
+      let toaster = this.toastCtrl.create({
+      message: 'Thank you, your order is complete!',
+      duration: 3000
+    });
+    toaster.present();
+      
+    });
    // update status of the order in all team members order
 
 
@@ -157,7 +176,9 @@ export class TeamOrder {
              //completing all the choices of users
             // choices.forEach(choice=>{
             for(var val in choices){
-                if(parseInt(val)){
+               
+                if(parseInt(val)>=0){
+                  console.log(val + "success");
                     firebase.database().ref('/dailyConsumption/' + snapshot.key +'/' +this.today + '/' + orderKey + '/choice/' + val.valueOf() ).update({
                   status : 'Complete'
                 });
@@ -206,11 +227,11 @@ export class TeamOrder {
  }
 
  promiseOrderCompletion(choices,userID){
-
+  
    Object.keys(choices)
   .map(k => {
-    console.log(k);
-        
+  
+     if(parseInt(k)>=0){
      
        var val =this.updateAllNutritions(choices[k].choice,userID)
        .then(function(values) { 
@@ -244,7 +265,7 @@ export class TeamOrder {
            
         })
    
-        
+     }
    // });
   });
 

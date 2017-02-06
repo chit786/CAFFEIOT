@@ -32,7 +32,7 @@
           </button>
             </ion-item-options>
             <ion-item-options side="left">
-                <button ion-button color="secondary" (click)="completetask(task.$key)">
+                <button *ngIf="task.status!='Complete'" ion-button color="secondary" (click)="completetask(task.$key)">
         <ion-icon name="checkmark"></ion-icon>
         Done
       </button>

@@ -18,22 +18,42 @@ export class Tasks {
   tasks : FirebaseListObservable<any>;
   constructor(public navCtrl: NavController,public af:AngularFire) {
     // this.tasks = [{today:'Today'},{yesterday:'Yesterday'},{tomorrow:'Tomorrow'},{before:'Before'},{later:'Later'}]
-    this.tasks = af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/tasks')
+   
   }
 
-  ionViewDidLoad() { }
+  ionViewDidLoad() { 
+    //  var today = new Date().toISOString();
+    //                     var year = today.split("-")[0];
+    //                     var month = today.split("-")[1];
+    //                     var day = ( today.split("-")[2] ).split("T")[0]
+    //                     today = year + '-' + month + '-' + day;
 
-  removeMinute(key,memberKey){
+     this.tasks = this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/tasks', {
+       query:{
+         orderByChild : 'date',
+        
+       }
+     })
+
+  }
+
+  removetask(key){
 
     this.tasks.remove(key);
 
 
   }
-  completeMinute(key,memberKey){
+  completetask(key,memberKey){
   
     firebase.database().ref('/userProfile/' + firebase.auth().currentUser.uid + '/tasks/' + key).update({
       status : 'Complete'
-    })
+    }).then((refKey)=>{
+
+      this.af.database.object('/userProfile/' + firebase.auth().currentUser.uid + '/tasks/' + key).subscribe((task)=>{
+          firebase.database().ref('/minutes/' + task.meetID + '/' + key + '/status').set('Complete');
+      })
+
+      })
 
   }
 

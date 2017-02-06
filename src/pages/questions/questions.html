@@ -20,11 +20,13 @@
 
 <ion-content>
 
-    <ion-tabs>
+    <ion-tabs *ngIf="isCompSet">
         <ion-tab [root]="tab1Root" tabTitle="Feeds" tabBadge="{{(feedUnread | async)?.unreadFeed}}" tabIcon="flash"></ion-tab>
         <ion-tab [root]="tab2Root" tabTitle="Favourites" tabIcon="heart-outline"></ion-tab>
         <ion-tab [root]="tab3Root" tabTitle="Ask Question" tabIcon="hand"></ion-tab>
         <ion-tab [root]="tab4Root" tabTitle="My Questions" tabIcon="list"></ion-tab>
     </ion-tabs>
+
+    <ion-label class="nocompmsg" *ngIf="!isCompSet">Please choose Company in your profile settings on homepage to post a question.</ion-label>
 
 </ion-content>

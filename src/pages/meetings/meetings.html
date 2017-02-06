@@ -66,17 +66,13 @@
                     </div>
                 </ion-item>
                 <ion-item-options side="left">
-                    <button ion-button color="primary">
+                    <button ion-button (click)="launchSendSMS(meeting.$key)" color="primary">
         <ion-icon name="text"></ion-icon>
         Text
       </button>
-                    <button ion-button color="secondary">
-        <ion-icon name="calendar"></ion-icon>
-        Reschedule
-      </button>
                 </ion-item-options>
                 <ion-item-options side="right">
-                    <button ion-button color="primary">
+                    <button ion-button (click)="removeMeeting(meeting.$key,true)" color="primary">
         <ion-icon name="close"></ion-icon>
         Remove
       </button>
@@ -122,17 +118,13 @@
                     </div>
                 </ion-item>
                 <ion-item-options side="left">
-                    <button ion-button color="primary">
+                    <button ion-button (click)="launchSendSMS(meeting.$key)" color="primary">
         <ion-icon name="text"></ion-icon>
         Text
       </button>
-                    <button ion-button color="secondary">
-        <ion-icon name="calendar"></ion-icon>
-        Reschedule
-      </button>
                 </ion-item-options>
                 <ion-item-options side="right">
-                    <button ion-button color="primary">
+                    <button ion-button (click)="removeMeeting(meeting.$key,false)" color="primary">
         <ion-icon name="close"></ion-icon>
         Remove
       </button>

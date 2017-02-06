@@ -20,19 +20,31 @@ export class ScheduleMeeting {
   meetingDescription;
   parentTeam;
   parentTeamName;
-  date: any = new Date().toISOString();
+  date: any = new Date().toUTCString();
   teams;
   isDisabled;
+
 
   firstNameref
 
   constructor( public navParams: NavParams,public navCtrl: NavController,public af:AngularFire,public toastCtrl: ToastController) {
-
+   
   }
 
   ionViewDidEnter() {
     this.teams = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid + '/teams');
-  
+    if(this.navParams.get('meetkey')){
+         this.af.database.object('/meetings/' + this.navParams.get('meetkey')).subscribe((meeting)=>{
+
+      this.meetingTitle = meeting.meetingTitle,
+      this.meetingDescription = meeting.meetingDescription,
+      this.myTime = meeting.myTime,
+      this.conferenceDate = meeting.conferenceDate
+
+
+    })
+    }
+   
     
     this.parentTeam = this.navParams.get('teamName');
     
@@ -62,11 +74,12 @@ saveItem(){
     }
     var meetings = firebase.database().ref('/userProfile/'+firebase.auth().currentUser.uid + '/meetings/host');
     var meetingKey 
-    if(this.navParams.get('meetKey')){
+    if(this.navParams.get('meetkey')){
       
-      meetingKey= this.navParams.get('meetKey');
+      meetingKey= this.navParams.get('meetkey');
+      meetings.child(meetingKey).update(meetingDetails);
     }else{
-      meetingKey = meetings.push(meetingDetails);
+      meetingKey = meetings.push(meetingDetails).key;
     }
   
 
@@ -77,7 +90,7 @@ saveItem(){
     var fstName = snap.val().firstName;
     var lstName = snap.val().lastName;
 
-    firebase.database().ref('/meetings/'+meetingKey.key).update({
+    firebase.database().ref('/meetings/'+meetingKey).update({
       ownerName : fstName + ' ' + lstName,
     }); 
 
@@ -112,13 +125,13 @@ saveItem(){
                       teamName : teamID,
                       users : snapshot.val()
                     }
-                     updates['/userProfile/'+childSnapshot.key + '/meetings/member/' + meetingKey.key] = meetingDetailswithmembers;
+                     updates['/userProfile/'+childSnapshot.key + '/meetings/member/' + meetingKey] = meetingDetailswithmembers;
       
                     }else{
-                       updates['/userProfile/'+childSnapshot.key + '/meetings/host/' + meetingKey.key + '/users'] = snapshot.val();
+                       updates['/userProfile/'+childSnapshot.key + '/meetings/host/' + meetingKey + '/users'] = snapshot.val();
                     }
 
-                    updates['/meetings/'+ meetingKey.key + '/users/' + childSnapshot.key] = user
+                    updates['/meetings/'+ meetingKey + '/users/' + childSnapshot.key] = user
                    
 
                     return false;
@@ -134,7 +147,7 @@ saveItem(){
       })
   });
 
-  firebase.database().ref('/meetings/'+ meetingKey.key).update(meetingDetails).then(()=>{
+  firebase.database().ref('/meetings/'+ meetingKey).update(meetingDetails).then(()=>{
      
                           let toast = this.toastCtrl.create({
                           message: 'Meeting scheduled',

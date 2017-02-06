@@ -155,6 +155,26 @@ export class HomePage {
     }
   }
    
+   removetask(key){
+
+    this.todaystasks.remove(key);
+
+
+  }
+  completetask(key,memberKey){
+  
+    firebase.database().ref('/userProfile/' + firebase.auth().currentUser.uid + '/tasks/' + key).update({
+      status : 'Complete'
+    }).then((refKey)=>{
+
+      this.af.database.object('/userProfile/' + firebase.auth().currentUser.uid + '/tasks/' + key).subscribe((task)=>{
+          firebase.database().ref('/minutes/' + task.meetID + '/' + key + '/status').set('Complete');
+      })
+
+      })
+
+  }
+
   hideList(){
 
       if(this.shownutrition){

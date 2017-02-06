@@ -22,8 +22,8 @@
                     {{question?.questionTitle}}
                 </ion-card-title>
                 <!--<rating [(ngModel)]="question.isFav" max="1" (click)="addToFavourite(question.$key)"></rating>-->
-                <ion-icon name="heart" *ngIf="question.isFav" (click)="addToFavourite(question.$key)"></ion-icon>
-                <ion-icon name="heart-outline" *ngIf="!question.isFav" (click)="addToFavourite(question.$key)"></ion-icon>
+                <ion-icon name="heart" class="favHeart" *ngIf="question.isFav" (click)="addToFavourite(question.$key)"></ion-icon>
+                <ion-icon name="heart-outline" class="nonfavHeart" *ngIf="!question.isFav" (click)="addToFavourite(question.$key)"></ion-icon>
                 <ion-item>
                     <ion-avatar item-left>
                         <img src="{{(question.askProfile | async)?.profilepic}}">
@@ -50,10 +50,11 @@
         <div (click)='openQuestion(question.$key)'>{{(question.comments|async)?.length}} Comments</div>
       </button>
                     </ion-col>
-                    <ion-col center text-center>
-                        <ion-note>
-                            11h ago
-                        </ion-note>
+                    <ion-col>
+                        <button class="un-btn" icon-left ion-button clear small>
+        <ion-icon name="trash"></ion-icon>
+        <div (click)='removeQuestion(question.$key)'>Unfollow</div>
+      </button>
                     </ion-col>
                 </ion-row>
 

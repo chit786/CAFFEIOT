@@ -12,6 +12,7 @@ import {Questions} from '../pages/questions/questions';
 import {Tasks} from '../pages/tasks/tasks';
 import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
 import {Contacts} from '../pages/contacts/contacts';
+import {SendSMSPage} from '../pages/send-sms/send-sms';
 import { AngularFire } from 'angularfire2';
 
 
@@ -117,7 +118,7 @@ export class MyApp {
             // var updates= {}
             
             // updates['/userProfile/' + key ] = postData;
-             firebase.database().ref('/userProfile/' + key + '/regID').set(data.registrationId);
+             firebase.database().ref('/userProfile/' + key.key + '/regID').set(data.registrationId);
 
       // }
       
@@ -173,6 +174,7 @@ export class MyApp {
   openPage(page) {
     if(page.title=="Logout"){
       firebase.auth().signOut();
+      
        
     }else{
         this.nav.setRoot(page.component);

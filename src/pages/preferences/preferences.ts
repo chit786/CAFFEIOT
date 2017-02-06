@@ -19,8 +19,9 @@ export class Preferences {
   skillPref = [];
   options : FirebaseListObservable<any>;
   constructor(public toastCtrl: ToastController,public navParams: NavParams,public navCtrl: NavController, public view: ViewController, public af:AngularFire, public profileData: ProfileData) {
-     this.options = this.af.database.list('/organisations');
-
+     
+     this.company = "";
+     
    
   }
   
@@ -32,9 +33,14 @@ export class Preferences {
     this.setSkills(bankName);
   }
   select(chip : Element,skillName){
+
+      if(this.skillPref.indexOf(skillName)==0){
+        this.skillPref.push(skillName);
+      }
      
-     if(chip.getAttribute("ng-reflect-color")=="light"){
+     if(chip.getAttribute("ng-reflect-color")=="light" || chip.getAttribute("color")=="light"){
        chip.setAttribute("ng-reflect-color","primary");
+       chip.setAttribute("color","primary");
        chip.setAttribute("class","chip-md chip-md-primary");
        var currList = firebase.database().ref('/userProfile/'+this.profileData.currentUser.uid + '/skills')
        currList.once('value',function(snapshot){
@@ -48,7 +54,9 @@ export class Preferences {
        });
       currList.push({
         name : skillName,
-      }).then(key=>this.presentToast('skillset added!'));
+      }).then(key=>
+    
+      this.presentToast('skillset added!'));
      
      }else{
         chip.setAttribute("ng-reflect-color","light");
@@ -82,11 +90,22 @@ export class Preferences {
 
   }
   ionViewDidLoad() {
+    this.options = this.af.database.list('/organisations');
    
   }
   close(){
-    this.view.dismiss();
-   
+     this.view.dismiss();
+
+    if(this.company){
+      if(this.skillPref.length<1){
+           let toast = this.toastCtrl.create({
+      message: "Atleast 1 skill is required to get feeds and collaborate!",
+      duration: 3000
+    });
+    toast.present();
+      }
+    }
+
 
   }
 

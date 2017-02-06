@@ -25,15 +25,23 @@ export class QuestionDetail {
   ionViewDidLoad() {
 
     this.question = this.af.database.object('/questions/' + this.navParams.get('qsKey'))
+                    .map((_qs)=>{
+                      _qs.host = this.af.database.object('/userProfile/' + _qs.param);
+                      return _qs;
+                    }) as FirebaseObjectObservable<any>;
+                 
     this.comments = this.af.database.list('/questions/' + this.navParams.get('qsKey') + '/comments').map((cms)=>{
       return cms.map((cm)=>{
 
         if(cm.askedBy==firebase.auth().currentUser.uid){
+            cm.questionflag = false;
             cm.position = 'right';
         }else{
+            cm.questionflag = true;
             cm.position = 'left';
         }
-
+        
+       // cm.userProfile = this.af.database.object('/userProfile/' + cm.$key.askedBy)
         cm.user= this.af.database.object('/userProfile/'+ cm.askedBy ),
         cm.detail = this.af.database.object('/questions/'+this.navParams.get('qsKey') )
         return cm;
@@ -99,7 +107,7 @@ export class QuestionDetail {
         firstName : snapshot.val().firstName,
         lastName : snapshot.val().lastName,
         profilepic : snapshot.val().profilepic,
-        regID : snapshot.val().regID
+        // regID : snapshot.val().regID
 
       }
 
@@ -111,7 +119,7 @@ export class QuestionDetail {
            firstName : chsnapshot.val().firstName,
            lastName : chsnapshot.val().lastName,
            profilepic : chsnapshot.val().profilepic,
-           regID : chsnapshot.val().regID
+          //  regID : chsnapshot.val().regID
 
         }
 

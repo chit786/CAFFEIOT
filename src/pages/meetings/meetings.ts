@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ModalController,NavController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import {MeetingDetails} from '../meeting-details/meeting-details';
+import {SendSMSPage} from '../send-sms/send-sms';
 import {ScheduleMeeting} from '../schedule-meeting/schedule-meeting';
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import firebase from 'firebase';
@@ -82,9 +83,49 @@ export class Meetings {
    viewItem(teamKey,title){
      this.navCtrl.push(MeetingDetails, {
       teamKey : teamKey,
-      title:title
+      title:title,
+      isHost:this.isHost()
      });
    }
+
+   launchSendSMS(meetKey){
+
+     this.navCtrl.push(SendSMSPage,meetKey);
+
+   }
+
+   removeMeeting(meetKey,flag){
+
+     let prompt = this.alertCtrl.create({
+      title: 'New Member',
+      message: "Are you sure?",
+     
+      buttons: [
+        {
+          text: 'Yes',
+          handler: data => {
+
+            if(flag){
+              this.meetingListHost.remove(meetKey);
+            }else{
+              this.meetingListMember.remove(meetKey);
+            }
+
+          }
+        },
+         {
+          text: 'No',
+          handler: data => {
+           
+          }
+        }
+      ]
+    });
+    prompt.present();
+    
+
+   }
+
 
    isHost(){
      if(this.meetings=='host'){

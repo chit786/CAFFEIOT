@@ -58,7 +58,8 @@ export class MinutesOfMeeting {
       firebase.database().ref('/userProfile/' + this.member + '/tasks/' + key.key).update({
         description : desc,
         date : dat,
-        status : 'Pending'
+        status : 'Pending',
+        meetID : this.navParams.get('teamID')
       }) 
 
 

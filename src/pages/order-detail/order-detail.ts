@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams,ViewController,NavController,ToastController  } from 'ionic-angular';
 import firebase from 'firebase';
-import {AngularFire, FirebaseListObservable} from 'angularfire2';
+import {AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
 // import { Ionic2RatingModule } from 'ionic2-rating';
 
 /*
@@ -24,6 +24,7 @@ export class OrderDetail {
   dbRating;
   choices=[];
   today =  new Date().toISOString();
+  orderStatus ;
   constructor(public navParams: NavParams,public toastCtrl: ToastController,
   public navCtrl: NavController, public view: ViewController,public af:AngularFire){
      
@@ -31,8 +32,14 @@ export class OrderDetail {
   }
  
   ionViewDidLoad() {
+      this.orderKey = this.navParams.get('itemKey');
+   this.af.database.object('/orders/' + firebase.auth().currentUser.uid + '/' + this.orderKey ).subscribe((order)=>{
+ 
+      this.orderStatus = order.status;
+   })
+
     this.title = this.navParams.get('item').id;
-    this.orderKey = this.navParams.get('itemKey');
+  
     var temprate = this.dbRating;
     firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + this.orderKey ).child('rating').on('value',function(snap){
       temprate = snap.val();
@@ -41,7 +48,7 @@ export class OrderDetail {
     this.choiceCollection = this.navParams.get('item').choices; 
     this.choiceCollection.subscribe((choice)=>{
       this.choices = choice.splice(0);
-      console.log(this.choices);
+      
     })
 
      
@@ -69,6 +76,15 @@ export class OrderDetail {
     //var choices = this.choiceCollection;
     firebase.database().ref('/orders/' + firebase.auth().currentUser.uid + '/' + this.orderKey).update({
       status : "Complete"
+    }).then(()=>{
+
+
+           let toaster = this.toastCtrl.create({
+      message: 'Thank you, your order is complete!',
+      duration: 3000
+    });
+    toaster.present();
+      
     });
 
       firebase.database().ref('/dailyConsumption/' + firebase.auth().currentUser.uid +'/' +this.today + '/' + this.orderKey ).update({
@@ -113,11 +129,11 @@ let promises = Object.keys(choices)
            
         }).then(()=>{
 
-           let toaster = this.toastCtrl.create({
-      message: 'updated your nutritions!',
-      duration: 3000
-    });
-    toaster.present();
+    //        let toaster = this.toastCtrl.create({
+    //   message: 'updated your nutritions!',
+    //   duration: 3000
+    // });
+    // toaster.present();
 
         });
    
