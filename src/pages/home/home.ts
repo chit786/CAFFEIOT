@@ -8,6 +8,7 @@ import { NavController } from 'ionic-angular';
 import { AuthData } from '../../providers/auth-data';
 import {OrderData} from '../../providers/order-data';
 import {ProfilePage} from '../profile/profile';
+import { Preferences } from '../preferences/preferences';
 import { AngularFire, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
 
 @Component({
@@ -24,14 +25,17 @@ export class HomePage {
    coff:number;
    todaystasks:FirebaseListObservable<any[]>;
    nutritions:FirebaseListObservable<any[]>;
-   temp:any;
-  finalNutritionarray = [];
+   //temp:any;
+  //finalNutritionarray = [];
   shownutrition:any;
   waterObservable : FirebaseObjectObservable<any>;
   nutritionIcon:any ;
    auth:any;
    segmentvalue:any;
    isMobile : any;
+   nutritionsub : any;
+   usersubscribstion:any;
+   taskssubscription : any;
  
  // coffeecount;
   @ViewChild('canvas') canvas:ElementRef;
@@ -42,6 +46,19 @@ export class HomePage {
   public waterlevel1:string = '';
     public waterlevel2:string = '';
     ngAfterViewInit() {
+
+
+        var nav = this.navCtrl;
+
+      firebase.database().ref('/userProfile/' + firebase.auth().currentUser.uid + '/skills').once('value',function(skills){
+          if(!skills.val()){
+
+              nav.push(ProfilePage,{
+                  isfromhome:true
+              });
+          }
+      })
+
       
          //water intake is 2/3 of body weight in pounds multiply by 0.029 litre , 1 kg = 2.20 pound
           var consumeDay;
@@ -51,11 +68,10 @@ export class HomePage {
                         var day = ( today.split("-")[2] ).split("T")[0]
                         today = year + '-' + day + '-' + month;
                         consumeDay = day + '-' + month + '-' + year; 
-
-        this.af.database.object('/nutritions/' + firebase.auth().currentUser.uid + '/' + consumeDay + '/serving size')
+       
+       this.nutritionsub = this.af.database.object('/nutritions/' + firebase.auth().currentUser.uid + '/' + consumeDay + '/serving size')
         .subscribe((water)=>{
-
-            this.af.database.object('/userProfile/' + firebase.auth().currentUser.uid).subscribe((user)=>{
+            this.usersubscribstion = this.af.database.object('/userProfile/' + firebase.auth().currentUser.uid).subscribe((user)=>{
 
                 this.waterIntake = Math.round((water.value / ((2 * 0.029 * 1000 *((user.weight * 2.20))/ 3)))*100)
                 console.log(this.waterIntake);
@@ -81,18 +97,28 @@ export class HomePage {
             })
                
            })
-
-           console.log("in home");
-
-
-         
     }
 
-    
+    ngOnDestroy() {
+
+            this.nutritionsub.unsubscribe();
+            if(this.usersubscribstion){
+                 this.usersubscribstion.unsubscribe();
+            }
+            if( this.taskssubscription){
+                this.taskssubscription.unsubscribe();
+            }
+           
+            
+    }
 
 
   constructor(public navCtrl: NavController, public authData: AuthData,public af: AngularFire,public order:OrderData,
   public renderer: Renderer, platform:Platform) {
+
+
+
+
 
     //   this.isMobile = platform.width() < 768;
       this.segmentvalue = "Nutritions";
@@ -109,34 +135,10 @@ export class HomePage {
 
       //af.auth.getAuth().auth.uid
 
-      console.log("in home constructor");
-        var consumeDay;
-        var today = new Date().toISOString();
-                        var year = today.split("-")[0];
-                        var month = today.split("-")[1];
-                        var day = ( today.split("-")[2] ).split("T")[0]
-                        today = year + '-' + month + '-' + day;
-                        consumeDay = day + '-' + month + '-' + year; 
-
         
 
      
-        //today's tasks list
-            this.todaystasks = af.database.list('/userProfile/' + firebase.auth().currentUser.uid+ '/tasks',{
-                query:{
-                    orderByChild:'date',
-                    equalTo  : today
-                }
-            }).map((data)=>{
-                return data.map((val)=>{
-                    val.icon = 'ios-add-circle-outline';
-                    val.showDetails = false;
-                    return val;
-                })
-
-            }) as FirebaseListObservable<any>;  
-
-            this.nutritions = af.database.list('/nutritions/' + firebase.auth().currentUser.uid + '/' + consumeDay)
+      
 
             this.nutritionIcon = 'ios-remove-circle-outline';
             this.shownutrition = true;
@@ -144,6 +146,7 @@ export class HomePage {
 
     }
    
+
    //toggle show detail on dashboard
    toggleDetails(data) {
     if (data.showDetails) {
@@ -167,7 +170,7 @@ export class HomePage {
       status : 'Complete'
     }).then((refKey)=>{
 
-      this.af.database.object('/userProfile/' + firebase.auth().currentUser.uid + '/tasks/' + key).subscribe((task)=>{
+     this.taskssubscription = this.af.database.object('/userProfile/' + firebase.auth().currentUser.uid + '/tasks/' + key).subscribe((task)=>{
           firebase.database().ref('/minutes/' + task.meetID + '/' + key + '/status').set('Complete');
       })
 
@@ -192,10 +195,45 @@ export class HomePage {
 
 
     goToProfile(){
-    this.navCtrl.push(ProfilePage);
+    this.navCtrl.push(ProfilePage,{
+                  isfromhome:false
+              });
     }
 
     ionViewDidEnter(){
+
+      console.log("in home constructor");
+        var consumeDay;
+        var today = new Date().toISOString();
+                        var year = today.split("-")[0];
+                        var month = today.split("-")[1];
+                        var day = ( today.split("-")[2] ).split("T")[0]
+                        today = year + '-' + month + '-' + day;
+                        consumeDay = day + '-' + month + '-' + year; 
+
+          //today's tasks list
+            this.todaystasks = this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid+ '/tasks',{
+                query:{
+                    orderByChild:'date',
+                    equalTo  : today
+                }
+            }).map((data)=>{
+                return data.map((val)=>{
+                    val.icon = 'ios-add-circle-outline';
+                    val.showDetails = false;
+                    return val;
+                })
+
+            }) as FirebaseListObservable<any>;  
+
+            this.nutritions = this.af.database.list('/nutritions/' + firebase.auth().currentUser.uid + '/' + consumeDay);
+
+
+
+
+
+
+
          var labelArr = [];
          var labelCountArr = [];
          var nutritionList = []; 
@@ -206,7 +244,7 @@ export class HomePage {
          var backColor = [];
          var hoverColor = [];
          
-         var temp = this.finalNutritionarray;
+       //  var temp = this.finalNutritionarray;
 
 
             firebase.auth().onAuthStateChanged(function(user) {

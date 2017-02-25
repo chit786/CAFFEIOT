@@ -21,12 +21,12 @@ export class MyTeams {
 
   teamNameString : any;
   constructor(public navCtrl: NavController,public af: AngularFire,public alertCtrl: AlertController,public teamData: TeamsData,public profileData : ProfileData) {
-    this.items = af.database.list(this.teamData.userProfile + '/teams');
+   
     
   }
 
   ionViewDidLoad() {
-
+     this.items = this.af.database.list(this.teamData.userProfile + '/teams');
   }
 
   addTeam(){

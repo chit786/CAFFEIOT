@@ -24,7 +24,7 @@
         </ion-card-content>
         <rating [(ngModel)]="item.rating" max="5" (click)="saveRating(item,item.rating)"></rating>
 
-        <button *ngIf="item.status=='Pending'" ion-button small item-right color="primary" (click)="completeChoice(item.$key)">
+        <button *ngIf="item.status=='Pending'" ion-button small item-right color="primary" (click)="completeChoice(item.$key,item.choice)">
         Completed
       </button>
         <button *ngIf="item.status=='Complete'" ion-button small item-right color="unavailable">

@@ -1,4 +1,4 @@
-import { NavController, AlertController, Platform } from 'ionic-angular';
+import { NavController, AlertController, Platform,NavParams } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { ProfileData } from '../../providers/profile-data';
 import { AuthData } from '../../providers/auth-data';
@@ -24,6 +24,8 @@ export class ProfilePage {
   public userProfile: any;
   public birthDate: string;
   company;
+  showback : any;
+  skillsubscription : any;
   // assetCollection: any;
   URL: any;
   options : FirebaseListObservable<any>;
@@ -37,15 +39,39 @@ export class ProfilePage {
       correctOrientation: true
   }
 
-  constructor(public nav: NavController,public af: AngularFire, public profileData: ProfileData, public alertCtrl: AlertController, 
+  constructor(public navParams: NavParams,public nav: NavController,public af: AngularFire, public profileData: ProfileData, public alertCtrl: AlertController, 
   public authData: AuthData, public platform: Platform) {
     this.nav = nav;
     this.profileData = profileData;
-  
-    this.loadData();
+   
+    if(this.navParams.get('isfromhome')){
+      this.showback = false;
+    }else{
+      this.showback = true;
+    }
+
+    this.skillsubscription =  this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/skills').subscribe((skills)=>{
+      console.log(skills.length);
+       if(skills.length>0){
+         this.showback = true;
+       }else{
+          this.showback = false;
+       }
+     })
 
   }
+    ngOnDestroy() {
+      if(this.skillsubscription){
+        this.skillsubscription.unsubscribe();
+      }
+      
+    }
 
+
+  ionViewDidEnter(){
+     this.loadData();
+    
+  }
   logOut() {
     this.authData.logoutUser().then(() => {
       this.nav.setRoot(LoginPage);
@@ -247,7 +273,7 @@ let alert = this.alertCtrl.create({
 
     chip.remove();
     var skill= firebase.database().ref('/userProfile/'+this.profileData.currentUser.uid+'/skills');
-    skill.on('value',function(snapshot){
+    skill.once('value',function(snapshot){
       snapshot.forEach(function(childSnapshot){
           if(childSnapshot.val().name==skillName){
             childSnapshot.ref.child('name').ref.remove();
@@ -353,15 +379,20 @@ let alert = this.alertCtrl.create({
       // Camera.getPicture(this.optionsval).then((fileUri) => {
         // Crop Image, on android this returns something like, '/storage/emulated/0/Android/...'
         // Only giving an android example as ionic-native camera has built in cropping ability
-        if (this.platform.is('android')) {
+        // if (this.platform.is('android')) {
         
-          _imagePath = 'file://' + _imagePath;
-        }
+        //   _imagePath = 'file://' + _imagePath;
+        // }
           const options = { quality: 100 };
+           console.log('here Image Path!: ' + _imagePath);
           /* Using cordova-plugin-crop starts here */
           plugins.crop.promise(_imagePath, options).then( (path) => {
             // path looks like 'file:///storage/emulated/0/Android/data/com.foo.bar/cache/1477008080626-cropped.jpg?1477008106566'
             console.log('Cropped Image Path!: ' + path);
+            if (this.platform.is('android')) {
+        
+              path = 'file://' + path;
+            }
             // Do whatever you want with new path such as read in a file
             // Here we resolve the path to finish, but normally you would now want to read in the file
             resolve(path);

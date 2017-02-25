@@ -38,7 +38,18 @@ export class MyTeamDetails {
      //load all client data corresponding to the meeting id
     // this.teamMembers = this.teamData.getClientInfo(this.navParams.get('item'));
     //var members = [];
-     this.teamMembers = af.database.list('/teams/'+ this.navParams.get('item').$key + '/members')
+    
+      this.year = this.today.split("-")[0];
+           this.month = this.today.split("-")[1];
+           this.day = ( this.today.split("-")[2] ).split("T")[0];
+           this.orderID = ( this.today.split(":")[0] ).split("T")[1] + this.today.split(":")[1] + (this.today.split(":")[2]).split(".")[0]  ;
+
+
+  }
+
+  ionViewDidLoad() {
+    //constructor code
+      this.teamMembers = this.af.database.list('/teams/'+ this.navParams.get('item').$key + '/members')
                         .map((_userRefs)=>{
             return _userRefs.map((_userRef)=>{
              _userRef.profile = this.af.database.object('/userProfile/' + _userRef.$key) 
@@ -47,7 +58,7 @@ export class MyTeamDetails {
             })
           }) as FirebaseListObservable<any>;
 
-      this.tempTeam = af.database.list('/teams/'+ this.navParams.get('item').$key + '/members',{ preserveSnapshot: true } )
+      this.tempTeam = this.af.database.list('/teams/'+ this.navParams.get('item').$key + '/members',{ preserveSnapshot: true } )
 
      this.tempTeam.subscribe((snapshots)=>{
         snapshots.forEach(snapshot=>{
@@ -63,16 +74,6 @@ export class MyTeamDetails {
 
      })
 
-      this.year = this.today.split("-")[0];
-           this.month = this.today.split("-")[1];
-           this.day = ( this.today.split("-")[2] ).split("T")[0];
-           this.orderID = ( this.today.split(":")[0] ).split("T")[1] + this.today.split(":")[1] + (this.today.split(":")[2]).split(".")[0]  ;
-
-
-  }
-
-  ionViewDidLoad() {
-     
 
   }
 
@@ -125,7 +126,7 @@ export class MyTeamDetails {
 
     }).then(()=>{
       let toast = this.toastCtrl.create({
-                          message: 'New order is placed with id : ' + keyVal.key,
+                          message: 'New order is placed with id : ' + this.orderID,
                           duration: 3000
                         });
                         toast.present();

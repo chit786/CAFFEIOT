@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams,ViewController,NavController,ToastController  } from 'ionic-angular';
 import firebase from 'firebase';
-import {AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
+import {AngularFire, FirebaseListObservable} from 'angularfire2';
 // import { Ionic2RatingModule } from 'ionic2-rating';
 
 /*
@@ -25,6 +25,7 @@ export class OrderDetail {
   choices=[];
   today =  new Date().toISOString();
   orderStatus ;
+  ordersubscribe:any;
   constructor(public navParams: NavParams,public toastCtrl: ToastController,
   public navCtrl: NavController, public view: ViewController,public af:AngularFire){
      
@@ -33,9 +34,8 @@ export class OrderDetail {
  
   ionViewDidLoad() {
       this.orderKey = this.navParams.get('itemKey');
-   this.af.database.object('/orders/' + firebase.auth().currentUser.uid + '/' + this.orderKey ).subscribe((order)=>{
- 
-      this.orderStatus = order.status;
+   this.ordersubscribe = this.af.database.object('/orders/' + firebase.auth().currentUser.uid + '/' + this.orderKey ).subscribe((order)=>{
+          this.orderStatus = order.status;
    })
 
     this.title = this.navParams.get('item').id;
@@ -58,6 +58,12 @@ export class OrderDetail {
                     this.today = day + "-" + month + "-" + year;
     
   }
+
+   ngOnDestroy() {
+
+     this.ordersubscribe.unsubscribe();
+
+   }
 
   saveRating(choiceName,itemrating){
     // this.navParams.get('item').rating = this.rate;
@@ -92,12 +98,16 @@ export class OrderDetail {
     })
 
     
-let promises = Object.keys(choices)
+//let promises = 
+Object.keys(choices)
   .map(k => {
    // console.log(k);
         
-     
-       var val =this.updateAllNutritions(choices[k].choice)
+      if(choices[k].status!='Complete'){
+
+    
+       //var val =
+       this.updateAllNutritions(choices[k].choice)
        .then(function(values) { 
            var consumeDay;
         var today = new Date().toISOString();
@@ -136,7 +146,7 @@ let promises = Object.keys(choices)
     // toaster.present();
 
         });
-   
+     }     
         
    // });
   });
@@ -159,15 +169,81 @@ let promises = Object.keys(choices)
 
   }
 
-  completeChoice(choiceKey){
- 
+  completeChoice(choiceKey,choice){
+    
+    
+    var myorderkey = this.orderKey;
+
     
     firebase.database().ref('/orders/'+firebase.auth().currentUser.uid + '/' + this.orderKey + '/choice/').child(choiceKey).update({
       status : 'Complete'
+    }).then(()=>{
+
+       firebase.database().ref('/orders/' + firebase.auth().currentUser.uid + '/' + myorderkey ).once('value',function(snapshot){
+       var checkstatus = true;
+       console.log(snapshot.val().choice);
+       for(var val in snapshot.val().choice){
+         if(snapshot.val().choice[val].status!='Complete'){
+           checkstatus = false;
+           break;
+         }
+       }
+
+       if(checkstatus){
+         firebase.database().ref('/orders/' + firebase.auth().currentUser.uid + '/' + myorderkey ).update({
+            status : 'Complete'
+         })
+       }
+
+     })
+
     }) 
 
     firebase.database().ref('/dailyConsumption/' + firebase.auth().currentUser.uid +'/' +this.today + '/' + this.orderKey + '/choice/' ).child(choiceKey).update({
       status : 'Complete'
+    }).then(()=>{
+     
+      this.updateAllNutritions(choice)
+      .then(function(values) { 
+           var consumeDay;
+        var today = new Date().toISOString();
+        var year = today.split("-")[0];
+        var month = today.split("-")[1];
+        var day = ( today.split("-")[2] ).split("T")[0]
+        consumeDay = day + '-' + month + '-' + year; 
+           // console.log('all done', values); // [snap, snap, snap] 
+            
+            Object.keys(values)
+            .map(j=>{
+             
+              var unit = firebase.database().ref('/nutritions/' + firebase.auth().currentUser.uid + '/' + consumeDay + '/' + values[j].valueOf).child('unit')
+              var value = firebase.database().ref('/nutritions/' + firebase.auth().currentUser.uid + '/' + consumeDay + '/' + values[j].valueOf).child('value')
+              unit.transaction(function(currentUnit){
+
+                return values[j].unit;
+
+              });
+
+              value.transaction(function(currentValue){
+
+                return currentValue + values[j].value;
+              })
+
+               
+
+            })
+           
+        }).then(()=>{
+
+    //        let toaster = this.toastCtrl.create({
+    //   message: 'updated your nutritions!',
+    //   duration: 3000
+    // });
+    // toaster.present();
+
+        });
+
+
     })
     
     

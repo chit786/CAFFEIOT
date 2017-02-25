@@ -30,8 +30,8 @@ export class AuthData {
   signupUser(email: string, password: string): any {
     return this.fireAuth.createUserWithEmailAndPassword(email, password)
       .then((newUser) => {
-        this.userProfile.child(newUser.uid).set({email: email});
-        this.userProfile.child(newUser.uid).set({profilepic: 'assets/img/default_profile.jpg'});
+    
+        this.userProfile.child(newUser.uid).set({email: email,profilepic: 'assets/img/default_profile.jpg'});
        
       });
   }

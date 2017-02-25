@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams,ToastController } from 'ionic-angular';
-import {AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
+import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import { SMS } from 'ionic-native';
 
 /*

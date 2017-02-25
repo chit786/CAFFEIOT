@@ -28,7 +28,7 @@ import {Favourite} from '../pages/favourite/favourite';
 import {Feed} from '../pages/feed/feed';
 import {MyQuestions} from '../pages/my-questions/my-questions';
 import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
-import { AngularFireModule,AuthProviders,AuthMethods} from 'angularfire2';
+import { AngularFireModule} from 'angularfire2';
 import {Preferences} from '../pages/preferences/preferences';
 import {Contacts} from '../pages/contacts/contacts';
 import {MomentModule} from 'angular2-moment';

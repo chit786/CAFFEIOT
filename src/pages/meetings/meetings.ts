@@ -32,7 +32,13 @@ export class Meetings {
   constructor(public af: AngularFire,public navCtrl: NavController,public alertCtrl: AlertController,public modalCtrl: ModalController) {
 
     this.meetings = "host";
-    this.meetingListHost = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/host',{
+  
+
+  }
+
+  ionViewDidLoad() {
+    //constructor code in ionviewdid load
+      this.meetingListHost = this.af.database.list('/userProfile/'+firebase.auth().currentUser.uid+'/meetings/host',{
       query:{
         orderByChild : 'conferenceDate'
       }
@@ -65,11 +71,6 @@ export class Meetings {
         return _user
     }) 
 }) as FirebaseListObservable<any>;
-
-  }
-
-  ionViewDidLoad() {
-    
     
   }
 

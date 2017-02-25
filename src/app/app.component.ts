@@ -12,7 +12,7 @@ import {Questions} from '../pages/questions/questions';
 import {Tasks} from '../pages/tasks/tasks';
 import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
 import {Contacts} from '../pages/contacts/contacts';
-import {SendSMSPage} from '../pages/send-sms/send-sms';
+
 import { AngularFire } from 'angularfire2';
 
 
@@ -22,14 +22,13 @@ import { AngularFire } from 'angularfire2';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  //rootPage: any = HomePage;
+  // rootPage: any = HomePage;
   rootPage: any ;
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform,public alertCtrl: AlertController,public af: AngularFire) {
-    
-   console.log("in component");
+   ngOnInit(){
+
     //initialize firebase
     firebase.initializeApp({
       apiKey: "AIzaSyCLoFM5qxP6IXTMThJ1mm7B8EqXYaEMXAE",
@@ -39,13 +38,21 @@ export class MyApp {
       messagingSenderId: "558368532218"
     },'app1');
 
+    
+
     firebase.auth().onAuthStateChanged((user) => {
+
+       this.platform.ready().then(() => {  StatusBar.styleDefault();
+        Splashscreen.hide();})
+
+
       if (!user) {
         console.log("Login");
         this.rootPage = LoginPage;
       }else{
+        
          console.log("Home");
-        this.rootPage = HomePage;
+         this.rootPage = HomePage;
         this.initializeApp(user);
       }
     });
@@ -81,6 +88,13 @@ export class MyApp {
 
     ];
 
+   }
+
+
+
+  constructor(public platform: Platform,public alertCtrl: AlertController,public af: AngularFire) {
+  
+
   }
 
   initializeApp(user) {
@@ -90,8 +104,8 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       if (this.platform.is('android')){
-      StatusBar.styleDefault();
-        Splashscreen.hide();
+      // StatusBar.styleDefault();
+      //   Splashscreen.hide();
       let push = Push.init({
         android: {
           senderID: "558368532218"
@@ -173,6 +187,7 @@ export class MyApp {
 
   openPage(page) {
     if(page.title=="Logout"){
+      //this.af.auth.logout();
       firebase.auth().signOut();
       
        

@@ -30,6 +30,13 @@ OrderList : FirebaseListObservable<any>;
    //this.initializeItems();
     this.rate = '3.5';
 
+   
+
+
+ }
+
+ ionViewDidEnter(){
+   //constructor code
     var year = this.today.split("-")[0];
            var month = this.today.split("-")[1];
           var day = ( this.today.split("-")[2] ).split("T")[0];
@@ -43,14 +50,14 @@ OrderList : FirebaseListObservable<any>;
             })
                
            })
-
-
  }
 
 
 
  //added as part of stub addition
  ionViewDidLoad(){
+
+
     var year = this.today.split("-")[0];
            var month = this.today.split("-")[1];
           var day = ( this.today.split("-")[2] ).split("T")[0];

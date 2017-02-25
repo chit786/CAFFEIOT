@@ -38,14 +38,20 @@ export class MeetingDetails {
   constructor(public af: AngularFire,public navCtrl: NavController,public navParams: NavParams,
   public modalCtrl: ModalController, public view: ViewController,public alertCtrl: AlertController,public teamData: TeamsData) {
 
-    this.teamkey = this.navParams.get('teamKey') ;
+
+  }
+
+  ionViewDidLoad() {
+
+    //constructor code :
+     this.teamkey = this.navParams.get('teamKey') ;
       this.year = this.today.split("-")[0];
            this.month = this.today.split("-")[1];
            this.day = ( this.today.split("-")[2] ).split("T")[0];
            this.orderID = ( this.today.split(":")[0] ).split("T")[1] + this.today.split(":")[1] + (this.today.split(":")[2]).split(".")[0]  ;
 
 
-            this.tempTeam = af.database.list('/meetings/'+ this.navParams.get('teamKey') + '/users',{ preserveSnapshot: true } )
+            this.tempTeam = this.af.database.list('/meetings/'+ this.navParams.get('teamKey') + '/users',{ preserveSnapshot: true } )
 
      this.tempTeam.subscribe((snapshots)=>{
         snapshots.forEach(snapshot=>{
@@ -60,10 +66,19 @@ export class MeetingDetails {
         })
 
      })
+     //==========================
 
-  }
 
-  ionViewDidLoad() {
+
+
+
+
+
+
+
+
+
+
     this.isHost = this.navParams.get('isHost');
     this.meetingDetail = this.af.database.object('/meetings/' + this.teamkey);
     this.memberDetail = this.af.database.list('/meetings/' + this.teamkey+ '/users')

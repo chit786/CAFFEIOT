@@ -45,7 +45,10 @@ export class SignupPage {
   } else {
     this.authData.signupUser(this.signupForm.value.email, this.signupForm.value.password).then(() => {
       //this.nav.setRoot(HomePage);
-      this.nav.setRoot(Preferences);
+      
+      //this.nav.push(Preferences);
+      
+      
     }, (error) => {
       this.loading.dismiss();
       let alert = this.alertCtrl.create({

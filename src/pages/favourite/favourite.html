@@ -40,19 +40,19 @@
                         <button ion-button icon-left clear small>
         <ion-icon name="thumbs-up" *ngIf="question.likeCount" ></ion-icon>
          <ion-icon name="thumbs-up-outline" *ngIf="!question.likeCount"></ion-icon>
-        <div (click)="addTolike(question.$key)">{{(question.detail | async)?.likeCount}} Likes</div>
+        <div (click)="addTolike(question.$key)">{{(question.detail | async)?.likeCount}}</div>
       </button>
                     </ion-col>
                     <ion-col>
                         <button ion-button icon-left clear small>
         <ion-icon name="text"></ion-icon>
-        <div (click)='openQuestion(question.$key)'>{{(question.comments|async)?.length}} Comments</div>
+        <div (click)='openQuestion(question.$key)'>{{(question.comments|async)?.length}}</div>
       </button>
                     </ion-col>
                     <ion-col>
-                        <button class="un-btn" icon-left ion-button clear small>
+                        <button class="un-btn" icon-left ion-button clear small (click)='removeQuestion(question.$key)'>
         <ion-icon name="trash"></ion-icon>
-        <div (click)='removeQuestion(question.$key)'>Unfollow</div>
+        <!--<div (click)='removeQuestion(question.$key)'></div>-->
       </button>
                     </ion-col>
                 </ion-row>

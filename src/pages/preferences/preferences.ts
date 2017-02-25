@@ -3,6 +3,8 @@ import { NavController,ViewController,NavParams,ToastController } from 'ionic-an
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import { ProfileData } from '../../providers/profile-data';
 import firebase from 'firebase';
+import {ProfilePage} from '../profile/profile';
+// import {Events} from 'ionic/angular2';
 /*
   Generated class for the Preferences page.
 
@@ -19,7 +21,7 @@ export class Preferences {
   skillPref = [];
   options : FirebaseListObservable<any>;
   constructor(public toastCtrl: ToastController,public navParams: NavParams,public navCtrl: NavController, public view: ViewController, public af:AngularFire, public profileData: ProfileData) {
-     
+     console.log("this is called");
      this.company = "";
      
    
@@ -94,8 +96,7 @@ export class Preferences {
    
   }
   close(){
-     this.view.dismiss();
-
+      
     if(this.company){
       if(this.skillPref.length<1){
            let toast = this.toastCtrl.create({
@@ -105,6 +106,12 @@ export class Preferences {
     toast.present();
       }
     }
+
+     this.navCtrl.pop();
+      // this.navCtrl.push(ProfilePage,{
+      //             isfromhome:false
+      //         });
+
 
 
   }

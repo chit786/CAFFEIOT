@@ -29,10 +29,15 @@ export class TeamOrder {
   day:any;
   constructor(public navCtrl: NavController,public af:AngularFire,public toastCtrl: ToastController, public navParms : NavParams) {
 
+  }
+
+  ionViewDidLoad() {
+    //constructor code
+
      this.year = this.today.split("-")[0];
            this.month = this.today.split("-")[1];
            this.day = ( this.today.split("-")[2] ).split("T")[0];
-           var orderID = ( this.today.split(":")[0] ).split("T")[1] + this.today.split(":")[1] + (this.today.split(":")[2]).split(".")[0]  ;
+          // var orderID = ( this.today.split(":")[0] ).split("T")[1] + this.today.split(":")[1] + (this.today.split(":")[2]).split(".")[0]  ;
 
            this.today = this.day + "-" + this.month + "-" + this.year
 
@@ -49,7 +54,7 @@ export class TeamOrder {
     }) as FirebaseListObservable<any>;
   
 
-    af.database.object('/teamOrder/' +this.navParms.get('order').$key).subscribe((x)=>{
+    this.af.database.object('/teamOrder/' +this.navParms.get('order').$key).subscribe((x)=>{
        this.meetingKey = x.meetingKey
       if(firebase.auth().currentUser.uid == x.askedByKey){
        
@@ -59,13 +64,10 @@ export class TeamOrder {
       }
     }
     )
-    this.removeChoiceRef = af.database.list('/teamOrder/' +this.navParms.get('order').$key + '/members/' + firebase.auth().currentUser.uid + "/choice");
-    this.dailyConsRef = af.database.list('/dailyConsumption/' + firebase.auth().currentUser.uid  + '/' + this.today+ '/' + this.navParms.get('order').$key + "/choice");
+    this.removeChoiceRef = this.af.database.list('/teamOrder/' +this.navParms.get('order').$key + '/members/' + firebase.auth().currentUser.uid + "/choice");
+    this.dailyConsRef = this.af.database.list('/dailyConsumption/' + firebase.auth().currentUser.uid  + '/' + this.today+ '/' + this.navParms.get('order').$key + "/choice");
 
-  }
-
-  ionViewDidLoad() {
-
+    //======================
     
   
   }
@@ -233,7 +235,8 @@ export class TeamOrder {
   
      if(parseInt(k)>=0){
      
-       var val =this.updateAllNutritions(choices[k].choice,userID)
+       //var val =
+       this.updateAllNutritions(choices[k].choice,userID)
        .then(function(values) { 
            var consumeDay;
         var today = new Date().toISOString();

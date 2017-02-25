@@ -1,10 +1,9 @@
 page-profile {
     .placeholder-preferences ion-list {
         white-space: normal;
-
         .chip-md {
             .label-md {
-                    margin-left: 15px !important;
+                margin-left: 15px !important;
             }
         }
     }
@@ -14,6 +13,12 @@ page-profile {
     ion-list {
         margin: 0;
         padding: 0;
+        .special {
+            white-space: normal;
+        }
+    }
+    .force-back-button .back-button {
+        display: inline-block;
     }
     ion-list-header {
         background-color: #ECECEC;

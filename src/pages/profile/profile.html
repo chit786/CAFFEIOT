@@ -1,5 +1,14 @@
 <ion-header>
-    <ion-navbar color="primary">
+    <ion-navbar *ngIf="!showback" hideBackButton color="primary">
+        <ion-title>Profile</ion-title>
+        <!--<ion-buttons end>
+           
+            <button ion-button icon-only (click)="logOut()">
+        <ion-icon name="log-out"></ion-icon>
+      </button>
+        </ion-buttons>-->
+    </ion-navbar>
+    <ion-navbar *ngIf="showback" class="force-back-button" color="primary">
         <ion-title>Profile</ion-title>
         <!--<ion-buttons end>
            
@@ -15,6 +24,7 @@
         <ion-list-header>
             Personal Information
         </ion-list-header>
+        <ion-label *ngIf="!showback">Please complete profile information</ion-label>
         <div class="image-block">
             <img [src]="URL" class="padding" />
             <button (click)="doGetPicture()" class="floating-camera"><ion-icon name="camera"></ion-icon></button>
@@ -25,7 +35,7 @@
                     <ion-col width-50>
                         Name
                     </ion-col>
-                    <ion-col *ngIf="userProfile?.firstName || userProfile?.lastName">
+                    <ion-col *ngIf="userProfile?.firstName || userProfile?.lastName" class="special">
                         {{userProfile?.firstName}} {{userProfile?.lastName}}
                     </ion-col>
                     <ion-col class="placeholder-profile" *ngIf="!userProfile?.firstName">
@@ -48,7 +58,7 @@
                     <ion-col width-50>
                         Email
                     </ion-col>
-                    <ion-col width-50 *ngIf="userProfile?.email">
+                    <ion-col width-50 *ngIf="userProfile?.email" class="special">
                         {{userProfile?.email}}
                     </ion-col>
                     <ion-col class="placeholder-profile" *ngIf="!userProfile?.email">
@@ -63,7 +73,7 @@
         <ion-item (click)="updateNumber()">
             <ion-grid>
                 <ion-row>
-                    <ion-col width-50>
+                    <ion-col width-50 class="special">
                         Number
                     </ion-col>
                     <ion-col width-50 *ngIf="userProfile?.number">
@@ -84,7 +94,7 @@
                     <ion-col width-50>
                         Weight
                     </ion-col>
-                    <ion-col width-50 *ngIf="userProfile?.weight">
+                    <ion-col width-50 *ngIf="userProfile?.weight" class="special">
                         {{userProfile?.weight}} Kg
                     </ion-col>
                     <ion-col class="placeholder-profile" *ngIf="!userProfile?.weight">
@@ -115,7 +125,7 @@
             <ion-grid>
                 <ion-row>
                     <ion-col width-50 (click)="openPreferences()">
-                        Preferences
+                        Your skills
                         <ion-icon name="arrow-forward"></ion-icon>
                     </ion-col>
                     <ion-col class="placeholder-preferences">
@@ -138,7 +148,7 @@
                     <ion-col width-50 (click)="openPreferences()">
                         Company
                     </ion-col>
-                    <ion-col width-50 *ngIf="userProfile?.company">
+                    <ion-col width-50 *ngIf="userProfile?.company" class="special">
                         {{userProfile?.company}}
                     </ion-col>
                     <ion-col class="placeholder-profile" *ngIf="!userProfile?.company">

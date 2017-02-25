@@ -175,7 +175,10 @@ export class AskQuestion {
 
                    }
                    firebase.database().ref('/questions/' + key.key + '/members/' + index).update(member);
+                   console.log(childsnap.key);
+                   console.log(firebase.auth().currentUser.uid);
                    if(childsnap.key==firebase.auth().currentUser.uid){
+                     console.log("matched");
                       firebase.database().ref('/questions/' + key.key + '/askedBy').update(askDetail);
                    }
                    

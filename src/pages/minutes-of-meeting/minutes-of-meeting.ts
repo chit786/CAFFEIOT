@@ -22,9 +22,6 @@ export class MinutesOfMeeting {
     options : FirebaseListObservable<any>;
   constructor(public navCtrl: NavController, public af : AngularFire,public navParams: NavParams) {
 
-    this.options = af.database.list('/meetings/' + this.navParams.get('teamID') + '/users')
-    this.meetingNode = af.database.object('/meetings/' + this.navParams.get('teamID'))
-    this.minutes = af.database.list('/minutes/'+ this.navParams.get('teamID'))
     // this.minutes = [
     //   {description:"Test Case",assignedTo:"Chitrang"},
     //   {description:"Test Case No",assignedTo:"Praveen"}
@@ -32,7 +29,12 @@ export class MinutesOfMeeting {
     
   } 
 
+
   ionViewDidLoad() {
+
+    this.options = this.af.database.list('/meetings/' + this.navParams.get('teamID') + '/users')
+    this.meetingNode = this.af.database.object('/meetings/' + this.navParams.get('teamID'))
+    this.minutes = this.af.database.list('/minutes/'+ this.navParams.get('teamID'))
     
   }
   saveItem(){
