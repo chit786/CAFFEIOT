@@ -1,0 +1,22 @@
+page-preferences {
+    ion-label {
+        white-space: normal;
+    }
+    .label {
+        white-space: normal;
+    }
+    .label {
+        font-size: 100%;
+        line-height: 1;
+        // white-space: nowrap;
+        color: #000;
+        font-weight: normal;
+        text-align: inherit;
+    }
+    .item-borderless {
+        border-top: 0px;
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+}

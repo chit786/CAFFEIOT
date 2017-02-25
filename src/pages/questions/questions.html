@@ -6,18 +6,27 @@
 -->
 <ion-header>
     <ion-navbar color="primary">
-        <button ion-button menuToggle>
+        <button ion-button menuToggle class="disable-hover">
       <ion-icon name="menu"></ion-icon>
     </button>
         <ion-title>Questions</ion-title>
-        <ion-buttons end>
+        <!--<ion-buttons end>
             <button ion-button icon-only (click)="addItem()"><ion-icon name="add-circle"></ion-icon></button>
-        </ion-buttons>
+        </ion-buttons>-->
     </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+
+    <ion-tabs *ngIf="isCompSet">
+        <ion-tab [root]="tab1Root" tabTitle="Feeds" tabBadge="{{(feedUnread | async)?.unreadFeed}}" tabIcon="flash"></ion-tab>
+        <ion-tab [root]="tab2Root" tabTitle="Favourites" tabIcon="heart-outline"></ion-tab>
+        <ion-tab [root]="tab3Root" tabTitle="Ask Question" tabIcon="hand"></ion-tab>
+        <ion-tab [root]="tab4Root" tabTitle="My Questions" tabIcon="list"></ion-tab>
+    </ion-tabs>
+
+    <ion-label class="nocompmsg" *ngIf="!isCompSet">Please choose Company in your profile settings on homepage to post a question.</ion-label>
 
 </ion-content>

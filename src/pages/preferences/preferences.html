@@ -1,0 +1,50 @@
+<!--
+  Generated template for the Preferences page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-toolbar color="primary">
+        <ion-title>
+            Preferences
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="close()"><ion-icon name="close"></ion-icon></button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+    <ion-item>
+        <ion-label class="placeholder">Please choose your preferences! You will receive feeds depending on your choice's' below!</ion-label>
+    </ion-item>
+    <!--<ion-list>-->
+    <ion-item>
+        <ion-label>Company</ion-label>
+        <ion-select #newSelect [(ngModel)]="company" (ionChange)="onChange(company)">
+            <ion-option value="Select">Select</ion-option>
+            <ion-option *ngFor="let option of options | async" value="{{option?.name}}">{{option?.name}}</ion-option>
+        </ion-select>
+
+    </ion-item>
+
+    <!--</ion-list>-->
+    <ion-list>
+        <ion-item class="item-borderless" *ngFor="let skill of skills | async">
+            <ion-chip #chip style="width: 100%;" color="light">
+                <!--<ion-label style="text-align: center;">{{skill.name}}</ion-label>-->
+                <span>{{skill.name}}</span>
+                <button #btn ion-button clear color="dark" (click)="select(chip,skill.name)">
+                                <ion-icon name="add"></ion-icon>
+                </button>
+            </ion-chip>
+        </ion-item>
+    </ion-list>
+    <!--
+    <ion-fab bottom right>
+        <button ion-fab icon-only (click)="addPreference()"><ion-icon name="arrow-forward"></ion-icon></button>
+    </ion-fab>-->
+</ion-content>

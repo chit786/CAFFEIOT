@@ -1,0 +1,99 @@
+<!--
+  Generated template for the QuestionDetail page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar color="primary">
+        <ion-navbar>
+            <ion-title>
+                Question Detail
+            </ion-title>
+            <ion-buttons end>
+                <button ion-button icon-only (click)="close()"><ion-icon name="close"></ion-icon></button>
+            </ion-buttons>
+        </ion-navbar>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-item>
+
+
+        <h2>{{(question|async)?.questionTitle}}</h2>
+        <ion-avatar item-left>
+            <!--<img src="{{(question | async)?.askedBy.profilepic}}">-->
+            <img src="{{((question | async)?.host|async)?.profilepic}}">
+        </ion-avatar>
+        <p>{{((question | async)?.host|async)?.firstName + ' ' + ((question | async)?.host | async)?.lastName}}</p>
+        <p>{{(question | async)?.askedBy.date | amCalendar}}</p>
+
+
+        <!--<ion-card>
+            <ion-card-title class="card-title">
+                {{(question|async)?.questionTitle}}
+            </ion-card-title>
+            <ion-item>
+                <ion-avatar item-left>
+                    <img src="{{(question | async)?.askedBy.profilepic}}">
+                </ion-avatar>
+                <h2>{{(question | async)?.askedBy.name}}</h2>
+                <p>{{(question | async)?.askedBy.date | amCalendar}}</p>
+            </ion-item>
+
+
+        </ion-card>-->
+    </ion-item>
+    <!--<ion-list>
+        <ion-item *ngFor='let comment of comments | async'>
+            <ion-card>
+
+                <ion-card-content>
+                    <ion-card-title>
+                        {{(comment.user | async)?.firstName}}
+                    </ion-card-title>
+                    <p>
+                        {{comment?.desc}}
+                    </p>
+                    <ion-icon name="redo" (click)="scheduleMeetingWithMember(question.$key,comment)"></ion-icon>
+                </ion-card-content>
+            </ion-card>
+
+        </ion-item>
+    </ion-list>-->
+
+    <ion-list no-lines class="chat-list">
+        <ion-item *ngFor="let comment of comments| async">
+            <ion-avatar item-right *ngIf="comment.position=='right'" class="profile-pic right">
+                <img src="{{(comment.user | async)?.profilepic}}">
+            </ion-avatar>
+            <chat-bubble [message]="comment"></chat-bubble>
+            <ion-icon name="redo" *ngIf="comment.questionflag" (click)="scheduleMeetingWithMember(question.$key,comment)"></ion-icon>
+            <ion-avatar item-left *ngIf="comment.position=='left'" class="profile-pic left">
+                <img src="{{(comment.user | async)?.profilepic}}">
+            </ion-avatar>
+        </ion-item>
+    </ion-list>
+
+</ion-content>
+
+<ion-footer>
+
+    <ion-toolbar>
+
+        <form>
+            <ion-input #chat_input [(ngModel)]="message" (keyup.enter)="sendMessage()" (focus)="updateScroll()" name="message" placeholder="Write a message...">
+            </ion-input>
+        </form>
+        <ion-buttons right>
+            <div ion-button icon-only item-right (click)="sendMessage($event)">
+                <ion-icon name="send"></ion-icon>
+            </div>
+        </ion-buttons>
+    </ion-toolbar>
+
+</ion-footer>

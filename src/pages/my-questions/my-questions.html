@@ -1,0 +1,72 @@
+<!--
+  Generated template for the MyQuestions page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <!--
+    <ion-navbar>
+        <ion-title>MyQuestions</ion-title>
+    </ion-navbar>-->
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-searchbar [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="onSearchInput()"></ion-searchbar>
+
+    <div *ngIf="searching" class="spinner-container">
+        <ion-spinner></ion-spinner>
+    </div>
+
+    <ion-list>
+        <!--<ion-item *ngFor="let item of items">
+            {{item.title}}
+        </ion-item>-->
+        <ion-item *ngFor='let question of myQs | async'>
+            <ion-card>
+                <ion-card-title class="card-title">
+                    {{question?.questionTitle}}
+                </ion-card-title>
+
+                <ion-item>
+                    <ion-avatar item-left>
+                        <img src="{{(question.user|async)?.profilepic}}">
+                    </ion-avatar>
+                    <!--<h2>{{(question.detail | async)?.askedBy.name}}</h2>-->
+                    <h2>{{(question.user|async)?.firstName + ' ' + (question.user|async)?.lastName}}</h2>
+                    <p>{{(question.detail | async)?.askedBy.date | amCalendar}}</p>
+                </ion-item>
+
+                <!--<ion-card-content>
+            <p>This is a question posted as a sample to test the questions functioonality. I am going to test the long message</p>
+        </ion-card-content>-->
+
+                <ion-row>
+                    <ion-col>
+                        <button ion-button icon-left clear small>
+        <ion-icon name="thumbs-up" *ngIf="question.likeCount" ></ion-icon>
+         <ion-icon name="thumbs-up-outline" *ngIf="!question.likeCount"></ion-icon>
+        <div (click)="addTolike(question.$key)">{{(question.detail | async)?.likeCount}} Likes</div>
+      </button>
+                    </ion-col>
+                    <ion-col>
+                        <button ion-button icon-left clear small>
+        <ion-icon name="text"></ion-icon>
+        <div (click)='openQuestion(question.$key)'>{{(question.comments|async)?.length}} Comments</div>
+      </button>
+                    </ion-col>
+                    <ion-col center text-center>
+                        <ion-note>
+                            11h ago
+                        </ion-note>
+                    </ion-col>
+                </ion-row>
+
+            </ion-card>
+        </ion-item>
+    </ion-list>
+    <!--</ion-list>-->
+
+</ion-content>

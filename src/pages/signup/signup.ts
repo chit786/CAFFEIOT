@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, LoadingController, AlertController } from 'ionic-angular';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthData } from '../../providers/auth-data';
-import { HomePage } from '../home/home';
+import { Preferences } from '../preferences/preferences';
+
 
 /*
   Generated class for the Signup page.
@@ -30,7 +31,7 @@ export class SignupPage {
     }
 
   ionViewDidLoad() {
-    console.log('Hello Signup Page');
+   
   }
  elementChanged(input){
     let field = input.inputControl.name;
@@ -40,10 +41,14 @@ export class SignupPage {
   this.submitAttempt = true;
 
   if (!this.signupForm.valid){
-    console.log(this.signupForm.value);
+   
   } else {
     this.authData.signupUser(this.signupForm.value.email, this.signupForm.value.password).then(() => {
-      this.nav.setRoot(HomePage);
+      //this.nav.setRoot(HomePage);
+      
+      //this.nav.push(Preferences);
+      
+      
     }, (error) => {
       this.loading.dismiss();
       let alert = this.alertCtrl.create({

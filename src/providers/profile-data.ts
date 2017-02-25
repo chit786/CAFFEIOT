@@ -64,6 +64,19 @@ export class ProfileData {
     });
   }
 
+  updateNumber(newNumber : string) : any{
+  return this.userProfile.child(this.currentUser.uid).update({
+      number: newNumber,
+    });
+
+  }
+
+  updateWeight(newWeight : string) : any{
+  return this.userProfile.child(this.currentUser.uid).update({
+      weight: newWeight,
+    });
+
+  }
   updateProfilepic(profilePic: string): any {
      return this.userProfile.child(this.currentUser.uid).update({
       profilepic: profilePic,
@@ -71,7 +84,11 @@ export class ProfileData {
   }
 
 
-
+  updateTeam(key:String):any {
+      return this.userProfile.child(this.currentUser.uid + "/teams").push({
+      teamID:key
+    });
+  }
   /**
   * Just like before this is changing the user's password, but remember, 
   * this has nothing to do with the database this is the AUTH portion of 
@@ -84,4 +101,13 @@ export class ProfileData {
       console.log(error);
     });
   }
+  /**
+  * Setting users company
+  */
+  updateCompany(companyName:string):any{
+     return this.userProfile.child(this.currentUser.uid).update({
+      company: companyName,
+    });
+  }
+
 }

@@ -35,7 +35,7 @@ export class LoginPage {
     }
 
   ionViewDidLoad() {
-    console.log('Hello Login Page');
+    
   }
   elementChanged(input){
     let field = input.inputControl.name;
@@ -45,10 +45,13 @@ export class LoginPage {
   this.submitAttempt = true;
 
   if (!this.loginForm.valid){
-    console.log(this.loginForm.value);
+    
   } else {
     this.authData.loginUser(this.loginForm.value.email, this.loginForm.value.password).then( authData => {
+      this.loading.dismiss().catch(() => {});
     this.nav.setRoot(HomePage);
+    //update the deviceID where the user is currently loggedIN
+    
   }, error => {
     this.loading.dismiss().then( () => {
       let alert = this.alertCtrl.create({

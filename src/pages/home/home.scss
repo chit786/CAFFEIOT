@@ -1,41 +1,90 @@
 page-home {
-
-.home-container {
-    display: block;
-    /* Large screens ----------- */
-    @media only screen and (min-width: 768px) {
-        .chart-div {
-            width: 50%;
-            height: 250px;
-            padding: 20px;
-            display: inline-block;
-            float: left;
+    .profile-btn {
+        color: white;
+        background-color: transparent;
+        font-size: 26px;
+    }
+    .home-container {
+        display: block;
+        /* Large screens ----------- */
+        .progress-container {
+            padding: 0 20px;
         }
-        .home-table {
-            height: 450px;
-            width: 49%;
-            padding: 20px;
-            display: inline-block;
+        .progress-bar-success {
+            background-image: -webkit-linear-gradient(top, #662900 0, #662900 100%);
+            background-image: -o-linear-gradient(top, #662900 0, #662900 100%);
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#662900), to(#662900));
+            background-image: linear-gradient(to bottom, #662900 0, #662900 100%);
+            //filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c', endColorstr='#ff449d44', GradientType=0);
+            background-repeat: repeat-x;
+        }
+        @media only screen and (min-width: 768px) {
+            .mob-view {
+                display: none;
+            }
+            .dskt-view {
+                display: block;
+                .mg-tp {
+                    margin-top: 50px;
+                }
+                ion-list {
+                    height: 100%;
+                    overflow: hidden;
+                    .list-header-md {
+                        border-top: 0;
+                        border-bottom: 1px solid #dedede;
+                    }
+                }
+                .scrollList {
+                    overflow: auto;
+                    height: 100%;
+                }
+            }
+            .chart-div {
+                width: 50%;
+                height: 250px;
+                padding: 20px;
+                display: inline-block;
+                float: left;
+            }
+            .home-table {
+                height: 400px;
+                width: 49%;
+                padding: 20px;
+                display: inline-block;
+            }
+            .progress-container {
+                height: 40px;
+                position: absolute;
+                width: 100%;
+                top: 360px;
+                margin-top: 50px;
+            }
+        }
+        @media only screen and (min-width: 0px) and (max-width:767px) {
+            .mob-view {
+                display: block;
+            }
+            .dskt-view {
+                display: none;
+            }
+            .chart-div {
+                width: 100%;
+                padding: 20px;
+                float: left;
+            }
+            .home-table {
+                height: auto;
+                width: 100%;
+                padding: 20px;
+                float: left;
+            }
+        }
+        .coffee-count {
+            position: absolute;
+            top: 15%;
+            left: 15%;
+            font-size: large;
         }
     }
-    @media only screen and (min-width: 0px) and (max-width:767px) {
-        .chart-div {
-            width: 100%;
-            padding: 20px;
-            float: left;
-        }
-        .home-table {
-            height: 450px;
-            width: 100%;
-            padding: 20px;
-            float: left;
-        }
-    }
-    .coffee-count {
-        position: absolute;
-        top: 15%;
-        left: 15%;
-        font-size: large;
-    }
-}
 }

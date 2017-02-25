@@ -7,7 +7,7 @@
 <ion-header>
 
     <ion-navbar color="primary">
-        <button ion-button menuToggle>
+        <button ion-button menuToggle class="disable-hover">
       <ion-icon name="menu"></ion-icon>
     </button>
         <ion-title>My Teams</ion-title>
@@ -19,11 +19,33 @@
 
 
 <ion-content padding>
-    <ion-item>Your Teams</ion-item>
+    <!--<ion-item>Your Teams</ion-item>-->
+    <ion-list-header>Your Teams</ion-list-header>
     <ion-list>
-        <button ion-item *ngFor="let item of items" (click)="itemSelected(item)">
-    {{ item }}
-  </button>
+        <ion-item-sliding #slidingItem *ngFor="let item of items | async">
+
+            <ion-item (click)="itemSelected(item)">
+                <!--<ion-icon name="arrow-forward"></ion-icon>-->
+
+                {{ item.teamName }}
+
+            </ion-item>
+            <ion-item-options side="right">
+                <button ion-button color="primary" (click)="removeTeam(item.$key)">
+                    <ion-icon name="close-circle"></ion-icon>
+                     Remove
+                 </button>
+            </ion-item-options>
+            <ion-item-options side="left">
+                <button ion-button color="call" (click)="addMeeting(item.teamName)">
+                    <ion-icon name="add-circle"></ion-icon>
+                     Meet-up
+                 </button>
+            </ion-item-options>
+        </ion-item-sliding>
+
+
     </ion-list>
+
 
 </ion-content>

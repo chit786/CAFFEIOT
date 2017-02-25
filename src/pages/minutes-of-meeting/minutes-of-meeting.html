@@ -6,13 +6,72 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>MinutesOfMeeting</ion-title>
-  </ion-navbar>
+    <ion-navbar color="primary">
+        <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+        <ion-title>Minutes of meeting</ion-title>
+    </ion-navbar>
+
 
 </ion-header>
 
 
 <ion-content padding>
+
+    <ion-list>
+
+        <ion-item>
+            <ion-label floating>Description</ion-label>
+            <ion-input type="text" [(ngModel)]="description"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>Assigned To</ion-label>
+            <ion-select [(ngModel)]="member" placeholder="Select" cancelText="Nah" okText="Okay!">
+                <ion-option *ngFor="let option of options | async" value="{{option.$key}}">{{option?.firstName +' ' +option?.lastName }}</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <ion-label class="dob-label">Achieve on</ion-label>
+            <ion-datetime displayFormat="MMM D, YYYY" pickerFormat="D MMM YYYY" [(ngModel)]="taskDate"></ion-datetime>
+        </ion-item>
+
+    </ion-list>
+
+    <button full ion-button color="primary" (click)="saveItem()">Save</button>
+    <div>
+        <ion-list>
+            <ion-item-sliding *ngFor="let minute of minutes | async">
+                <ion-item>
+
+                    <h2>Assigned To : {{minute.assignedTo}}</h2>
+                    <p>Task : {{minute.description}}</p>
+                    <p>Completion Date : {{minute.date}}</p>
+                    <p>Status : {{minute.status}}</p>
+
+                </ion-item>
+
+                <ion-item-options side="right">
+                    <button ion-button color="primary" (click)="removeMinute(minute.$key,minute.memberKey)">
+        <ion-icon name="close-circle"></ion-icon>
+        Remove
+      </button>
+                </ion-item-options>
+                <ion-item-options *ngIf="minute.status=='Pending'" side="left">
+                    <button ion-button color="secondary" (click)="completeMinute(minute.$key,minute.memberKey)">
+        <ion-icon name="checkmark"></ion-icon>
+        Done
+      </button>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-list>
+    </div>
+
+
+
+
+
 
 </ion-content>

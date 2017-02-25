@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
-import { NavParams,ModalController,ViewController,AlertController } from 'ionic-angular';
+import { NavParams,ModalController,ViewController,AlertController,NavController } from 'ionic-angular';
 import {PlaceOrder} from '../place-order/place-order';
+import {Contacts} from '../contacts/contacts';
+import { TeamsData } from '../../providers/teams-data';
+import {ScheduleMeeting} from '../schedule-meeting/schedule-meeting';
+import {MinutesOfMeeting} from '../minutes-of-meeting/minutes-of-meeting';
+import {AngularFire, FirebaseListObservable,FirebaseObjectObservable} from 'angularfire2';
+import firebase from 'firebase';
 
 /*
   Generated class for the MeetingDetails page.
@@ -16,12 +22,75 @@ import {PlaceOrder} from '../place-order/place-order';
 export class MeetingDetails {
 
   title;
+  teamkey:any;
   description;
-  constructor(public navParams: NavParams,public modalCtrl: ModalController, public view: ViewController,public alertCtrl: AlertController) {
+    today:any = new Date().toISOString();
+       year:any;
+  month:any;
+    memberList = [];
+  day:any;
+   orderID: any;
+    uName;
+    isHost;
+  meetingDetail: FirebaseObjectObservable<any>;
+  memberDetail : FirebaseListObservable<any>;
+   tempTeam : FirebaseListObservable<any>;
+  constructor(public af: AngularFire,public navCtrl: NavController,public navParams: NavParams,
+  public modalCtrl: ModalController, public view: ViewController,public alertCtrl: AlertController,public teamData: TeamsData) {
+
 
   }
 
   ionViewDidLoad() {
+
+    //constructor code :
+     this.teamkey = this.navParams.get('teamKey') ;
+      this.year = this.today.split("-")[0];
+           this.month = this.today.split("-")[1];
+           this.day = ( this.today.split("-")[2] ).split("T")[0];
+           this.orderID = ( this.today.split(":")[0] ).split("T")[1] + this.today.split(":")[1] + (this.today.split(":")[2]).split(".")[0]  ;
+
+
+            this.tempTeam = this.af.database.list('/meetings/'+ this.navParams.get('teamKey') + '/users',{ preserveSnapshot: true } )
+
+     this.tempTeam.subscribe((snapshots)=>{
+        snapshots.forEach(snapshot=>{
+
+          if(snapshot.key==firebase.auth().currentUser.uid){
+            this.uName = snapshot.val().firstName + ' ' + snapshot.val().lastName   
+          }
+
+
+
+          this.memberList[snapshot.key] = snapshot.val();
+        })
+
+     })
+     //==========================
+
+
+
+
+
+
+
+
+
+
+
+
+    this.isHost = this.navParams.get('isHost');
+    this.meetingDetail = this.af.database.object('/meetings/' + this.teamkey);
+    this.memberDetail = this.af.database.list('/meetings/' + this.teamkey+ '/users')
+                        .map((_userRefs)=>{
+            return _userRefs.map((_userRef)=>{
+             _userRef.profilePicturenew = this.af.database.object('/userProfile/' + _userRef.$key) 
+             _userRef.choices =  this.af.database.list('/meetings/' + this.teamkey+ '/users/' + _userRef.$key + '/choice')  
+                 return _userRef;
+            })
+          }) as FirebaseListObservable<any>;
+
+
     this.title = this.navParams.get('title');
     this.description = this.navParams.get('when');
     
@@ -33,14 +102,14 @@ export class MeetingDetails {
     alert.setTitle('Coffee?');
 
     alert.addInput({
-      type: 'checkbox',
+      type: 'radio',
       label: 'Get Coffee?',
       value: 'coffee',
       checked: true
     });
 
     alert.addInput({
-      type: 'checkbox',
+      type: 'radio',
       label: 'Ask Team',
       value: 'team'
     });
@@ -49,10 +118,10 @@ export class MeetingDetails {
     alert.addButton({
       text: 'Okay',
       handler: data => {
-        console.log('Checkbox data:', data);
-         for (var val in data) {
-            console.log(data[val]);
-                if(data[val]=='coffee'){
+       
+        // for (var val in data) {
+          
+                if(data=='coffee'){
                 let addModal = this.modalCtrl.create(PlaceOrder);
 
                 addModal.onDidDismiss((item) => {
@@ -67,10 +136,54 @@ export class MeetingDetails {
 
                 addModal.present();
                     
-                }else if(data[val]=="team"){
+                }else if(data=="team"){
+
+                 
+                
+                  //this.teamData.askCoffee(this.memberDetail);
+                  var teamDataService = this.teamData;
+                  
+                  let teamOrder = {
+                    id : this.orderID,
+                    teamName : this.title,
+                    members : this.memberList,
+                    askedByKey : firebase.auth().currentUser.uid,
+                    status : "In Progress",
+                    meetingKey:this.navParams.get('teamKey')
+
+                  }
+
+                  let orderDetail = {
+
+                    id:this.orderID,
+                  date : this.month+"/"+this.day+"/"+this.year,
+                  machineID : "A",
+                  status : "In Progress",
+                  rating : 0,
+                  askedByKey : firebase.auth().currentUser.uid,
+                  askedByname : this.uName
+                  }
+
+
+                  firebase.database().ref('/teamOrder').push(teamOrder).then((keyNode)=>{
+                    
+                    
+                      for(var val in this.memberList){
+                      
+                        firebase.database().ref('/orders/' + val.toString() + '/' + keyNode.key).update(orderDetail).then(()=>{
+                          
+
+                          teamDataService.askToMember(val.toString(),this.uName,"Coffee?");
+                        }
+                        )
+
+                      }
+
+                  })
+                  
 
                 }
-            }
+           // }
       }
     });
     alert.present();
@@ -85,9 +198,57 @@ export class MeetingDetails {
     alert.present();
   }
   addMember(){
+this.navCtrl.push(Contacts, {
+      isPopup:true,
+      isMeet: true,
+      teamKey:this.navParams.get('teamKey')
+    });
+
     
   }
+  openMom(teamKey){
+   
+    this.navCtrl.push(MinutesOfMeeting,{
+        teamID:this.navParams.get('teamKey')
+    })
+  }
 
+  reschedule(meetKey){
+   
+     this.navCtrl.push(ScheduleMeeting,{
+        teamName: this.title,
+        isPopup: true,
+        meetkey:this.navParams.get('teamKey')
+    })
+  }
+
+   callMe(user){
+
+    user.subscribe((userref)=>{
+         document.location.href = 'tel:'+userref.number;
+    })
+
+  }
+
+  smsMe(user){
+   // console.log(number);
+  
+    user.subscribe((userref)=>{
+         document.location.href = 'sms:'+userref.number;
+    })
+
+    
+
+  }
+
+  mailme(user){
+    
+
+    user.subscribe((userref)=>{
+        document.location.href = 'mailto:'+userref.email;
+    })
+
+  }
 
 
 

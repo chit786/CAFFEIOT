@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
-        "declaration": true,
+        "declaration": false,
+        "sourceMap": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "lib": [
@@ -14,11 +15,8 @@
     },
     "exclude": [
         "node_modules",
-        "typings/global",
-        "typings/global.d.ts"
-    ],
-    "types": [
-        "firebase"
+        "typings/globals",
+        "typings/index.d.ts"
     ],
     "compileOnSave": false,
     "atom": {

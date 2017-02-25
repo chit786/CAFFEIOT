@@ -1,15 +1,15 @@
 <!--
-  Generated template for the Orders page.
+ Generated template for the Orders page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
+ See http://ionicframework.com/docs/v2/components/#navigation for more info on
+ Ionic pages and navigation.
 -->
 <ion-header>
 
     <ion-navbar color="primary">
-        <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+        <button ion-button menuToggle class="disable-hover">
+     <ion-icon name="menu"></ion-icon>
+   </button>
         <ion-title>Orders</ion-title>
         <ion-buttons end>
             <button ion-button icon-only (click)="addItem()"><ion-icon name="add-circle"></ion-icon></button>
@@ -20,33 +20,66 @@
 
 
 <ion-content padding>
-    <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+    <!--<ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>-->
     <!--ion-item>
-        <ion-label width="10">Order Id</ion-label>
-        <ion-label width="20">Date</ion-label>
-        <ion-label width="10">Choice</ion-label>
-        <ion-label width="10">Machine Id</ion-label>
-        <ion-label width="10">Status</ion-label>
-        <ion-label width="10">Rating</ion-label>
-    </ion-item-->
-    <ion-card *ngFor="let item of items" (click)="viewItem(item)">
-        <ion-row>
-            <ion-col>
-                <img src="assets/img/machineB.png">
-            </ion-col>
-            <ion-col>
-                <ion-card-header>
-                    {{ item.choice }}
-                </ion-card-header>
-                <ion-item>
-                    <p>date : {{ item.date }}</p>
-                    <p>order Id : {{ item.id }}</p>
-                    <p>machine Id : {{ item.machineID }}</p>
-                    <p>order status : {{ item.Status }}</p>
-                    <p>rating : {{ item.rating }}</p>
-                </ion-item>
-            </ion-col>
-        </ion-row>
-    </ion-card>
+       <ion-label width="10">Order Id</ion-label>
+       <ion-label width="20">Date</ion-label>
+       <ion-label width="10">Choice</ion-label>
+       <ion-label width="10">Machine Id</ion-label>
+       <ion-label width="10">Status</ion-label>
+       <ion-label width="10">Rating</ion-label>
+   </ion-item-->
+    <!--<ion-card *ngFor="let item of items">-->
+    <ion-list>
+        <ion-list-header>
+            Today's Orders
+        </ion-list-header>
+        <!--<ion-item-sliding #slidingItem *ngFor="let item of OrderList | async">-->
+        <ion-item *ngFor="let item of OrderList | async">
+            <ion-card>
+
+                <div (click)="openOrder(item)">
+                    <ion-badge item-left>{{ item.id }}</ion-badge>
+                    <!--<span class="al-rt">{{ item.date | amDateFormat : 'DD MMM YYYY' }}</span>-->
+                    <span class="al-rt">{{ item.status }}</span>
+                    <span class="clearfix"></span>
+                </div>
+                <!--<div class="list-label"> {{ item.choice }}</div>-->
+                <!--<ion-list>
+            <ion-item class="list-label" *ngFor="let drink of item.choice">-->
+
+                <ion-chip #chip color="light" *ngFor="let drink of item.choices|async">
+                    <ion-label class="chipclass" style="text-align: center;">{{drink.choice}}</ion-label>
+                    <button #btn ion-button *ngIf="drink.status!='Complete'" clear color="dark" (click)="removeChoice(chip,item.choice,item.$key)">
+                                <ion-icon name="close"></ion-icon>
+                </button>
+                </ion-chip>
+
+                <!--</ion-item>
+        </ion-list>-->
+                <div class="bottom-status">
+                    <!--<span><rating [(ngModel)]="item.rating" max="5" readOnly="true"></rating></span>-->
+                    <span>Ordered By : {{item.askedByname}}</span>
+
+
+                    <button #btn class="btn-removeorder" clear ion-button color="primary" (click)="cancelOrder(item.$key)">
+                                <!--<ion-icon name="close"></ion-icon>-->
+                                Remove
+                         </button>
+
+                    <!--<span class="al-rt">{{ item.status }}</span>-->
+                </div>
+            </ion-card>
+        </ion-item>
+        <!--<ion-item-options side="right">
+                <button ion-button color="primary" (click)="cancelOrder(item.$key)">
+                    <ion-icon name="close-circle"></ion-icon>
+                     Cancel
+                 </button>
+            </ion-item-options>-->
+        <!--</ion-item-sliding>-->
+
+
+    </ion-list>
 
 </ion-content>

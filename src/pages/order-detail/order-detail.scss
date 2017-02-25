@@ -1,4 +1,15 @@
-page-order-detail {}
+page-order-detail {
+    ion-card {
+        position: relative;
+        .failed-btn {
+            position: absolute;
+            right: 0;
+        }
+        button {
+            margin: 0 10px 10px 10px !important;
+        }
+    }
+}
 
 ul {
     padding: 0px;

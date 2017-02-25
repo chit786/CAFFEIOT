@@ -6,13 +6,66 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>MyTeamDetails</ion-title>
-  </ion-navbar>
+    <ion-navbar color="primary">
+        <ion-navbar>
+            <ion-title>
+                {{title}}
+            </ion-title>
+        </ion-navbar>
+    </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
 
+    <ion-list>
+        <ion-item-sliding *ngFor="let member of teamMembers | async">
+            <ion-item>
+                <ion-avatar item-left>
+                    <img src="{{(member.profile | async)?.profilepic}}">
+                </ion-avatar>
+                <h2>{{(member.profile | async)?.firstName + " " + (member.profile | async)?.lastName}}</h2>
+            </ion-item>
+            <ion-item-options side="left">
+                <button ion-button color="text" (click)="smsMe(member.profile)">
+        <ion-icon name="text"></ion-icon>
+        Text
+        <!--<a [href]="'sms:' + 31647911724">Mail</a>-->
+      </button>
+                <button ion-button color="call" (click)="callMe(member.profile)">
+        <ion-icon name="call"></ion-icon>
+        Call
+        <!--<a [href]="'tel:' + 31647911724">Call</a>-->
+      </button>
+            </ion-item-options>
+            <ion-item-options side="right">
+                <button ion-button color="primary" (click)="mailme(member.profile)">
+        <ion-icon name="mail"></ion-icon>
+        Email
+        <!--<a [href]="'sms:' + 31647911724">Mail</a>-->
+      </button>
+                <button ion-button color="primary" (click)="removeMember(member.$key)">
+        <ion-icon name="close-circle"></ion-icon>
+        Remove
+      </button>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+
+
+
+
 </ion-content>
+
+<ion-footer>
+
+    <ion-fab bottom left>
+        <button ion-fab icon-only mini (click)="askCoffee()"><ion-icon name="cafe"></ion-icon></button>
+    </ion-fab>
+    <ion-fab bottom right>
+        <button ion-fab icon-only mini (click)="addNewmember()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
+
+
+</ion-footer>

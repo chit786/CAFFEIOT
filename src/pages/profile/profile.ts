@@ -1,16 +1,20 @@
-import { NavController, AlertController, Platform } from 'ionic-angular';
+import { NavController, AlertController, Platform,NavParams } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { ProfileData } from '../../providers/profile-data';
 import { AuthData } from '../../providers/auth-data';
 import { LoginPage } from '../login/login';
-
+import { Preferences } from '../preferences/preferences';
+import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import { Camera } from 'ionic-native';
+
+
 
 import firebase from 'firebase';
 
 import 'whatwg-fetch';
 
 declare var window: any;
+declare var plugins: any;
 
 @Component({
   selector: 'page-profile',
@@ -19,34 +23,63 @@ declare var window: any;
 export class ProfilePage {
   public userProfile: any;
   public birthDate: string;
+  company;
+  showback : any;
+  skillsubscription : any;
   // assetCollection: any;
   URL: any;
+  options : FirebaseListObservable<any>;
+  skills : FirebaseListObservable<any>;
 
-  constructor(public nav: NavController, public profileData: ProfileData, public alertCtrl: AlertController, 
+   public optionsval: any = {
+        destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      targetHeight: 620,
+      targetWidth : 620,
+      correctOrientation: true
+  }
+
+  constructor(public navParams: NavParams,public nav: NavController,public af: AngularFire, public profileData: ProfileData, public alertCtrl: AlertController, 
   public authData: AuthData, public platform: Platform) {
     this.nav = nav;
     this.profileData = profileData;
-  
-    // this.profileData.getUserProfile().on('value', (data) => {
-    //   this.userProfile = data.val();
-    //   this.birthDate = this.userProfile.birthDate;
-    //  if(!this.userProfile.profilepic){
-    //     this.URL = "assets/img/default_profile.jpg";
-    //  }
-    // else{
-    //    this.URL = this.userProfile.profilepic;
-    // }
+   
+    if(this.navParams.get('isfromhome')){
+      this.showback = false;
+    }else{
+      this.showback = true;
+    }
 
-     
-    // });
-    this.loadData();
+    this.skillsubscription =  this.af.database.list('/userProfile/' + firebase.auth().currentUser.uid + '/skills').subscribe((skills)=>{
+      console.log(skills.length);
+       if(skills.length>0){
+         this.showback = true;
+       }else{
+          this.showback = false;
+       }
+     })
 
   }
+    ngOnDestroy() {
+      if(this.skillsubscription){
+        this.skillsubscription.unsubscribe();
+      }
+      
+    }
 
+
+  ionViewDidEnter(){
+     this.loadData();
+    
+  }
   logOut() {
     this.authData.logoutUser().then(() => {
       this.nav.setRoot(LoginPage);
     });
+  }
+  openPreferences(){
+    this.nav.push(Preferences);
+
   }
   updateName() {
     let alert = this.alertCtrl.create({
@@ -78,6 +111,55 @@ export class ProfilePage {
     alert.present();
   }
 
+  updateNumber(){
+let alert = this.alertCtrl.create({
+      inputs: [
+        {
+          name: 'newNumber',
+          placeholder: 'Your new number',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            this.profileData.updateNumber(data.newNumber);
+          }
+        }
+      ]
+    });
+    alert.present();
+
+  }
+
+  
+
+updateWeight(){
+let alert = this.alertCtrl.create({
+      inputs: [
+        {
+          name: 'newWeight',
+          placeholder: 'Your weight',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            this.profileData.updateWeight(data.newWeight);
+          }
+        }
+      ]
+    });
+    alert.present();
+
+  }
   updateDOB(birthDate) {
     this.profileData.updateDOB(birthDate);
   }
@@ -129,6 +211,16 @@ export class ProfilePage {
     alert.present();
   }
 
+  onChange(SelectedValue){
+    
+    this.setCompany(SelectedValue);
+}
+
+  setCompany(SelectedValue){
+     this.profileData.updateCompany(SelectedValue);
+
+  }
+
   /** 
   * called after the user has logged in to load up the data
   */
@@ -144,11 +236,9 @@ export class ProfilePage {
         element.id = _childSnapshot.key;
 
        // result.push(element);
-       console.log("inside load data");
-       console.log(this.profileData.currentUser.uid );
-       console.log("asset uid" + element.owner);
+      
        if(this.profileData.currentUser.uid == element.owner ){
-         console.log(element.URL);
+         
         result = element.URL
        }
       });
@@ -163,6 +253,10 @@ export class ProfilePage {
        this.profileData.getUserProfile().on('value', (data) => {
       this.userProfile = data.val();
       this.birthDate = this.userProfile.birthDate;
+      this.company = this.userProfile.company;
+      this.skills = this.af.database.list('/userProfile/'+this.profileData.currentUser.uid+'/skills');
+      
+     this.options = this.af.database.list('/organisations');
      if(!this.userProfile.profilepic){
         this.URL = "assets/img/default_profile.jpg";
      }
@@ -172,6 +266,26 @@ export class ProfilePage {
 
      
     });
+  }
+
+  delete(chip: Element,skillName : string){
+  
+
+    chip.remove();
+    var skill= firebase.database().ref('/userProfile/'+this.profileData.currentUser.uid+'/skills');
+    skill.once('value',function(snapshot){
+      snapshot.forEach(function(childSnapshot){
+          if(childSnapshot.val().name==skillName){
+            childSnapshot.ref.child('name').ref.remove();
+            return true;
+          }
+          return false;
+      });
+
+    })
+    //this.skill = this.af.database.list('/userProfile/'+this.profileData.currentUser.uid+'/skills');
+    
+    //this.skill.remove();
   }
 
   makeFileIntoBlob(_imagePath) {
@@ -191,7 +305,7 @@ export class ProfilePage {
             };
 
             reader.onerror = (e) => {
-              console.log('Failed file read: ' + e.toString());
+             
               reject(e);
             };
 
@@ -220,7 +334,7 @@ export class ProfilePage {
       var uploadTask = fileRef.put(_imageBlob);
 
       uploadTask.on('state_changed', (_snapshot) => {
-        console.log('snapshot progess ' + _snapshot);
+     
       }, (_error) => {
         reject(_error);
       }, () => {
@@ -258,19 +372,57 @@ export class ProfilePage {
 
   }
 
-
+  // Return a promise to catch errors while loading image
+  getMedia(_imagePath){
+    return new Promise((resolve, reject) => {
+      // Get Image from ionic-native's built in camera plugin
+      // Camera.getPicture(this.optionsval).then((fileUri) => {
+        // Crop Image, on android this returns something like, '/storage/emulated/0/Android/...'
+        // Only giving an android example as ionic-native camera has built in cropping ability
+        // if (this.platform.is('android')) {
+        
+        //   _imagePath = 'file://' + _imagePath;
+        // }
+          const options = { quality: 100 };
+           console.log('here Image Path!: ' + _imagePath);
+          /* Using cordova-plugin-crop starts here */
+          plugins.crop.promise(_imagePath, options).then( (path) => {
+            // path looks like 'file:///storage/emulated/0/Android/data/com.foo.bar/cache/1477008080626-cropped.jpg?1477008106566'
+            console.log('Cropped Image Path!: ' + path);
+            if (this.platform.is('android')) {
+        
+              path = 'file://' + path;
+            }
+            // Do whatever you want with new path such as read in a file
+            // Here we resolve the path to finish, but normally you would now want to read in the file
+            resolve(path);
+          }).catch( (error) => {
+            reject(error);
+          });
+        
+      // }).catch((error) => {
+      //   reject(error);
+      // })
+    });
+  }
   doGetPicture() {
     // TODO:
     // get picture from camera
     Camera.getPicture({
+      
       destinationType: Camera.DestinationType.FILE_URI,
       sourceType: Camera.PictureSourceType.CAMERA,
-      targetHeight: 640,
+      targetHeight: 620,
+      targetWidth : 620,
       correctOrientation: true
     }).then((_imagePath) => {
      // alert('got image path ' + _imagePath);
       // convert picture to blob
-      return this.makeFileIntoBlob(_imagePath);
+      return this.getMedia(_imagePath);
+
+      
+    }).then((_imgPath)=>{
+       return this.makeFileIntoBlob(_imgPath);
     }).then((_imageBlob) => {
      // alert('got image blob ' + _imageBlob);
 
@@ -286,7 +438,7 @@ export class ProfilePage {
      // alert('file saved to asset catalog successfully  ');
       this.loadData();
     }, (_error) => {
-      console.log("here");
+    
      // alert('Error ' + _error.message);
     });
 

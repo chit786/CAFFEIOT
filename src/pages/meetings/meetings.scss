@@ -6,11 +6,17 @@ page-meetings {
         border-radius: 50%;
         margin: 0 5px;
     }
+    .overlap-img:first-child {
+        margin: 0;
+    }
+    .overlap-img {
+        margin-left: -30px;
+    }
     .horImgScrBlk {
         padding: 10px 0;
     }
     .meeting-blk {
-        border-bottom: 0.55px solid #c8c7cc;
+        // border-bottom: 0.55px solid #c8c7cc;
         width: 85%;
         padding: 0 20px;
         display: inline-block;
@@ -36,7 +42,6 @@ page-meetings {
             border: 0;
         }
     }
-
     .horImgScrBlk {
         overflow-x: scroll;
     }

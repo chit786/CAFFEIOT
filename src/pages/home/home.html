@@ -1,6 +1,6 @@
 <ion-header>
     <ion-navbar color="primary">
-        <button ion-button menuToggle>
+        <button ion-button menuToggle class="disable-hover">
              <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>
@@ -10,7 +10,7 @@
             <!--<button ion-button icon-only (click)="logOut()">
         <ion-icon name="log-out"></ion-icon>
         </button>-->
-            <button (click)="goToProfile()">
+            <button (click)="goToProfile()" class="profile-btn">
              <ion-icon name="person"></ion-icon>
         </button>
         </ion-buttons>
@@ -20,26 +20,159 @@
 <ion-content class="home-container">
     <div class="chart-div">
         <canvas #canvas>
-              
-        </canvas>
-
-
+            </canvas>
     </div>
-    <div class="home-table">
-        <ion-list>
-            <ion-item>
-                <h2>Caffeine</h2>
-            </ion-item>
-            <ion-item>
-                <h2>Calories</h2>
-            </ion-item>
-            <ion-item>
-                <h2>Protein</h2>
-            </ion-item>
-            <ion-item>
-                <h2>Carbohydrates</h2>
-            </ion-item>
+    <div class="mob-view">
+
+        <div class="progress-container">
+            {{waterIntake}}% Water
+            <div class="progress" style="width:100%">
+
+                <div #waterLevel1 class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+
+                </div>
+            </div>
+        </div>
+        <!--<div class="home-table">
+            <ion-list>
+                <ion-list-header>
+                    <ion-icon [name]="nutritionIcon" item-right (click)="hideList()"></ion-icon>
+                    <h2 style="display: inline-block;">Intakes</h2>
+                </ion-list-header>
+                <div *ngIf="shownutrition">
+                    <ion-item *ngFor='let item of nutritions | async'>
+                        <h2>{{item.$key}}</h2>
+                        <p>{{item.value + item.unit}}</p>
+                    </ion-item>
+                </div>
+            </ion-list>
+
+        </div>-->
+        <div padding>
+            <ion-segment [(ngModel)]="segmentvalue">
+                <ion-segment-button value="Nutritions">
+                    Nutritions
+                </ion-segment-button>
+                <ion-segment-button value="tasks">
+                    Today's Tasks
+                </ion-segment-button>
+            </ion-segment>
+        </div>
+
+        <div [ngSwitch]="segmentvalue">
+            <!--<div class="home-table">-->
+            <ion-list *ngSwitchCase="'Nutritions'">
+                <ion-list-header>
+                    <ion-icon [name]="nutritionIcon" item-right (click)="hideList()"></ion-icon>
+                    <h2 style="display: inline-block;">Intakes</h2>
+                </ion-list-header>
+                <div *ngIf="shownutrition">
+                    <ion-item *ngFor='let item of nutritions | async'>
+                        <h2>{{item.$key}}</h2>
+                        <p>{{item.value + item.unit}}</p>
+                    </ion-item>
+                </div>
+            </ion-list>
+
+            <!--</div>-->
+
+            <ion-list *ngSwitchCase="'tasks'">
+                <ion-item-sliding *ngFor="let task of todaystasks | async" (click)="toggleDetails(task)">
+                    <ion-item>
+                        <!--<ion-item padding *ngFor='let task of todaystasks | async' (click)="toggleDetails(task)">-->
+                        <ion-icon color="primary" item-right [name]="task.icon"></ion-icon>
+                        <h2>{{task.description}}</h2>
+                        <div *ngIf="task.showDetails">
+
+                            <p>Status : {{task.status}}</p>
+                            <p>Completion Date : {{task.date}}</p>
+                        </div>
+                    </ion-item>
+                    <ion-item-options side="right">
+                        <button ion-button color="primary" (click)="removetask(task.$key)">
+              <ion-icon name="close-circle"></ion-icon>
+            Remove
+          </button>
+                    </ion-item-options>
+                    <ion-item-options side="left">
+                        <button *ngIf="task.status!='Complete'" ion-button color="secondary" (click)="completetask(task.$key)">
+        <ion-icon name="checkmark"></ion-icon>
+        Done
+      </button>
+                    </ion-item-options>
+
+                </ion-item-sliding>
+            </ion-list>
+
+        </div>
+    </div>
+
+
+    <div class="dskt-view">
+        <!--<div class="chart-div">
+            <canvas #canvas>
+            </canvas>
+        </div>-->
+        <div class="home-table">
+            <ion-list>
+                <ion-list-header>
+                    <ion-icon [name]="nutritionIcon" item-right (click)="hideList()"></ion-icon>
+                    <h2 style="display: inline-block;">Intakes</h2>
+                </ion-list-header>
+                <div *ngIf="shownutrition" class="scrollList">
+                    <ion-item *ngFor='let item of nutritions | async'>
+                        <h2>{{item.$key}}</h2>
+                        <p>{{item.value + item.unit}}</p>
+                    </ion-item>
+                </div>
+            </ion-list>
+
+        </div>
+        <div class="progress-container">
+            {{waterIntake}}% Water
+            <div class="progress" style="width:100%">
+
+                <div #waterLevel2 class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+
+                </div>
+            </div>
+        </div>
+        <ion-list class="mg-tp">
+            <ion-list-header *ngIf="!isMobile">
+                Today's Tasks
+            </ion-list-header>
+            <ion-item-sliding *ngFor="let task of todaystasks | async" (click)="toggleDetails(task)">
+                <ion-item>
+                    <!--<ion-item padding *ngFor='let task of todaystasks | async' (click)="toggleDetails(task)">-->
+                    <ion-icon color="primary" item-right [name]="task.icon"></ion-icon>
+                    <h2>{{task.description}}</h2>
+                    <div *ngIf="task.showDetails">
+
+                        <p>Status : {{task.status}}</p>
+                        <p>Completion Date : {{task.date}}</p>
+                    </div>
+                </ion-item>
+                <ion-item-options side="right">
+                    <button ion-button color="primary" (click)="removetask(task.$key)">
+              <ion-icon name="close-circle"></ion-icon>
+            Remove
+          </button>
+                </ion-item-options>
+                <ion-item-options side="left">
+                    <button *ngIf="task.status!='Complete'" ion-button color="secondary" (click)="completetask(task.$key)">
+        <ion-icon name="checkmark"></ion-icon>
+        Done
+      </button>
+                </ion-item-options>
+            </ion-item-sliding>
+
+
         </ion-list>
 
     </div>
+
+
+
+
+
 </ion-content>

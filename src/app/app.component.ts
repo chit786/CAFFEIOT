@@ -1,17 +1,20 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, AlertController } from 'ionic-angular';
-import { StatusBar,Push, Splashscreen } from 'ionic-native';
+import { StatusBar,Push, Splashscreen,Keyboard } from 'ionic-native';
 import firebase from 'firebase';
 import { HomePage } from '../pages/home/home';
 import { Orders } from '../pages/orders/orders';
 import { PlaceOrder } from '../pages/place-order/place-order';
-import {OrderDetail} from '../pages/order-detail/order-detail';
 import { LoginPage } from '../pages/login/login';
 import {Meetings} from '../pages/meetings/meetings';
-import {MeetingDetails} from '../pages/meeting-details/meeting-details';
 import {MyTeams} from '../pages/my-teams/my-teams';
 import {Questions} from '../pages/questions/questions';
-import {ProfilePage} from '../pages/profile/profile';
+import {Tasks} from '../pages/tasks/tasks';
+import {ScheduleMeeting} from '../pages/schedule-meeting/schedule-meeting';
+import {Contacts} from '../pages/contacts/contacts';
+
+import { AngularFire } from 'angularfire2';
+
 
 @Component({
   templateUrl: 'app.html'
@@ -19,11 +22,13 @@ import {ProfilePage} from '../pages/profile/profile';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  // rootPage: any = HomePage;
+  rootPage: any ;
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform,public alertCtrl: AlertController) {
+   ngOnInit(){
+
     //initialize firebase
     firebase.initializeApp({
       apiKey: "AIzaSyCLoFM5qxP6IXTMThJ1mm7B8EqXYaEMXAE",
@@ -31,36 +36,76 @@ export class MyApp {
       databaseURL: "https://caffeiot.firebaseio.com",
       storageBucket: "caffeiot.appspot.com",
       messagingSenderId: "558368532218"
-    });
+    },'app1');
+
+    
 
     firebase.auth().onAuthStateChanged((user) => {
+
+       this.platform.ready().then(() => {  StatusBar.styleDefault();
+        Splashscreen.hide();})
+
+
       if (!user) {
+        console.log("Login");
         this.rootPage = LoginPage;
+      }else{
+        
+         console.log("Home");
+         this.rootPage = HomePage;
+        this.initializeApp(user);
       }
     });
 
+    //   af.auth.subscribe(auth => {
+    //     if(auth) {
+          
+    //       console.log('logged in');
+    //       this.rootPage = HomePage;
+    //     } else {
+    //       console.log('not logged in');
+    // //     this.rootPage = LoginPage;
+    //       this.rootPage = LoginPage;
+    //       this.initializeApp(auth);
+    //     }
+    //   });
 
-    this.initializeApp();
+
+
+    //this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'HomePage', component: HomePage },
+      { title: 'Contacts', component: Contacts },
       { title: 'Orders', component: Orders },
        { title: 'Meetings', component: Meetings },
       { title: 'My Teams', component: MyTeams },
+      { title: 'All Tasks', component: Tasks },
+      { title: 'Schedule Meeting', component: ScheduleMeeting },
       { title: 'Have a Question?..', component: Questions },
+      { title: 'Logout', component:'' },
+
     ];
+
+   }
+
+
+
+  constructor(public platform: Platform,public alertCtrl: AlertController,public af: AngularFire) {
+  
 
   }
 
-  initializeApp() {
+  initializeApp(user) {
     
     this.platform.ready().then(() => {
+      Keyboard.disableScroll(true);
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       if (this.platform.is('android')){
-      StatusBar.styleDefault();
-       Splashscreen.hide();
+      // StatusBar.styleDefault();
+      //   Splashscreen.hide();
       let push = Push.init({
         android: {
           senderID: "558368532218"
@@ -74,7 +119,23 @@ export class MyApp {
       });
 
        push.on('registration', (data) => {
-        console.log("device token ->", data.registrationId);
+        //console.log("device token ->", data.registrationId);
+
+      var key = firebase.database().ref('/userProfile').child(user.uid);
+      // if(key.key){
+           
+      // }else{
+            // var postData = {
+              
+            //    regID :  data.registrationId,
+            // }
+            // var updates= {}
+            
+            // updates['/userProfile/' + key ] = postData;
+             firebase.database().ref('/userProfile/' + key.key + '/regID').set(data.registrationId);
+
+      // }
+      
         //TODO - send device token to server
       });
       push.on('notification', (data) => {
@@ -93,7 +154,12 @@ export class MyApp {
               text: 'View',
               handler: () => {
                 //TODO: Your logic here
-                self.nav.push(HomePage, {message: data.message});
+                if(data.message=="Coffee?"){
+                   self.nav.push(PlaceOrder, {message: data.message});
+                }else{
+                  self.nav.push(HomePage, {message: data.message});
+                }
+               
               }
             }]
           });
@@ -101,7 +167,13 @@ export class MyApp {
         } else {
           //if user NOT using app and push notification comes
           //TODO: Your logic on click of push notification directly
-          self.nav.push(HomePage, {message: data.message});
+
+         // self.nav.push(HomePage, {message: data.message});
+           if(data.message=="Coffee?"){
+                   self.nav.push(PlaceOrder, {message: data.message});
+                }else{
+                  self.nav.push(HomePage, {message: data.message});
+                }
           console.log("Push notification clicked");
         }
       });
@@ -114,8 +186,16 @@ export class MyApp {
   }
 
   openPage(page) {
+    if(page.title=="Logout"){
+      //this.af.auth.logout();
+      firebase.auth().signOut();
+      
+       
+    }else{
+        this.nav.setRoot(page.component);
+    }
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    
   }
 }
