@@ -38,6 +38,7 @@
                 <ion-option value="dolce">Dolce</ion-option>
             </ion-select>
         </ion-item>
+
         <ion-item *ngFor="let item of choice; let i = index" [attr.data-index]="i">
             {{item}}
             <ion-icon name="close" (click)="removeItem(i)" style="float:right"></ion-icon>
